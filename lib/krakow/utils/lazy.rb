@@ -1,6 +1,9 @@
 module Krakow
   module Utils
     module Lazy
+
+      include Utils::Logging
+
       attr_reader :arguments
 
       def initialize(args={})
@@ -31,6 +34,14 @@ module Krakow
             arguments[key] = nil
           end
         end
+      end
+
+      def to_s
+        "<#{self.class.name}:#{object_id}>"
+      end
+
+      def inspect
+        "<#{self.class.name}:#{object_id} [#{arguments.inspect}]>"
       end
 
       def method_missing(*args)

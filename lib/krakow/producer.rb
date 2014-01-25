@@ -13,19 +13,27 @@ module Krakow
       required! :host, :port, :topic
       @connection = Connection.new(:host => host, :port => port)
       connection.init!
+      debug "Connection established: #{connection}"
+    end
+
+    def to_s
+      "<#{self.class.name}:#{object_id} {#{host}:#{port}} T:#{topic}>"
     end
 
     def goodbye_my_love!
+      debug 'Tearing down producer'
       if(connection)
         connection.terminate
       end
       @connection = nil
+      info 'Producer torn down'
     end
 
     # message:: Message to send
     # Write message
     def write(*message)
       if(message.size > 1)
+        debug 'Multiple message publish'
         connection.transmit(
           Command::Mpub.new(
             :topic_name => topic,
@@ -33,6 +41,7 @@ module Krakow
           )
         )
       else
+        debug 'Single message publish'
         connection.transmit(
           Command::Pub.new(
             :message => message.first,
@@ -48,6 +57,7 @@ module Krakow
     # exception will be raised if `FrameType::Error` is received
     def read(*args)
       result = connection.queue.pop
+      debug "Read message: #{result}"
       if(args.include?(:validate) && result.is_a?(FrameType::Error))
         error = Error::BadResponse.new('Write failed')
         error.result = result
