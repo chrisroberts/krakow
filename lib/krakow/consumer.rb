@@ -6,13 +6,14 @@ module Krakow
 
     finalizer :goodbye_my_love!
 
-    attr_reader :connections, :discovery, :queue
+    attr_reader :connections, :discovery, :queue, :in_flight
 
     def initialize(args={})
       super
       required! :topic, :channel
       optional :host, :port, :nslookupd, :receive_count
       @connections = {}
+      @in_flight = {}
       @queue = Queue.new
       if(nslookupd)
         debug "Connections will be established via lookup #{nslookupd.inspect}"
@@ -39,7 +40,7 @@ module Krakow
     def goodbye_my_love!
       debug 'Tearing down consumer'
       connections.values.each do |con|
-        con.terminate
+        con.terminate if con.alive?
       end
       info 'Consumer torn down'
     end
@@ -52,7 +53,11 @@ module Krakow
       connection = Connection.new(
         :host => host,
         :port => port,
-        :queue => queue
+        :queue => queue,
+        :callback => {
+          :actor => current_actor,
+          :method => :process_message
+        }
       )
     end
 
@@ -62,7 +67,7 @@ module Krakow
     # NOTE: Currently unused
     def process_message(message, connection)
       if(message.is_a?(FrameType::Message))
-        connection.transmit(Command::Rdy.new(:count => receive_count || 1))
+        in_flight[message.message_id] = "#{connection.host}_#{connection.port}"
       end
       message
     end
@@ -73,12 +78,19 @@ module Krakow
       found = discovery.lookup(topic)
       debug "Discovery results: #{found.inspect}"
       found.each do |node|
-        unless(connections[node[:hostname]])
+        debug "Processing discovery result: #{node.inspect}"
+        key = "#{node[:broadcast_address]}_#{node[:tcp_port]}"
+        unless(connections[key])
           connection = build_connection(node[:broadcast_address], node[:tcp_port], queue)
           if(register(connection))
-            connections[node[:hostname]] = connection
+            connections[key] = connection
             info "Registered new connection #{connection}"
+          else
+            warn "Failed to register connection #{connection} (#{node.inspect})"
+            connection.terminate
           end
+        else
+          debug "Discovery result already registered: #{node.inspect}"
         end
       end
     end
@@ -88,11 +100,11 @@ module Krakow
     def register(connection)
       connection.init!
       connection.transmit(Command::Sub.new(:topic_name => topic, :channel_name => channel))
-      unless(response = connection.queue.pop.is_a?(FrameType::Error))
+      begin
         connection.transmit(Command::Rdy.new(:count => receive_count || 1))
         true
-      else
-        error "Failed to establish connection: #{response.error}"
+      rescue Error::BadResponse => e
+        debug "Failed to establish connection: #{e.result.error}"
         connection.terminate
         false
       end
@@ -101,8 +113,9 @@ module Krakow
     # message_id:: Message ID
     # Confirm message has been processed
     def confirm(message_id)
-      writer.transmit(Command::Fin.new(:message_id => message_id))
-      writer.transmit(Command::Rdy.new(:count => (receive_count - queue.size)))
+      connection = in_flight_lookup(message_id)
+      connection.transmit(Command::Fin.new(:message_id => message_id))
+      connection.transmit(Command::Rdy.new(:count => (receive_count - queue.size)))
       true
     end
 
@@ -110,14 +123,14 @@ module Krakow
     # timeout:: Requeue timeout (default is none)
     # Requeue message (processing failure)
     def requeue(message_id, timeout=0)
-      writer.transmit(Command::Req.new(:message_id => message_id, :timeout => timeout))
+      in_flight_lookup(message_id).transmit(
+        Command::Req.new(:message_id => message_id, :timeout => timeout)
+      )
     end
 
-    # Attempt to return free connection from pool for writing
-    def writer
-      connections.values.detect do |con|
-        !con.receiving?
-      end || connections.values.first
+    def in_flight_lookup(msg_id)
+      connections[in_flight[msg_id]] ||
+        abort(Error.new("Failed to locate connection for in flight message (#{msg_id})"))
     end
 
   end
