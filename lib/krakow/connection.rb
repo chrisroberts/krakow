@@ -16,6 +16,7 @@ module Krakow
       required! :host, :port
       optional :version, :queue, :callback
       arguments[:queue] ||= Queue.new
+      arguments[:responses] ||= Queue.new
       arguments[:version] ||= 'v2'
       @socket = TCPSocket.new(host, port)
     end
@@ -38,6 +39,15 @@ module Krakow
       output = message.to_line
       debug ">>> #{output}"
       socket.write output
+      unless(responses.empty?)
+        response = responses.pop
+        message.response = response
+        if(message.error?(response))
+          res = Error::BadResponse.new "Message transmission failed #{message}"
+          res.result = response
+          abort res
+        end
+      end
     end
 
     # Cleanup prior to destruction
@@ -53,13 +63,14 @@ module Krakow
 
     # Receive message and return proper FrameType instance
     def receive
+      debug 'Read wait for frame start'
       buf = socket.read(8)
       if(buf)
         @receiving = true
         debug "<<< #{buf.inspect}"
         struct = FrameType.decode(buf)
         debug "Decoded structure: #{struct.inspect}"
-        struct[:data] = socket.read(struct[:size])
+        struct[:data] = socket.recv(struct[:size])
         debug "<<< #{struct[:data].inspect}"
         @receiving = false
         frame = FrameType.build(struct)
@@ -94,6 +105,9 @@ module Krakow
         debug 'Responding to heartbeat'
         transmit Command::Nop.new
         nil
+      elsif(!message.is_a?(FrameType::Message))
+        debug "Captured non-message type response: #{message}"
+        responses << message
       else
         if(callback && callback[:actor] && callback[:method])
           debug "Sending #{message} to callback `#{callback[:actor]}##{callback[:method]}`"
