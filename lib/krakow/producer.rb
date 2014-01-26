@@ -18,6 +18,7 @@ module Krakow
       connect
     end
 
+    # Establish connection to configured `host` and `port`
     def connect
       info "Establishing connection to: #{host}:#{port}"
       begin
@@ -34,10 +35,12 @@ module Krakow
       "<#{self.class.name}:#{object_id} {#{host}:#{port}} T:#{topic}>"
     end
 
+    # Return if connected
     def connected?
       connection && connection.alive?
     end
 
+    # Process connection failure and attempt reconnection
     def connection_failure(*args)
       warn "Connection has failed to #{host}:#{port}"
       retries = 0
