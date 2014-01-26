@@ -46,5 +46,9 @@ module Krakow
       super
     end
 
+    def content
+      raise NoMethodError.new 'Content method not properly defined!'
+    end
+
   end
 end

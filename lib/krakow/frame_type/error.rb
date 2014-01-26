@@ -7,6 +7,14 @@ module Krakow
         required! :error
       end
 
+      def error
+        arguments[:error]
+      end
+
+      def content
+        error
+      end
+
     end
   end
 end

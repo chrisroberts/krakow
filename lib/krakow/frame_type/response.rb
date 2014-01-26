@@ -7,6 +7,10 @@ module Krakow
         required! :response
       end
 
+      def content
+        response
+      end
+
     end
   end
 end

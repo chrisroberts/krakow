@@ -7,6 +7,10 @@ module Krakow
         required! :attempts, :timestamp, :message_id, :message
       end
 
+      def content
+        message
+      end
+
     end
   end
 end
