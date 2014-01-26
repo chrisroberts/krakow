@@ -4,7 +4,7 @@ module Krakow
     include Utils::Lazy
     include Celluloid
 
-    trap_exit :connection_died
+    trap_exit :connection_failure
     finalizer :goodbye_my_love!
 
     attr_reader :connections, :discovery, :queue, :in_flight
@@ -112,7 +112,10 @@ module Krakow
       end
     end
 
-    def connection_died(con, reason)
+    # con:: actor
+    # reason:: Exception
+    # Remove connection from register if found
+    def connection_failure(con, reason)
       connections.delete_if do |key, value|
         if(value == con)
           warn "Connection failure detected. Removing connection: #{key}"
@@ -139,6 +142,8 @@ module Krakow
       )
     end
 
+    # msg_id:: Message ID
+    # Return connection linked to message ID
     def in_flight_lookup(msg_id)
       connections[in_flight[msg_id]] ||
         abort(Error.new("Failed to locate connection for in flight message (#{msg_id})"))
