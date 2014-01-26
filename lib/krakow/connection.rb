@@ -64,7 +64,7 @@ module Krakow
     # Receive message and return proper FrameType instance
     def receive
       debug 'Read wait for frame start'
-      buf = socket.read(8)
+      buf = socket.recv(8)
       if(buf)
         @receiving = true
         debug "<<< #{buf.inspect}"
@@ -77,6 +77,9 @@ module Krakow
         debug "Struct: #{struct.inspect} Frame: #{frame.inspect}"
         frame
       else
+        if(socket.closed?)
+          raise Error.new("#{self} encountered closed socket!")
+        end
         nil
       end
     end
