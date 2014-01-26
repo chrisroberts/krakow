@@ -11,6 +11,12 @@ module Krakow
         "#{name} #{message_id}\n"
       end
 
+      class << self
+        def error
+          %w(E_INVALID E_FIN_FAILED)
+        end
+      end
+
     end
   end
 end

@@ -11,6 +11,16 @@ module Krakow
         "#{name} #{topic_name} #{channel_name}\n"
       end
 
+      class << self
+        def ok
+          %w(OK)
+        end
+
+        def error
+          %w(E_INVALID E_BAD_TOPIC E_BAD_CHANNEL)
+        end
+      end
+
     end
   end
 end

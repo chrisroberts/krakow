@@ -19,6 +19,16 @@ module Krakow
         [name, "\n", payload.length, payload].pack('a*a*l>a*')
       end
 
+      class << self
+        def ok
+          %w(OK)
+        end
+
+        def error
+          %w(E_INVALID E_BAD_BODY)
+        end
+      end
+
     end
   end
 end

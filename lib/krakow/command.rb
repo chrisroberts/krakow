@@ -3,6 +3,20 @@ module Krakow
 
     include Utils::Lazy
 
+    class << self
+
+      def ok
+        []
+      end
+
+      def error
+        []
+      end
+
+    end
+
+    attr_accessor :response
+
     # Return command name
     def name
       self.class.name.split('::').last.upcase
@@ -11,6 +25,16 @@ module Krakow
     # Convert to line output
     def to_line
       raise NoMethodError.new 'No line conversion method defined!'
+    end
+
+    def ok?(response)
+      response = response.content if response.is_a?(FrameType)
+      self.class.ok.include?(response)
+    end
+
+    def error?(response)
+      response = response.content if response.is_a?(FrameType)
+      self.class.error.include?(response)
     end
 
     # Make all the commands available
