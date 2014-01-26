@@ -22,7 +22,7 @@ module Krakow
 
     def goodbye_my_love!
       debug 'Tearing down producer'
-      if(connection)
+      if(connection && connection.alive?)
         connection.terminate
       end
       @connection = nil
@@ -56,8 +56,8 @@ module Krakow
     # Read response from connection. If :validate is included an
     # exception will be raised if `FrameType::Error` is received
     def read(*args)
-      result = connection.queue.pop
-      debug "Read message: #{result}"
+      result = connection.responses.pop
+      debug "Read response: #{result}"
       if(args.include?(:validate) && result.is_a?(FrameType::Error))
         error = Error::BadResponse.new('Write failed')
         error.result = result
