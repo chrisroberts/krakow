@@ -105,13 +105,15 @@ module Krakow
         debug 'Responding to heartbeat'
         transmit Command::Nop.new
         nil
-      elsif(!message.is_a?(FrameType::Message))
-        debug "Captured non-message type response: #{message}"
-        responses << message
       else
         if(callback && callback[:actor] && callback[:method])
           debug "Sending #{message} to callback `#{callback[:actor]}##{callback[:method]}`"
-          callback[:actor].send(callback[:method], message, current_actor)
+          message = callback[:actor].send(callback[:method], message, current_actor)
+        end
+        if(!message.is_a?(FrameType::Message))
+          debug "Captured non-message type response: #{message}"
+          responses << message
+          nil
         else
           message
         end
