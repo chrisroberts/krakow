@@ -4,6 +4,7 @@ module Krakow
     include Utils::Lazy
     include Celluloid
 
+    trap_exit :connection_died
     finalizer :goodbye_my_love!
 
     attr_reader :connections, :discovery, :queue, :in_flight
@@ -102,11 +103,21 @@ module Krakow
       connection.transmit(Command::Sub.new(:topic_name => topic, :channel_name => channel))
       begin
         connection.transmit(Command::Rdy.new(:count => receive_count || 1))
+        self.link connection
         true
       rescue Error::BadResponse => e
         debug "Failed to establish connection: #{e.result.error}"
         connection.terminate
         false
+      end
+    end
+
+    def connection_died(con, reason)
+      connections.delete_if do |key, value|
+        if(value == con)
+          warn "Connection failure detected. Removing connection: #{key}"
+          true
+        end
       end
     end
 
