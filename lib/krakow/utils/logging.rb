@@ -19,6 +19,14 @@ module Krakow
         end
       end
 
+      class << self
+        def level=(level)
+          if(Celluloid.logger.class == Logger)
+            Celluloid.logger.level = Logger.const_get(level.to_s.upcase.to_sym)
+          end
+        end
+      end
+
     end
   end
 end
