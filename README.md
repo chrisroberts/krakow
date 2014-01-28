@@ -103,6 +103,27 @@ consumer = Krakow::Consumer(
 ```
 Great for testing, but you really should use the lookup service in the "real world"
 
+### Backoff support
+
+NSQ has this backoff notion. It's pretty swell. Basically, if messages from a specific
+producer get re-queued (fail), then message consumption from that producers is halted,
+and slowly ramped back up. It gives time for downstream issues to work themselves out
+if possible instead of just keeping the firehose of gasoline on. Neat.
+
+By default backoff support is disabled. It can be enabled by setting the `:backoff_interval`
+when constructing the `Consumer`. The interval is in seconds (and yes, floats are allowed
+for sub-second intervals):
+
+```ruby
+consumer = Krakow::Consumer(
+  :nsqlookupd => 'http://HOST:PORT',
+  :topic => 'target',
+  :channel => 'ship',
+  :max_in_flight => 30,
+  :backoff_interval => 1
+)
+```
+
 ### It doesn't work
 
 Create an issue on the github repository.
