@@ -15,7 +15,14 @@ module Krakow
       end
 
       def to_line
-        payload = MultiJson.dump(arguments)
+        filtered = Hash[*
+          arguments.map do |key, value|
+            unless(value.nil?)
+              [key, value]
+            end
+          end.compact.flatten
+        ]
+        payload = MultiJson.dump(filtered)
         [name, "\n", payload.length, payload].pack('a*a*l>a*')
       end
 
