@@ -56,6 +56,26 @@ consumer = Krakow::Consumer(
 )
 ```
 
+### Clean up after yourself
+
+Since Celluloid[2] is in use under the hood, and the main interaction points are
+Actors (`Consumer` and `Producer`) you'll need to be sure you clean up. This simply
+means terminating the instance (since falling out of scope will not cause it to be
+garbage collected).
+
+```ruby
+consumer = Krakow::Consumer(
+  :nsqlookupd => 'http://HOST:PORT',
+  :topic => 'target',
+  :channel => 'ship',
+  :max_in_flight => 30
+)
+
+# do stuff
+
+consumer.terminate
+```
+
 ### Please make it shutup!
 
 Sure:
@@ -87,7 +107,7 @@ Great for testing, but you really should use the lookup service in the "real wor
 
 Create an issue on the github repository.
 
-#### It doesn't do `x`
+### It doesn't do `x`
 
 Create an issue, or even better, send a PR. Just base it off the `develop` branch.
 
@@ -95,5 +115,5 @@ Create an issue, or even better, send a PR. Just base it off the `develop` branc
 * Repo: https://github.com/chrisroberts/krakow
 * IRC: Freenode @ spox
 
-[1] https://github.com/bitly/nsq
-[2] https://github.com/celluloid/celluloid
+* [1] https://github.com/bitly/nsq
+* [2] https://github.com/celluloid/celluloid
