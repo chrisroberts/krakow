@@ -14,7 +14,7 @@ module Krakow
     def initialize(args={})
       super
       required! :host, :port
-      optional :version, :queue, :callback
+      optional :version, :queue, :callback, :responses
       arguments[:queue] ||= Queue.new
       arguments[:responses] ||= Queue.new
       arguments[:version] ||= 'v2'
