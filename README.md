@@ -136,5 +136,5 @@ Create an issue, or even better, send a PR. Just base it off the `develop` branc
 * Repo: https://github.com/chrisroberts/krakow
 * IRC: Freenode @ spox
 
-[1]: https://github.com/bitly/nsq "NSQ"
-[2]: https://github.com/celluloid/celluloid "Celluloid"
+[1]: http://bitly.github.io/nsq/ "NSQ: a realtime distributed messaging platform"
+[2]: http://celluloid.io "Celluloid: Actor-based concurrent object framework for Ruby"
