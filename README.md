@@ -36,7 +36,7 @@ end
 
 ## What is this?
 
-It's a Ruby library for NSQ[1] using Celluloid[2] under the hood.
+It's a Ruby library for [NSQ][1] using [Celluloid][2] under the hood.
 
 ## Information and FAQ that I totally made up
 
@@ -58,7 +58,7 @@ consumer = Krakow::Consumer(
 
 ### Clean up after yourself
 
-Since Celluloid[2] is in use under the hood, and the main interaction points are
+Since [Celluloid][2] is in use under the hood, and the main interaction points are
 Actors (`Consumer` and `Producer`) you'll need to be sure you clean up. This simply
 means terminating the instance (since falling out of scope will not cause it to be
 garbage collected).
@@ -135,7 +135,6 @@ Create an issue, or even better, send a PR. Just base it off the `develop` branc
 # Info
 * Repo: https://github.com/chrisroberts/krakow
 * IRC: Freenode @ spox
-```
-[1] https://github.com/bitly/nsq
-[2] https://github.com/celluloid/celluloid
-```
+
+[1]: https://github.com/bitly/nsq "NSQ"
+[2]: https://github.com/celluloid/celluloid "Celluloid"
