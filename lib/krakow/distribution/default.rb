@@ -18,9 +18,8 @@ module Krakow
           connections.each do |connection|
             set_ready_for(connection, :force)
           end
-          # TODO: Make interval configurable
           watch_dog.cancel if watch_dog
-          @watch_dog = every(5) do
+          @watch_dog = every(watch_dog_interval) do
             force_unready
           end
         else

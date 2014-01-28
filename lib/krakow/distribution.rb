@@ -12,6 +12,8 @@ module Krakow
 
     def initialize(args={})
       super
+      optional :watch_dog_interval
+      attributes[:watch_dog_interval] ||= 5
       @max_in_flight = arguments[:max_in_flight] || 1
       @ideal = 0
       @flight_record = {}
