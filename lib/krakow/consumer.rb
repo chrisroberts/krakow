@@ -127,10 +127,11 @@ module Krakow
       connections.delete_if do |key, value|
         if(value == con)
           warn "Connection failure detected. Removing connection: #{key}"
-          discovery.remove_connection(con)
+          distribution.remove_connection(con)
           true
         end
       end
+      distribution.redistribute!
     end
 
     # message_id:: Message ID

@@ -93,7 +93,7 @@ module Krakow
       # remove connection from registry
       registry.delete(connection_key(connection))
       # remove any in flight messages
-      in_flight.delete_if do |k,v|
+      flight_record.delete_if do |k,v|
         v == connection_key(connection)
       end
       true
@@ -102,7 +102,7 @@ module Krakow
     # connection:: Connection
     # Return lookup key (actor reference)
     def connection_key(connection)
-      connection.current_actor
+      connection
     end
 
     # msg_id:: Message ID string
