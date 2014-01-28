@@ -7,14 +7,17 @@ module Krakow
     trap_exit :connection_failure
     finalizer :goodbye_my_love!
 
-    attr_reader :connections, :discovery, :queue, :in_flight
+    attr_reader :connections, :discovery, :distribution, :queue
 
     def initialize(args={})
       super
       required! :topic, :channel
-      optional :host, :port, :nslookupd, :receive_count
+      optional :host, :port, :nslookupd, :max_in_flight
+      arguments[:max_in_flight] ||= 1
       @connections = {}
-      @in_flight = {}
+      @distribution = Distribution::Default.new(
+        :max_in_flight => max_in_flight
+      )
       @queue = Queue.new
       if(nslookupd)
         debug "Connections will be established via lookup #{nslookupd.inspect}"
@@ -25,12 +28,13 @@ module Krakow
         debug "Connection will be established via direct connection #{host}:#{port}"
         connection = build_connection(host, port, queue)
         if(register(connection))
-          connections[:default] = connection
+          info "Registered new connection #{connection}"
+          distribution.redistribute!
         else
-          raise Error.new("Failed to establish subscription at provided end point (#{host}:#{port}")
+          abort ConnectionFailure.new("Failed to establish subscription at provided end point (#{host}:#{port}")
         end
       else
-        raise Error.new('No connection information provided!')
+        abort ConfigurationError.new('No connection information provided!')
       end
     end
 
@@ -43,6 +47,7 @@ module Krakow
       connections.values.each do |con|
         con.terminate if con.alive?
       end
+      distribution.terminate if distribution && distribution.alive?
       info 'Consumer torn down'
     end
 
@@ -65,12 +70,17 @@ module Krakow
     # message:: FrameType
     # connection:: Connection
     # Process message if required
-    # NOTE: Currently unused
     def process_message(message, connection)
       if(message.is_a?(FrameType::Message))
-        in_flight[message.message_id] = "#{connection.host}_#{connection.port}"
+        distribution.register_message(message, connection)
       end
       message
+    end
+
+    # connection:: Connection
+    # Send RDY for connection based on distribution rules
+    def update_ready!(connection)
+      distribution.set_ready_for(connection)
     end
 
     # Requests lookup and adds connections
@@ -78,32 +88,29 @@ module Krakow
       debug 'Running consumer `init!` connection builds'
       found = discovery.lookup(topic)
       debug "Discovery results: #{found.inspect}"
+      connection = nil
       found.each do |node|
         debug "Processing discovery result: #{node.inspect}"
         key = "#{node[:broadcast_address]}_#{node[:tcp_port]}"
         unless(connections[key])
           connection = build_connection(node[:broadcast_address], node[:tcp_port], queue)
-          if(register(connection))
-            connections[key] = connection
-            info "Registered new connection #{connection}"
-          else
-            warn "Failed to register connection #{connection} (#{node.inspect})"
-            connection.terminate
-          end
+          info "Registered new connection #{connection}" if register(connection)
         else
           debug "Discovery result already registered: #{node.inspect}"
         end
       end
+      distribution.redistribute! if connection
     end
 
     # connection:: Connection
     # Registers connection with subscription. Returns false if failed
     def register(connection)
-      connection.init!
-      connection.transmit(Command::Sub.new(:topic_name => topic, :channel_name => channel))
       begin
-        connection.transmit(Command::Rdy.new(:count => receive_count || 1))
+        connection.init!
+        connection.transmit(Command::Sub.new(:topic_name => topic, :channel_name => channel))
         self.link connection
+        connections["#{connection.host}_#{connection.port}"] = connection
+        distribution.add_connection(connection)
         true
       rescue Error::BadResponse => e
         debug "Failed to establish connection: #{e.result.error}"
@@ -119,6 +126,7 @@ module Krakow
       connections.delete_if do |key, value|
         if(value == con)
           warn "Connection failure detected. Removing connection: #{key}"
+          discovery.remove_connection(con)
           true
         end
       end
@@ -127,9 +135,11 @@ module Krakow
     # message_id:: Message ID
     # Confirm message has been processed
     def confirm(message_id)
-      connection = in_flight_lookup(message_id)
-      connection.transmit(Command::Fin.new(:message_id => message_id))
-      connection.transmit(Command::Rdy.new(:count => (receive_count - queue.size)))
+      distribution.in_flight_lookup(message_id) do |connection|
+        connection.transmit(Command::Fin.new(:message_id => message_id))
+      end
+      connection = distribution.unregister_message(message_id)
+      update_ready!(connection)
       true
     end
 
@@ -137,16 +147,17 @@ module Krakow
     # timeout:: Requeue timeout (default is none)
     # Requeue message (processing failure)
     def requeue(message_id, timeout=0)
-      in_flight_lookup(message_id).transmit(
-        Command::Req.new(:message_id => message_id, :timeout => timeout)
-      )
-    end
-
-    # msg_id:: Message ID
-    # Return connection linked to message ID
-    def in_flight_lookup(msg_id)
-      connections[in_flight[msg_id]] ||
-        abort(Error.new("Failed to locate connection for in flight message (#{msg_id})"))
+      distribution.in_flight_lookup(message_id) do |connection|
+        connection.transmit(
+          Command::Req.new(
+            :message_id => message_id,
+            :timeout => timeout
+          )
+        )
+      end
+      connection = distributrion.unregister_message(message_id)
+      update_ready!(connection)
+      true
     end
 
   end

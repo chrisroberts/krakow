@@ -6,6 +6,7 @@ module Krakow
   autoload :Connection, 'krakow/connection'
   autoload :Consumer, 'krakow/consumer'
   autoload :Discovery, 'krakow/discovery'
+  autoload :Distribution, 'krakow/distribution'
   autoload :Error, 'krakow/exceptions'
   autoload :FrameType, 'krakow/frame_type'
   autoload :Producer, 'krakow/producer'
