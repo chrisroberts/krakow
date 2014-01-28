@@ -45,10 +45,16 @@ module Krakow
 
       # Returns next connection to receive RDY count
       def less_than_ideal_ready!
-        if(less_than_ideal_stack.nil? || less_than_ideal_stack.empty?)
-          @less_than_ideal_stack = waiting_connections
+        admit_defeat = false
+        connection = nil
+        until(connection || (admit_defeat && less_than_ideal_stack.empty?))
+          if(less_than_ideal_stack.nil? || less_than_ideal_stack.empty?)
+            @less_than_ideal_stack = waiting_connections
+            admit_defeat = true
+          end
+          con = less_than_ideal_stack.pop
+          connection = con unless registry_lookup(con)[:backoff_until] > Time.now.to_i
         end
-        connection = less_than_ideal_stack.pop
         if(connection)
           registry_lookup(connection)[:ready] = 1
           connection
@@ -60,21 +66,16 @@ module Krakow
       # Provides customized RDY set when less than ideal to round
       # robin through connections
       def set_ready_for(connection, *args)
-        if(less_than_ideal?)
-          if(args.include?(:force))
-            super connection
+        super connection
+        if(less_than_ideal? && !args.include?(:force))
+          debug "RDY set ignored due to less than ideal state (con: #{connection})"
+          con = less_than_ideal_ready!
+          if(con)
+            watch_dog.reset if watch_dog
+            super con
           else
-            debug "RDY set ignored due to less than ideal state (con: #{connection})"
-            con = less_than_ideal_ready!
-            if(con)
-              watch_dog.reset if watch_dog
-              super con
-            else
-              warn 'Failed to set RDY state while less than ideal. Connection stack is empty!'
-            end
+            warn 'Failed to set RDY state while less than ideal. Connection stack is empty!'
           end
-        else
-          super connection
         end
       end
 

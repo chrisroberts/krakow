@@ -14,9 +14,6 @@ module Krakow
       super
       optional :watch_dog_interval, :backoff_interval
       arguments[:watch_dog_interval] ||= 5
-      if(arguments[:backoff_interval].nil?)
-        arguments[:backoff_interval] = 1
-      end
       @max_in_flight = arguments[:max_in_flight] || 1
       @ideal = 0
       @flight_record = {}
@@ -40,8 +37,7 @@ module Krakow
     def unregister_message(message)
       msg_id = message.respond_to?(:message_id) ? message.message_id : message.to_s
       connection = flight_record[msg_id]
-      # TODO: Add lookup error
-      registry_info = registry[connection_key(connection)]
+      registry_info = registry_lookup(connection)
       flight_record.delete(msg_id)
       registry_info[:in_flight] -= 1
       calculate_ready!(connection)
@@ -85,7 +81,8 @@ module Krakow
       registry[connection_key(connection)] = {
         :ready => initial_ready,
         :in_flight => 0,
-        :failures => 0
+        :failures => 0,
+        :backoff_until => 0
       }
       true
     end
@@ -138,7 +135,7 @@ module Krakow
 
     # connection:: Connection
     # Log failure of processed message
-    def error(connection)
+    def failure(connection)
       if(backoff_interval)
         registry_info = registry_lookup(connection)
         registry_info[:failures] += 1
