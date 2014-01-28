@@ -19,8 +19,12 @@ module Krakow
       # error if not found
       def required!(*args)
         args.each do |key|
-          unless(arguments.has_key?(key.to_sym))
+          key = key.to_sym
+          unless(arguments.has_key?(key))
             raise ArgumentError.new "Missing required option `#{key}`!"
+          end
+          define_singleton_method(key) do
+            arguments[key]
           end
         end
       end
@@ -33,6 +37,9 @@ module Krakow
           unless(arguments.has_key?(key))
             arguments[key] = nil
           end
+          define_singleton_method(key) do
+            arguments[key]
+          end
         end
       end
 
@@ -42,20 +49,6 @@ module Krakow
 
       def inspect
         "<#{self.class.name}:#{object_id} [#{arguments.inspect}]>"
-      end
-
-      def method_missing(*args)
-        key = args.first.to_sym
-        if(arguments.has_key?(key))
-          arguments[key]
-        else
-          super
-        end
-      end
-
-      def respond_to_missing?(key, *args)
-        key = key.to_sym
-        super || arguments.has_key?(key)
       end
 
     end
