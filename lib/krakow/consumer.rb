@@ -12,8 +12,9 @@ module Krakow
     def initialize(args={})
       super
       required! :topic, :channel
-      optional :host, :port, :nslookupd, :max_in_flight, :backoff_interval
+      optional :host, :port, :nslookupd, :max_in_flight, :backoff_interval, :discovery_interval
       arguments[:max_in_flight] ||= 1
+      arguments[:discovery_interval] ||= 30
       @connections = {}
       @distribution = Distribution::Default.new(
         :max_in_flight => max_in_flight,
@@ -23,7 +24,7 @@ module Krakow
       if(nslookupd)
         debug "Connections will be established via lookup #{nslookupd.inspect}"
         @discovery = Discovery.new(:nslookupd => nslookupd)
-        every(60){ init! }
+        every(discovery_interval){ init! }
         init!
       elsif(host && port)
         debug "Connection will be established via direct connection #{host}:#{port}"
