@@ -80,7 +80,7 @@ consumer.terminate
 
 Sure:
 
-```
+```ruby
 Krakow::Utils::Logging.level = :warn # :debug / :info / :warn / :error / :fatal
 ```
 
@@ -106,9 +106,9 @@ Great for testing, but you really should use the lookup service in the "real wor
 ### Backoff support
 
 NSQ has this backoff notion. It's pretty swell. Basically, if messages from a specific
-producer get re-queued (fail), then message consumption from that producers is halted,
-and slowly ramped back up. It gives time for downstream issues to work themselves out
-if possible instead of just keeping the firehose of gasoline on. Neat.
+producer get re-queued (fail), then message consumption from that producer is halted,
+and slowly ramped back up. It gives time for downstream issues to work themselves out,
+if possible, instead of just keeping the firehose of gasoline on. Neat.
 
 By default backoff support is disabled. It can be enabled by setting the `:backoff_interval`
 when constructing the `Consumer`. The interval is in seconds (and yes, floats are allowed
@@ -135,6 +135,7 @@ Create an issue, or even better, send a PR. Just base it off the `develop` branc
 # Info
 * Repo: https://github.com/chrisroberts/krakow
 * IRC: Freenode @ spox
-
-* [1] https://github.com/bitly/nsq
-* [2] https://github.com/celluloid/celluloid
+```
+[1] https://github.com/bitly/nsq
+[2] https://github.com/celluloid/celluloid
+```
