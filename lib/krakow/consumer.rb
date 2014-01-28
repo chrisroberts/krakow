@@ -137,9 +137,9 @@ module Krakow
     def confirm(message_id)
       distribution.in_flight_lookup(message_id) do |connection|
         connection.transmit(Command::Fin.new(:message_id => message_id))
+        distribution.success(connection)
       end
       connection = distribution.unregister_message(message_id)
-      distribution.success(connection)
       update_ready!(connection)
       true
     end
@@ -155,9 +155,9 @@ module Krakow
             :timeout => timeout
           )
         )
+        distribution.failure(connection)
       end
       connection = distribution.unregister_message(message_id)
-      distribution.failure(connection)
       update_ready!(connection)
       true
     end
