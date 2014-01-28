@@ -84,7 +84,14 @@ module Krakow
         registry_info = registry_lookup(connection)
         unless(less_than_ideal?)
           registry_info[:ready] = ideal - registry_info[:in_flight]
-          registry_info[:ready] = 0 if registry_info[:ready] < 0
+          if(registry_info[:ready] < 0 || registry_info[:backoff_until] > Time.now.to_i)
+            registry_info[:ready] = 0
+            registry_info[:backoff_timer].cancel if registry[:backoff_timer]
+            registry_info[:backoff_timer] = after(registry_info[:backoff_until] - Time.now.to_i) do
+              calculate_ready!(connection)
+              set_ready_for(conection) unless less_than_ideal?
+            end
+          end
           registry_info[:ready]
         else
           registry_info[:ready] = 0
@@ -94,7 +101,7 @@ module Krakow
       # Returns all connections without RDY state
       def waiting_connections
         registry.find_all do |connection, info|
-          info[:ready] < 1 && info[:in_flight] < 1
+          info[:ready] < 1 && info[:in_flight] < 1 && info[:backoff_until] < Time.now.to_i
         end.map(&:first).compact
       end
 

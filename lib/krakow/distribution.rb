@@ -12,8 +12,11 @@ module Krakow
 
     def initialize(args={})
       super
-      optional :watch_dog_interval
-      attributes[:watch_dog_interval] ||= 5
+      optional :watch_dog_interval, :backoff_interval
+      arguments[:watch_dog_interval] ||= 5
+      if(arguments[:backoff_interval].nil?)
+        arguments[:backoff_interval] = 1
+      end
       @max_in_flight = arguments[:max_in_flight] || 1
       @ideal = 0
       @flight_record = {}
@@ -53,7 +56,7 @@ module Krakow
 
     # connection:: Connection
     # Send RDY for given connection
-    def set_ready_for(connection)
+    def set_ready_for(connection, *_)
       connection.transmit(
         Command::Rdy.new(
           :count => ready_for(connection)
@@ -81,7 +84,8 @@ module Krakow
     def add_connection(connection)
       registry[connection_key(connection)] = {
         :ready => initial_ready,
-        :in_flight => 0
+        :in_flight => 0,
+        :failures => 0
       }
       true
     end
@@ -130,6 +134,31 @@ module Krakow
     # Return list of all connections in registry
     def connections
       registry.keys
+    end
+
+    # connection:: Connection
+    # Log failure of processed message
+    def error(connection)
+      if(backoff_interval)
+        registry_info = registry_lookup(connection)
+        registry_info[:failures] += 1
+        registry_info[:backoff_until] = Time.now.to_i + (registry_info[:failures] * backoff_interval)
+      end
+      true
+    end
+
+    # connection:: Connection
+    # Log success of processed message
+    def success(connection)
+      if(backoff_interval)
+        registry_info = registry_lookup(connection)
+        if(registry_info[:failures] > 1)
+          registry_info[:failures] -= 1
+          registry_info[:backoff_until] = Time.now.to_i + (registry_info[:failures] * backoff_interval)
+        else
+          registry_info[:failures] = 0
+        end
+      end
     end
 
   end

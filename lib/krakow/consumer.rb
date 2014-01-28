@@ -139,6 +139,7 @@ module Krakow
         connection.transmit(Command::Fin.new(:message_id => message_id))
       end
       connection = distribution.unregister_message(message_id)
+      distribution.success(connection)
       update_ready!(connection)
       true
     end
@@ -155,7 +156,8 @@ module Krakow
           )
         )
       end
-      connection = distributrion.unregister_message(message_id)
+      connection = distribution.unregister_message(message_id)
+      distribution.failure(connection)
       update_ready!(connection)
       true
     end
