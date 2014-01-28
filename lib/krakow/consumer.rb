@@ -12,11 +12,12 @@ module Krakow
     def initialize(args={})
       super
       required! :topic, :channel
-      optional :host, :port, :nslookupd, :max_in_flight
+      optional :host, :port, :nslookupd, :max_in_flight, :backoff_interval
       arguments[:max_in_flight] ||= 1
       @connections = {}
       @distribution = Distribution::Default.new(
-        :max_in_flight => max_in_flight
+        :max_in_flight => max_in_flight,
+        :backoff_interval => backoff_interval
       )
       @queue = Queue.new
       if(nslookupd)
