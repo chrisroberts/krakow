@@ -1,6 +1,8 @@
 module Krakow
   class Producer
 
+    autoload :Http, 'krakow/producer/http'
+
     include Utils::Lazy
     include Celluloid
 
