@@ -7,7 +7,7 @@
 ```ruby
 require 'krakow'
 
-producer = Krakow::Producer(
+producer = Krakow::Producer.new(
   :host => 'HOST',
   :port => 'PORT',
   :topic => 'target'
@@ -20,7 +20,7 @@ producer.write('KRAKOW!', 'KRAKOW!')
 ```ruby
 require 'krakow'
 
-consumer = Krakow::Consumer(
+consumer = Krakow::Consumer.new(
   :nsqlookupd => 'http://HOST:PORT',
   :topic => 'target',
   :channel => 'ship'
@@ -48,7 +48,7 @@ you want, so adjust it when you create your consumer instance.
 ```ruby
 require 'krakow'
 
-consumer = Krakow::Consumer(
+consumer = Krakow::Consumer.new(
   :nsqlookupd => 'http://HOST:PORT',
   :topic => 'target',
   :channel => 'ship',
@@ -64,7 +64,7 @@ means terminating the instance (since falling out of scope will not cause it to 
 garbage collected).
 
 ```ruby
-consumer = Krakow::Consumer(
+consumer = Krakow::Consumer.new(
   :nsqlookupd => 'http://HOST:PORT',
   :topic => 'target',
   :channel => 'ship',
@@ -93,7 +93,7 @@ Because forcing starvation is mean.
 Fine!
 
 ```ruby
-consumer = Krakow::Consumer(
+consumer = Krakow::Consumer.new(
   :host => 'HOST',
   :port => 'PORT',
   :topic => 'target',
@@ -115,7 +115,7 @@ when constructing the `Consumer`. The interval is in seconds (and yes, floats ar
 for sub-second intervals):
 
 ```ruby
-consumer = Krakow::Consumer(
+consumer = Krakow::Consumer.new(
   :nsqlookupd => 'http://HOST:PORT',
   :topic => 'target',
   :channel => 'ship',
