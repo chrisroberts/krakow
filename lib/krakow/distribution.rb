@@ -112,7 +112,7 @@ module Krakow
     def in_flight_lookup(msg_id)
       connection = flight_record[msg_id]
       unless(connection)
-        abort LookupFailed.new("Failed to locate in flight message (ID: #{msg_id})")
+        abort Krakow::Error::LookupFailed.new("Failed to locate in flight message (ID: #{msg_id})")
       end
       if(block_given?)
         yield connection
@@ -125,7 +125,7 @@ module Krakow
     # Return registry information for given connection
     def registry_lookup(connection)
       registry[connection_key(connection)] ||
-        abort(LookupFailed.new("Failed to locate connection information in registry (#{connection})"))
+        abort(Krakow::Error::LookupFailed.new("Failed to locate connection information in registry (#{connection})"))
     end
 
     # Return list of all connections in registry
