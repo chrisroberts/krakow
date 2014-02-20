@@ -14,7 +14,7 @@ module Krakow
     def initialize(args={})
       super
       required! :host, :port
-      optional :version, :queue, :callback, :responses
+      optional :version, :queue, :callback, :responses, :notifier
       arguments[:queue] ||= Queue.new
       arguments[:responses] ||= Queue.new
       arguments[:version] ||= 'v2'
@@ -96,6 +96,7 @@ module Krakow
         if(message)
           debug "Adding message to queue #{message}"
           queue << message
+          notifier.signal(message) if notifier
         end
       end
     end

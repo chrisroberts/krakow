@@ -12,7 +12,7 @@ module Krakow
     def initialize(args={})
       super
       required! :topic, :channel
-      optional :host, :port, :nslookupd, :max_in_flight, :backoff_interval, :discovery_interval
+      optional :host, :port, :nslookupd, :max_in_flight, :backoff_interval, :discovery_interval, :notifier
       arguments[:max_in_flight] ||= 1
       arguments[:discovery_interval] ||= 30
       @connections = {}
@@ -33,10 +33,10 @@ module Krakow
           info "Registered new connection #{connection}"
           distribution.redistribute!
         else
-          abort ConnectionFailure.new("Failed to establish subscription at provided end point (#{host}:#{port}")
+          abort Error::ConnectionFailure.new("Failed to establish subscription at provided end point (#{host}:#{port}")
         end
       else
-        abort ConfigurationError.new('No connection information provided!')
+        abort Error::ConfigurationError.new('No connection information provided!')
       end
     end
 
@@ -62,6 +62,7 @@ module Krakow
         :host => host,
         :port => port,
         :queue => queue,
+        :notifier => notifier,
         :callback => {
           :actor => current_actor,
           :method => :process_message
