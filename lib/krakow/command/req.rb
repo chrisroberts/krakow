@@ -8,7 +8,7 @@ module Krakow
       end
 
       def to_line
-        "#{name} #{message_id} #{timeout}\n"
+        "#{name} #{message_id} #{self.timeout}\n"
       end
 
       class << self
