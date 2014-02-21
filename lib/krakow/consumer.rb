@@ -24,8 +24,8 @@ module Krakow
       if(nslookupd)
         debug "Connections will be established via lookup #{nslookupd.inspect}"
         @discovery = Discovery.new(:nslookupd => nslookupd)
-        every(discovery_interval){ init! }
         init!
+        every(discovery_interval){ init! }
       elsif(host && port)
         debug "Connection will be established via direct connection #{host}:#{port}"
         connection = build_connection(host, port, queue)
@@ -136,23 +136,30 @@ module Krakow
       distribution.redistribute!
     end
 
-    # message_id:: Message ID
+    # message_id:: Message ID (or message if you want to be lazy)
     # Confirm message has been processed
     def confirm(message_id)
-      distribution.in_flight_lookup(message_id) do |connection|
-        connection.transmit(Command::Fin.new(:message_id => message_id))
-        distribution.success(connection)
+      message_id = message_id.message_id if message_id.respond_to?(:message_id)
+      begin
+        distribution.in_flight_lookup(message_id) do |connection|
+          distribution.unregister_message(message_id)
+          connection.transmit(Command::Fin.new(:message_id => message_id))
+          distribution.success(connection)
+          update_ready!(connection)
+        end
+        true
+      rescue => e
+        abort e
       end
-      connection = distribution.unregister_message(message_id)
-      update_ready!(connection)
-      true
     end
 
     # message_id:: Message ID
     # timeout:: Requeue timeout (default is none)
     # Requeue message (processing failure)
     def requeue(message_id, timeout=0)
+      message_id = message_id.message_id if message_id.respond_to?(:message_id)
       distribution.in_flight_lookup(message_id) do |connection|
+        distribution.unregister_message(message_id)
         connection.transmit(
           Command::Req.new(
             :message_id => message_id,
@@ -160,9 +167,8 @@ module Krakow
           )
         )
         distribution.failure(connection)
+        update_ready!(connection)
       end
-      connection = distribution.unregister_message(message_id)
-      update_ready!(connection)
       true
     end
 
