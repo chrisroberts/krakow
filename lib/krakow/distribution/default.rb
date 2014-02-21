@@ -6,7 +6,7 @@ module Krakow
 
       # recalculate `ideal` and update RDY on connections
       def redistribute!
-        @ideal = max_in_flight / registry.size
+        @ideal = registry.size < 1 ? 0 : max_in_flight / registry.size
         debug "Distribution calculated ideal: #{ideal}"
         if(less_than_ideal?)
           registry.each do |connection, reg_info|
