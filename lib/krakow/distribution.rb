@@ -22,13 +22,13 @@ module Krakow
 
     # Reset flight distributions
     def redistribute!
-      raise NoMethodError.new 'Custom `#redistrubute!` method must be provided!'
+      raise NotImplementedError.new 'Custom `#redistrubute!` method must be provided!'
     end
 
     # connection:: Connection
     # Determine RDY value for given connection
     def calculate_ready!(connection)
-      raise NoMethodError.new 'Custom `#calculate_ready!` method must be provided!'
+      raise NotImplementedError.new 'Custom `#calculate_ready!` method must be provided!'
     end
 
     # message:: FrameType::Message or message ID string
