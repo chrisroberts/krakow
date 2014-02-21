@@ -1,15 +1,20 @@
 require 'http'
 require 'uri'
+require 'ostruct'
 
 module Krakow
   class Producer
     class Http
+
+      class Response < OpenStruct
+      end
 
       include Utils::Lazy
 
       attr_reader :uri
 
       def initialize(args={})
+        super
         required! :endpoint, :topic
         @uri = URI.parse(endpoint)
       end
@@ -17,7 +22,13 @@ module Krakow
       def send_message(method, path, args={})
         build = uri.dup
         build.path = "/#{path}"
-        HTTP.send(method, build.to_s, args)
+        response = HTTP.send(method, build.to_s, args)
+        begin
+          response = MultiJson.load(response.response.body)
+        rescue MultiJson::LoadError
+          response = {'status_code' => response == 'OK' ? 200 : nil, 'status_txt' => response, 'data' => nil}
+        end
+        Response.new(response)
       end
 
       def write(*payload)
@@ -108,6 +119,10 @@ module Krakow
 
       def ping
         send_message(:get, :ping)
+      end
+
+      def info
+        send_message(:get, :info)
       end
 
     end
