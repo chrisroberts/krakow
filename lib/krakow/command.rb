@@ -13,6 +13,20 @@ module Krakow
         []
       end
 
+      # message:: Krakow::Message
+      # Returns type of response expected (:none, :error_only, :required)
+      def response_for(message)
+        if(message.class.ok.empty?)
+          if(message.class.error.empty?)
+            :none
+          else
+            :error_only
+          end
+        else
+          :required
+        end
+      end
+
     end
 
     attr_accessor :response
@@ -23,8 +37,8 @@ module Krakow
     end
 
     # Convert to line output
-    def to_line
-      raise NoMethodError.new 'No line conversion method defined!'
+    def to_line(*args)
+      raise NotImplementedError.new 'No line conversion method defined!'
     end
 
     def ok?(response)

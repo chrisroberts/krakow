@@ -1,3 +1,4 @@
+require 'krakow/version'
 require 'celluloid/io'
 require 'celluloid/autostart'
 
@@ -7,18 +8,36 @@ module Krakow
     include Utils::Lazy
     include Celluloid::IO
 
+    FEATURES = [
+      :max_rdy_count,
+      :max_msg_timeout,
+      :msg_timeout,
+      :tls_v1,
+      :deflate,
+      :deflate_level,
+      :max_deflate_level,
+      :snappy,
+      :sample_rate
+    ]
+    EXCLUSIVE_FEATURES = [[:snappy, :deflate]]
+    ENABLEABLE_FEATURES = [:snappy, :deflate, :tls_v1]
+
     finalizer :goodbye_my_love!
 
-    attr_reader :socket
+    attr_reader :socket, :endpoint_settings
 
     def initialize(args={})
       super
       required! :host, :port
-      optional :version, :queue, :callback, :responses, :notifier
+      optional :version, :queue, :callback, :responses, :notifier, :features, :response_wait, :error_wait, :disable_negotiation
       arguments[:queue] ||= Queue.new
       arguments[:responses] ||= Queue.new
       arguments[:version] ||= 'v2'
+      arguments[:features] ||= {}
+      arguments[:response_wait] ||= 2
+      arguments[:error_wait] ||= 2
       @socket = TCPSocket.new(host, port)
+      @endpoint_settings = {}
     end
 
     def to_s
@@ -29,24 +48,44 @@ module Krakow
     def init!
       debug 'Initializing connection'
       socket.write version.rjust(4).upcase
+      unless(disable_negotiation?)
+        identify_and_negotiate
+      end
       async.process_to_queue!
       info 'Connection initialized'
     end
 
     # message:: Command instance to send
     # Send the message
+    # TODO: Do we want to validate Command instance and abort if
+    # response is already set?
     def transmit(message)
       output = message.to_line
       debug ">>> #{output}"
       socket.write output
-      unless(responses.empty?)
-        response = responses.pop
-        message.response = response
-        if(message.error?(response))
-          res = Error::BadResponse.new "Message transmission failed #{message}"
-          res.result = response
-          abort res
+      response_wait = wait_time_for(message)
+      responses.clear if response_wait
+      if(response_wait)
+        response = nil
+        (response_wait / 0.1).to_i.times do |i|
+          response = responses.pop unless responses.empty?
+          break if response
+          debug "Response wait sleep for 0.1 seconds (#{i+1} time)"
+          sleep(0.1)
         end
+        if(response)
+          message.response = response
+          if(message.error?(response))
+            res = Error::BadResponse.new "Message transmission failed #{message}"
+            res.result = response
+            abort res
+          end
+          response
+        else
+          abort Error::BadResponse::NoResponse.new "No response provided for message #{message}"
+        end
+      else
+        true
       end
     end
 
@@ -123,5 +162,60 @@ module Krakow
         end
       end
     end
+
+    def wait_time_for(message)
+      case Command.response_for(message)
+      when :required
+        response_wait
+      when :error_only
+        error_wait
+      end
+    end
+
+    def identify_defaults
+      unless(@identify_defaults)
+        @identify_defaults = {
+          :short_id => 'fubarx',
+          :long_id => 'fubarx',
+          :user_agent => "krakow/#{Krakow::VERSION}",
+          :feature_negotiation => !disable_negotiation
+        }
+      end
+      @identify_defaults
+    end
+
+    def identify_and_negotiate
+      ident = Command::Identify.new(
+        identify_defaults.merge(features)
+      )
+      socket.write(ident.to_line)
+      response = receive
+      begin
+        @endpoint_settings = MultiJson.load(response.content, :symbolize_keys => true)
+        info "Connection settings: #{endpoint_settings.inspect}"
+        # Enable things we need to enable
+        ENABLEABLE_FEATURES.each do |key|
+          if(endpoint_settings[key])
+            send(key)
+          end
+        end
+      rescue MultiJson::LoadError => e
+        error "Failed to parse response from Identify request: #{e} - #{response}"
+        abort e
+      end
+      true
+    end
+
+    def snappy
+      debug 'Loading support for snappy compression and converting connection'
+      require 'krakow/utils/snappy_frames'
+      @socket = SnappyFrames::Io.new(socket)
+    end
+
+    def deflate
+      debug 'Loading support for deflate compression and converting connection'
+      @socket = Zocket.new(socket)
+    end
+
   end
 end

@@ -34,6 +34,7 @@ module Krakow
         def error
           %w(E_INVALID E_BAD_BODY)
         end
+
       end
 
     end

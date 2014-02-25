@@ -14,7 +14,7 @@ module Krakow
     def initialize(args={})
       super
       required! :host, :port, :topic
-      optional :connect_retries
+      optional :reconnect_retries, :reconnect_interval
       arguments[:reconnect_retries] ||= 10
       arguments[:reconnect_interval] = 5
       connect
@@ -45,21 +45,9 @@ module Krakow
     # Process connection failure and attempt reconnection
     def connection_failure(*args)
       warn "Connection has failed to #{host}:#{port}"
-      retries = 0
-      begin
-        connect
-      rescue => e
-        retries += 1
-        warn "Connection retry #{retries}/#{reconnect_retries} failed. #{e.class}: #{e}"
-        if(retries < reconnect_retries)
-          sleep_interval = retries * reconnect_interval
-          debug "Sleeping for reconnect interval of #{sleep_interval} seconds"
-          sleep sleep_interval
-          retry
-        else
-          abort e
-        end
-      end
+      debug "Sleeping for reconnect interval of #{reconnect_interval} seconds"
+      sleep reconnect_interval
+      connect
     end
 
     def goodbye_my_love!
@@ -92,24 +80,8 @@ module Krakow
             )
           )
         end
-        read(:validate)
       else
         abort Error.new 'Remote connection is unavailable!'
-      end
-    end
-
-    # args:: Options (:validate)
-    # Read response from connection. If :validate is included an
-    # exception will be raised if `FrameType::Error` is received
-    def read(*args)
-      result = connection.responses.pop
-      debug "Read response: #{result}"
-      if(args.include?(:validate) && result.is_a?(FrameType::Error))
-        error = Error::BadResponse.new('Write failed')
-        error.result = result
-        abort error
-      else
-        result
       end
     end
 

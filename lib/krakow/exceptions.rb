@@ -7,6 +7,8 @@ module Krakow
 
     class BadResponse < Error
       attr_accessor :result
+      class NoResponse < BadResponse
+      end
     end
 
   end

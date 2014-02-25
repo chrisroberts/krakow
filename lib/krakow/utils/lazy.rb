@@ -26,6 +26,11 @@ module Krakow
           define_singleton_method(key) do
             arguments[key]
           end
+          if(key.match(/\w$/))
+            define_singleton_method("#{key}?".to_sym) do
+              !!arguments[key]
+            end
+          end
         end
       end
 
@@ -39,6 +44,11 @@ module Krakow
           end
           define_singleton_method(key) do
             arguments[key]
+          end
+          if(key.match(/\w$/))
+            define_singleton_method("#{key}?".to_sym) do
+              !!arguments[key]
+            end
           end
         end
       end
