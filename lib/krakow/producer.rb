@@ -14,9 +14,10 @@ module Krakow
     def initialize(args={})
       super
       required! :host, :port, :topic
-      optional :reconnect_retries, :reconnect_interval
+      optional :reconnect_retries, :reconnect_interval, :connection_features
       arguments[:reconnect_retries] ||= 10
       arguments[:reconnect_interval] = 5
+      arguments[:connection_features] ||= {}
       connect
     end
 
@@ -24,7 +25,11 @@ module Krakow
     def connect
       info "Establishing connection to: #{host}:#{port}"
       begin
-        @connection = Connection.new(:host => host, :port => port)
+        @connection = Connection.new(
+          :host => host,
+          :port => port,
+          :features => connection_features
+        )
         self.link connection
         connection.init!
         info "Connection established: #{connection}"
