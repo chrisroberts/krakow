@@ -20,7 +20,7 @@ module Krakow
       :sample_rate
     ]
     EXCLUSIVE_FEATURES = [[:snappy, :deflate]]
-    ENABLEABLE_FEATURES = [:snappy, :deflate, :tls_v1]
+    ENABLEABLE_FEATURES = [:tls_v1, :snappy, :deflate]
 
     finalizer :goodbye_my_love!
 
@@ -207,14 +207,32 @@ module Krakow
     end
 
     def snappy
-      debug 'Loading support for snappy compression and converting connection'
+      info 'Loading support for snappy compression and converting connection'
       require 'krakow/utils/snappy_frames'
       @socket = SnappyFrames::Io.new(socket)
+      response = receive
+      info "Snappy connection conversion complete. Response: #{response.inspect}"
     end
 
     def deflate
       debug 'Loading support for deflate compression and converting connection'
-      @socket = Zocket.new(socket)
+      raise NotImplementedError
+    end
+
+    def tls_v1
+      info 'Enabling TLS for connection'
+      @socket = Celluloid::IO::SSLSocket.new(@socket)
+      @socket.define_singleton_method(:recv) do |len|
+        str = readpartial(len)
+        if(len > str.length)
+          str << sysread(len - str.length)
+        end
+        str
+      end
+      @socket.sync = true
+      @socket.connect
+      response = receive
+      info "TLS enable complete. Response: #{response.inspect}"
     end
 
   end
