@@ -42,10 +42,10 @@ module SnappyFrames
     alias_method :read, :recv
 
     def read_stream
-      header = io.read(4)
+      header = io.recv(4)
       ident = CHUNK_TYPE[header.slice!(0)]
       size = (header << CHUNK_TYPE.key(:compressed)).unpack('L<').first
-      content = io.read(size)
+      content = io.recv(size)
       case ident
       when :identifier
         unless(content == IDENTIFIER)
