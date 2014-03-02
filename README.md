@@ -124,6 +124,36 @@ consumer = Krakow::Consumer.new(
 )
 ```
 
+### I need TLS!
+
+OK!
+
+```ruby
+consumer = Krakow::Consumer.new(
+  :nsqlookupd => 'http://HOST:PORT',
+  :topic => 'target',
+  :channel => 'ship',
+  :connection_features => {
+    :tls_v1 => true
+  }
+)
+```
+
+### I need Snappy compression!
+
+OK!
+
+```ruby
+consumer = Krakow::Consumer.new(
+  :nsqlookupd => 'http://HOST:PORT',
+  :topic => 'target',
+  :channel => 'ship',
+  :connection_features => {
+    :snappy => true
+  }
+)
+```
+
 ### It doesn't work
 
 Create an issue on the github repository.
