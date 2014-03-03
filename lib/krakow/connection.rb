@@ -33,7 +33,7 @@ module Krakow
       arguments[:queue] ||= Queue.new
       arguments[:responses] ||= Queue.new
       arguments[:version] ||= 'v2'
-      arguments[:features] ||= {}
+      arguments[:features] = {:deflate => true}
       arguments[:response_wait] ||= 2
       arguments[:error_wait] ||= 2
       @socket = TCPSocket.new(host, port)
@@ -209,14 +209,16 @@ module Krakow
     def snappy
       info 'Loading support for snappy compression and converting connection'
       require 'krakow/utils/snappy_frames'
-      @socket = SnappyFrames::Io.new(socket)
+      @socket = ConnectionFeatures::SnappyFrames::Io.new(socket)
       response = receive
       info "Snappy connection conversion complete. Response: #{response.inspect}"
     end
 
     def deflate
       debug 'Loading support for deflate compression and converting connection'
-      raise NotImplementedError
+      @socket = ConnectionFeatures::Deflate::Io.new(socket)
+      response = receive
+      info "Deflate connection conversion complete. Response: #{response.inspect}"
     end
 
     def tls_v1
