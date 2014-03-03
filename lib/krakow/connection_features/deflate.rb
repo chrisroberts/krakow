@@ -45,6 +45,12 @@ module Krakow
           end
         end
 
+        def close(*args)
+          super
+          deflator.deflate(nil, Zlib::FINISH)
+          deflator.close
+        end
+
       end
     end
   end
