@@ -154,6 +154,21 @@ consumer = Krakow::Consumer.new(
 )
 ```
 
+### I need Deflate compression!
+
+OK!
+
+```ruby
+consumer = Krakow::Consumer.new(
+  :nsqlookupd => 'http://HOST:PORT',
+  :topic => 'target',
+  :channel => 'ship',
+  :connection_features => {
+    :deflate => true
+  }
+)
+```
+
 ### It doesn't work
 
 Create an issue on the github repository.

@@ -33,7 +33,7 @@ module Krakow
       arguments[:queue] ||= Queue.new
       arguments[:responses] ||= Queue.new
       arguments[:version] ||= 'v2'
-      arguments[:features] = {:deflate => true}
+      arguments[:features] ||= {}
       arguments[:response_wait] ||= 2
       arguments[:error_wait] ||= 2
       @socket = TCPSocket.new(host, port)
