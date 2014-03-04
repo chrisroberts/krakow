@@ -29,13 +29,19 @@ module Krakow
     def initialize(args={})
       super
       required! :host, :port
-      optional :version, :queue, :callback, :responses, :notifier, :features, :response_wait, :error_wait, :disable_negotiation
+      optional(
+        :version, :queue, :callback, :responses, :notifier,
+        :features, :response_wait, :error_wait, :enforce_features
+      )
       arguments[:queue] ||= Queue.new
       arguments[:responses] ||= Queue.new
       arguments[:version] ||= 'v2'
       arguments[:features] ||= {}
-      arguments[:response_wait] ||= 2
-      arguments[:error_wait] ||= 2
+      arguments[:response_wait] ||= 1
+      arguments[:error_wait] ||= 0.4
+      if(arguments[:enforce_features].nil?)
+        arguments[:enforce_features] = true
+      end
       @socket = TCPSocket.new(host, port)
       @endpoint_settings = {}
     end
@@ -48,9 +54,7 @@ module Krakow
     def init!
       debug 'Initializing connection'
       socket.write version.rjust(4).upcase
-      unless(disable_negotiation?)
-        identify_and_negotiate
-      end
+      identify_and_negotiate
       async.process_to_queue!
       info 'Connection initialized'
     end
@@ -82,7 +86,9 @@ module Krakow
           end
           response
         else
-          abort Error::BadResponse::NoResponse.new "No response provided for message #{message}"
+          unless(Command.response_for(message) == :error_only)
+            abort Error::BadResponse::NoResponse.new "No response provided for message #{message}"
+          end
         end
       else
         true
@@ -175,33 +181,40 @@ module Krakow
     def identify_defaults
       unless(@identify_defaults)
         @identify_defaults = {
-          :short_id => Socket.hostname,
+          :short_id => Socket.gethostname,
           :long_id => Socket.gethostbyname(Socket.gethostname).flatten.compact.first,
           :user_agent => "krakow/#{Krakow::VERSION}",
-          :feature_negotiation => !disable_negotiation
+          :feature_negotiation => true
         }
       end
       @identify_defaults
     end
 
     def identify_and_negotiate
+      expected_features = identify_defaults.merge(features)
       ident = Command::Identify.new(
-        identify_defaults.merge(features)
+        expected_features
       )
       socket.write(ident.to_line)
       response = receive
-      begin
-        @endpoint_settings = MultiJson.load(response.content, :symbolize_keys => true)
-        info "Connection settings: #{endpoint_settings.inspect}"
-        # Enable things we need to enable
-        ENABLEABLE_FEATURES.each do |key|
-          if(endpoint_settings[key])
-            send(key)
+      if(expected_features[:feature_negotiation])
+        begin
+          @endpoint_settings = MultiJson.load(response.content, :symbolize_keys => true)
+          info "Connection settings: #{endpoint_settings.inspect}"
+          # Enable things we need to enable
+          ENABLEABLE_FEATURES.each do |key|
+            if(endpoint_settings[key])
+              send(key)
+            elsif(enforce_features && expected_features[key])
+              abort Error::ConnectionFeatureFailure.new("Failed to enable #{key} feature on connection!")
+            end
           end
+        rescue MultiJson::LoadError => e
+          error "Failed to parse response from Identify request: #{e} - #{response}"
+          abort e
         end
-      rescue MultiJson::LoadError => e
-        error "Failed to parse response from Identify request: #{e} - #{response}"
-        abort e
+      else
+        @endpoint_settings = {}
       end
       true
     end

@@ -1,6 +1,7 @@
 module Krakow
   class Error < StandardError
 
+    class ConnectionFeatureFailure < Error; end
     class LookupFailed < Error; end
     class ConnectionFailure < Error; end
     class ConfigurationError < Error; end
