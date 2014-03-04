@@ -1,5 +1,4 @@
 require 'krakow'
-require 'celluloid'
 require 'minitest/autorun'
 
 module Krakow
@@ -61,6 +60,7 @@ module Krakow
 end
 
 MiniTest::Spec.before do
+  Celluloid.boot
   Krakow::Test._scrub_topic!
   @consumer = Krakow::Test._consumer
   @producer = Krakow::Test._producer
