@@ -208,7 +208,6 @@ module Krakow
 
     def snappy
       info 'Loading support for snappy compression and converting connection'
-      require 'krakow/utils/snappy_frames'
       @socket = ConnectionFeatures::SnappyFrames::Io.new(socket)
       response = receive
       info "Snappy connection conversion complete. Response: #{response.inspect}"
@@ -223,16 +222,7 @@ module Krakow
 
     def tls_v1
       info 'Enabling TLS for connection'
-      @socket = Celluloid::IO::SSLSocket.new(@socket)
-      @socket.define_singleton_method(:recv) do |len|
-        str = readpartial(len)
-        if(len > str.length)
-          str << sysread(len - str.length)
-        end
-        str
-      end
-      @socket.sync = true
-      @socket.connect
+      @socket = ConnectionFeatures::Ssl::Io.new(socket)
       response = receive
       info "TLS enable complete. Response: #{response.inspect}"
     end
