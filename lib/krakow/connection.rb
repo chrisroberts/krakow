@@ -175,8 +175,8 @@ module Krakow
     def identify_defaults
       unless(@identify_defaults)
         @identify_defaults = {
-          :short_id => 'fubarx',
-          :long_id => 'fubarx',
+          :short_id => Socket.hostname,
+          :long_id => Socket.gethostbyname(Socket.gethostname).flatten.compact.first,
           :user_agent => "krakow/#{Krakow::VERSION}",
           :feature_negotiation => !disable_negotiation
         }
