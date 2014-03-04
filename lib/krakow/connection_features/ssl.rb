@@ -5,8 +5,12 @@ module Krakow
 
         attr_reader :_socket
 
-        def initialize(io)
-          @_socket = io
+        def initialize(io, args={})
+          ssl_socket_arguments = [io]
+          if(args[:ssl_context])
+            # ssl_socket_arguments << SSLContext.new
+          end
+          @_socket = Celluloid::IO::SSLSocket.new(*ssl_socket_arguments)
           _socket.sync = true
           _socket.connect
         end
