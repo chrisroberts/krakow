@@ -1,5 +1,5 @@
-autoload :Celluloid, 'celluloid/autostart'
-autoload :MultiJson, 'multi_json'
+require 'celluloid/autostart'
+require 'multi_json'
 
 module Krakow
 
