@@ -1,5 +1,3 @@
-require 'krakow'
-
 module Krakow
   class Version < Gem::Version
   end
