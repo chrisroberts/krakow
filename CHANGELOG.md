@@ -1,3 +1,6 @@
+## v0.2.2
+* Fix `nsqlookupd` attribute in `Consumer` and `Discovery`
+
 ## v0.2.0
 * Fix the rest of the namespacing issues
 * Start adding some tests
