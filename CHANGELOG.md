@@ -1,3 +1,14 @@
+## v0.2.0
+* Fix the rest of the namespacing issues
+* Start adding some tests
+* Use better exception types (NotImplementedError instead of NoMethodError)
+* Be smart about responses within connections
+* Add snappy support
+* Add deflate support
+* Add TLS support
+* Prevent division by zero in distribution
+* Add query methods to lazy helper (`attribute_name`?)
+
 ## v0.1.2
 * Include backoff support
 * Remove `method_missing` magic

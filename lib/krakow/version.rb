@@ -3,5 +3,5 @@ require 'krakow'
 module Krakow
   class Version < Gem::Version
   end
-  VERSION = Version.new('0.1.3')
+  VERSION = Version.new('0.2.0')
 end
