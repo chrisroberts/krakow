@@ -12,19 +12,20 @@ module Krakow
     def initialize(args={})
       super
       required! :topic, :channel
-      optional :host, :port, :nslookupd, :max_in_flight, :backoff_interval, :discovery_interval, :notifier, :connection_features
+      optional :host, :port, :nslookupd, :nsqlookupd, :max_in_flight, :backoff_interval, :discovery_interval, :notifier, :connection_features
       arguments[:max_in_flight] ||= 1
       arguments[:discovery_interval] ||= 30
       arguments[:connection_features] ||= {}
+      arguments[:nsqlookupd] ||= arguments[:nslookupd]
       @connections = {}
       @distribution = Distribution::Default.new(
         :max_in_flight => max_in_flight,
         :backoff_interval => backoff_interval
       )
       @queue = Queue.new
-      if(nslookupd)
-        debug "Connections will be established via lookup #{nslookupd.inspect}"
-        @discovery = Discovery.new(:nslookupd => nslookupd)
+      if(nsqlookupd)
+        debug "Connections will be established via lookup #{nsqlookupd.inspect}"
+        @discovery = Discovery.new(:nsqlookupd => nsqlookupd)
         init!
         every(discovery_interval){ init! }
       elsif(host && port)

@@ -9,13 +9,13 @@ module Krakow
 
     def initialize(args={})
       super
-      required! :nslookupd
+      required! :nsqlookupd
     end
 
     # topic:: Topic name
     # Return list of end points with given topic name available
     def lookup(topic)
-      result = [nslookupd].flatten.map do |location|
+      result = [nsqlookupd].flatten.map do |location|
         uri = URI.parse(location)
         uri.path = '/lookup'
         uri.query = "topic=#{topic}&ts=#{Time.now.to_i}"
