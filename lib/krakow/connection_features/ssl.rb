@@ -7,8 +7,12 @@ module Krakow
 
         def initialize(io, args={})
           ssl_socket_arguments = [io]
-          if(args[:ssl_context])
-            # ssl_socket_arguments << SSLContext.new
+          if(true) #args[:ssl_context])
+            require 'openssl'
+            context = OpenSSL::SSL::SSLContext.new
+            context.cert = OpenSSL::X509::Certificate.new(File.open("/home/spox/tls.cert"))
+            context.key = OpenSSL::PKey::RSA.new(File.open("/home/spox/tls.key"))
+            ssl_socket_arguments << context
           end
           @_socket = Celluloid::IO::SSLSocket.new(*ssl_socket_arguments)
           _socket.sync = true
