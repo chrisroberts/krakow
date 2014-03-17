@@ -31,12 +31,14 @@ module Krakow
       required! :host, :port
       optional(
         :version, :queue, :callback, :responses, :notifier,
-        :features, :response_wait, :error_wait, :enforce_features
+        :features, :response_wait, :error_wait, :enforce_features,
+        :features_args
       )
       arguments[:queue] ||= Queue.new
       arguments[:responses] ||= Queue.new
       arguments[:version] ||= 'v2'
       arguments[:features] ||= {}
+      arguments[:features_args] ||= {}
       arguments[:response_wait] ||= 1
       arguments[:error_wait] ||= 0.4
       if(arguments[:enforce_features].nil?)
@@ -221,21 +223,21 @@ module Krakow
 
     def snappy
       info 'Loading support for snappy compression and converting connection'
-      @socket = ConnectionFeatures::SnappyFrames::Io.new(socket)
+      @socket = ConnectionFeatures::SnappyFrames::Io.new(socket, features_args)
       response = receive
       info "Snappy connection conversion complete. Response: #{response.inspect}"
     end
 
     def deflate
       debug 'Loading support for deflate compression and converting connection'
-      @socket = ConnectionFeatures::Deflate::Io.new(socket)
+      @socket = ConnectionFeatures::Deflate::Io.new(socket, features_args)
       response = receive
       info "Deflate connection conversion complete. Response: #{response.inspect}"
     end
 
     def tls_v1
       info 'Enabling TLS for connection'
-      @socket = ConnectionFeatures::Ssl::Io.new(socket)
+      @socket = ConnectionFeatures::Ssl::Io.new(socket, features_args)
       response = receive
       info "TLS enable complete. Response: #{response.inspect}"
     end

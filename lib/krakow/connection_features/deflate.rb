@@ -7,7 +7,7 @@ module Krakow
 
         attr_reader :io, :buffer, :headers, :inflator, :deflator
 
-        def initialize(io)
+        def initialize(io, args={})
           @io = io
           @buffer = ''
           @inflator = Zlib::Inflate.new(-Zlib::MAX_WBITS)

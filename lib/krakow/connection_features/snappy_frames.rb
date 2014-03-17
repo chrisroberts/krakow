@@ -21,7 +21,7 @@ module Krakow
 
         attr_reader :io, :buffer
 
-        def initialize(io)
+        def initialize(io, args={})
           @io = io
           @snappy_write_ident = false
           @buffer = ''
