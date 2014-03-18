@@ -14,10 +14,12 @@ module Krakow
     def initialize(args={})
       super
       required! :host, :port, :topic
-      optional :reconnect_retries, :reconnect_interval, :connection_features
+      optional :reconnect_retries, :reconnect_interval, :connection_options
       arguments[:reconnect_retries] ||= 10
       arguments[:reconnect_interval] = 5
-      arguments[:connection_features] ||= {}
+      arguments[:connection_options] = {:features => {}, :config => {}}.merge(
+        arguments[:connection_options] || {}
+      )
       connect
     end
 
@@ -28,7 +30,8 @@ module Krakow
         @connection = Connection.new(
           :host => host,
           :port => port,
-          :features => connection_features
+          :features => connection_options[:features],
+          :features_args => connection_options[:config]
         )
         self.link connection
         connection.init!

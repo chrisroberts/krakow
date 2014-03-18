@@ -12,10 +12,12 @@ module Krakow
     def initialize(args={})
       super
       required! :topic, :channel
-      optional :host, :port, :nslookupd, :nsqlookupd, :max_in_flight, :backoff_interval, :discovery_interval, :notifier, :connection_features
+      optional :host, :port, :nslookupd, :nsqlookupd, :max_in_flight, :backoff_interval, :discovery_interval, :notifier, :connection_options
       arguments[:max_in_flight] ||= 1
       arguments[:discovery_interval] ||= 30
-      arguments[:connection_features] ||= {}
+      arguments[:connection_options] = {:features => {}, :config => {}}.merge(
+        arguments[:connection_options] || {}
+      )
       arguments[:nsqlookupd] ||= arguments[:nslookupd]
       @connections = {}
       @distribution = Distribution::Default.new(
@@ -65,7 +67,8 @@ module Krakow
         :port => port,
         :queue => queue,
         :notifier => notifier,
-        :features => connection_features,
+        :features => connection_options[:features],
+        :features_args => connection_options[:config],
         :callback => {
           :actor => current_actor,
           :method => :process_message
