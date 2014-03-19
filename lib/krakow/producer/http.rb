@@ -16,13 +16,24 @@ module Krakow
       def initialize(args={})
         super
         required! :endpoint, :topic
+        optional :config, :ssl_context
+        arguments[:config] ||= {}
+        build_ssl_context if ssl_context
         @uri = URI.parse(endpoint)
+      end
+
+      def build_ssl_context
+        require 'openssl'
+        context = OpenSSL::SSL::SSLContext.new
+        context.cert = OpenSSL::X509::Certificate.new(File.open(ssl_context[:certificate]))
+        context.key = OpenSSL::PKey::RSA.new(File.open(ssl_context[:key]))
+        config[:ssl_context] = context
       end
 
       def send_message(method, path, args={})
         build = uri.dup
         build.path = "/#{path}"
-        response = HTTP.send(method, build.to_s, args)
+        response = HTTP.send(method, build.to_s, args.merge(config))
         begin
           response = MultiJson.load(response.response.body)
         rescue MultiJson::LoadError
