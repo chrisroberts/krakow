@@ -40,7 +40,7 @@ module Krakow
       arguments[:features] ||= {}
       arguments[:features_args] ||= {}
       arguments[:response_wait] ||= 1
-      arguments[:error_wait] ||= 0.4
+      arguments[:error_wait] ||= 0.0
       if(arguments[:enforce_features].nil?)
         arguments[:enforce_features] = true
       end
