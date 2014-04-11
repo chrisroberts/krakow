@@ -133,8 +133,10 @@ consumer = Krakow::Consumer.new(
   :nsqlookupd => 'http://HOST:PORT',
   :topic => 'target',
   :channel => 'ship',
-  :connection_features => {
-    :tls_v1 => true
+  :connection_options => {
+    :features => {
+      :tls_v1 => true
+    }
   }
 )
 ```
@@ -148,8 +150,10 @@ consumer = Krakow::Consumer.new(
   :nsqlookupd => 'http://HOST:PORT',
   :topic => 'target',
   :channel => 'ship',
-  :connection_features => {
-    :snappy => true
+  :connection_options => {
+    :features => {
+      :snappy => true
+    }
   }
 )
 ```
@@ -163,8 +167,33 @@ consumer = Krakow::Consumer.new(
   :nsqlookupd => 'http://HOST:PORT',
   :topic => 'target',
   :channel => 'ship',
-  :connection_features => {
-    :deflate => true
+  :connection_options => {
+    :features => {
+      :deflate => true
+    }
+  }
+)
+```
+
+### I want to use TLS based authentication!
+
+OK!
+
+```ruby
+consumer = Krakow::Consumer.new(
+  :nsqlookupd => 'http://HOST:PORT',
+  :topic => 'target',
+  :channel => 'ship',
+  :connection_options => {
+    :features => {
+      :tls_v1 => true
+    },
+    :config => {
+      :ssl_context => {
+        :certificate => '/path/to/cert',
+        :key => '/path/to/key'
+      }
+    }
   }
 )
 ```
