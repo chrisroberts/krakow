@@ -26,4 +26,4 @@ class MiniTest::Test
   end
 end
 
-Celluloid.logger.level = 4
+Celluloid.logger.level = 1
