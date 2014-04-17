@@ -43,4 +43,8 @@ class MiniTest::Test
   end
 end
 
-Celluloid.logger.level = 1
+if(ENV['DEBUG'])
+  Celluloid.logger.level = 1
+else
+  Celluloid.logger.level = 4
+end
