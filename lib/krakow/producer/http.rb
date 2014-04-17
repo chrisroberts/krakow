@@ -14,6 +14,13 @@ module Krakow
       attr_reader :uri
 
       def initialize(args={})
+        # load this "on demand" to prevent weird behavior from `http`
+        # and `multi_json` interacton fun
+        begin
+          require 'json'
+        rescue LoadError
+          # ignore (maybe log?)
+        end
         super
         required! :endpoint, :topic
         optional :config, :ssl_context
