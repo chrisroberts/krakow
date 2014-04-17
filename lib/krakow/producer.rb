@@ -16,7 +16,7 @@ module Krakow
       required! :host, :port, :topic
       optional :reconnect_retries, :reconnect_interval, :connection_options
       arguments[:reconnect_retries] ||= 10
-      arguments[:reconnect_interval] = 5
+      arguments[:reconnect_interval] ||= 5
       arguments[:connection_options] = {:features => {}, :config => {}}.merge(
         arguments[:connection_options] || {}
       )
@@ -33,8 +33,8 @@ module Krakow
           :features => connection_options[:features],
           :features_args => connection_options[:config]
         )
-        self.link connection
         connection.init!
+        self.link connection
         info "Connection established: #{connection}"
       rescue => e
         abort e
@@ -47,15 +47,19 @@ module Krakow
 
     # Return if connected
     def connected?
-      connection && connection.alive?
+      !!(connection && connection.alive?)
     end
 
     # Process connection failure and attempt reconnection
     def connection_failure(*args)
-      warn "Connection has failed to #{host}:#{port}"
-      debug "Sleeping for reconnect interval of #{reconnect_interval} seconds"
-      sleep reconnect_interval
-      connect
+      @connection = nil
+      begin
+        warn "Connection failure detected for #{host}:#{port}"
+        connect
+      rescue => e
+        warn "Failed to establish connection to #{host}:#{port}. Pausing #{reconnect_interval} before retry"
+        sleep reconnect_interval
+      end
     end
 
     def goodbye_my_love!
@@ -70,7 +74,8 @@ module Krakow
     # message:: Message to send
     # Write message
     def write(*message)
-      if(connection.alive?)
+      abort ArgumentError.new 'Expecting one or more messages to send. None provided.'
+      if(connection && connection.alive?)
         if(message.size > 1)
           debug 'Multiple message publish'
           connection.transmit(
@@ -89,7 +94,7 @@ module Krakow
           )
         end
       else
-        abort Error.new 'Remote connection is unavailable!'
+        abort Error::ConnectionUnavailable.new 'Remote connection is unavailable!'
       end
     end
 
