@@ -38,7 +38,7 @@ describe Krakow::Consumer do
 
       Timeout::timeout(10) do
         30.times do
-          @consumer.queue.pop.finish rescue Krakow::Error::ConnectionFailure
+          @consumer.queue.pop.confirm rescue Krakow::Error::ConnectionFailure
         end
       end
 
@@ -68,7 +68,7 @@ describe Krakow::Consumer do
 
       wait_for do
         msg = @consumer.queue.pop
-        msg.finish rescue Krakow::Error::ConnectionFailure
+        msg.confirm rescue Krakow::Error::ConnectionFailure
         msg.content == 'needle'
       end
 
@@ -101,7 +101,7 @@ describe Krakow::Consumer do
         while (expected_messages & received_messages).length < expected_messages.length do
           msg = @consumer.queue.pop
           received_messages << msg.content
-          msg.finish rescue Krakow::Error::ConnectionFailure
+          msg.confirm rescue Krakow::Error::ConnectionFailure
         end
 
         # woohoo we got em all!

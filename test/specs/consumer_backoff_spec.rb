@@ -28,7 +28,7 @@ describe Krakow::Consumer, 'with backoff enabled' do
     @consumer.distribution.in_backoff_mode.must_equal true
 
     wait_for do
-      @consumer.queue.pop.finish
+      @consumer.queue.pop.confirm
       !@consumer.distribution.in_backoff_mode
     end
   end
@@ -42,7 +42,7 @@ describe Krakow::Consumer, 'with backoff enabled' do
     @cluster.nsqd.first.start
 
     wait_for do
-      @consumer.queue.pop.finish rescue Krakow::Error::ConnectionFailure
+      @consumer.queue.pop.confirm rescue Krakow::Error::ConnectionFailure
       !@consumer.distribution.in_backoff_mode
     end
   end

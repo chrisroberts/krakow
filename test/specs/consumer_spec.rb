@@ -48,7 +48,7 @@ describe Krakow::Consumer do
 
     it 'should properly confirm messages' do
       consumer.queue.length.must_equal 1
-      consumer.queue.pop.finish
+      consumer.queue.pop.confirm
       sleep(msg_timeout * 1.1) # pause for slightly longer than msg_timeout
       consumer.queue.must_be :empty?
     end
@@ -71,7 +71,7 @@ describe Krakow::Consumer do
       sleep(msg_timeout * 0.8)
       original_msg.touch
       sleep(msg_timeout * 0.8)
-      original_msg.finish
+      original_msg.confirm
       sleep(msg_timeout * 1.1)
       consumer.queue.must_be :empty?
     end
@@ -89,7 +89,7 @@ describe Krakow::Consumer do
       expected_messages.length.times do
         msg = consumer.queue.pop
         received_messages << msg.message
-        msg.finish
+        msg.confirm
       end
       received_messages.sort.must_equal(expected_messages)
     end
@@ -113,7 +113,7 @@ describe Krakow::Consumer do
       expected_messages.length.times do
         msg = consumer.queue.pop
         messages << msg.message
-        msg.finish
+        msg.confirm
       end
       messages.sort.must_equal expected_messages
       consumer.queue.must_be :empty?
@@ -134,7 +134,7 @@ describe Krakow::Consumer do
         # wait for the consumer to glom onto that never ending stream
         wait_for do
           msg = consumer.queue.pop
-          msg.finish
+          msg.confirm
           msg.content == 'never ending'
         end
 
@@ -142,7 +142,7 @@ describe Krakow::Consumer do
 
         wait_for do
           msg = consumer.queue.pop
-          msg.finish
+          msg.confirm
           msg.content == 'a new hope'
         end
 
@@ -173,7 +173,7 @@ describe Krakow::Consumer do
       @expected_messages.length.times do
         msg = consumer.queue.pop
         messages << msg.message
-        msg.finish
+        msg.confirm
       end
       messages.sort.must_equal @expected_messages
       consumer.queue.must_be :empty?
@@ -202,7 +202,7 @@ describe Krakow::Consumer do
               Timeout::timeout(1) do
                 msg = consumer.queue.pop
                 receive_queue.push(msg.message)
-                msg.finish
+                msg.confirm
               end
             rescue Timeout::Error
               # try again!
