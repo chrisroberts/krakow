@@ -24,6 +24,23 @@ class MiniTest::Test
       end
     end
   end
+
+  # Assert that something must take longer than a certain amount of time to complete
+  def must_take_longer_than(time, &block)
+    start_time = Time.now.to_f
+    yield
+    end_time = Time.now.to_f
+
+    (end_time - start_time).must_be :>, time
+  end
+
+  def must_take_less_than(time, &block)
+    start_time = Time.now.to_f
+    yield
+    end_time = Time.now.to_f
+
+    (end_time - start_time).must_be :<, time
+  end
 end
 
-Celluloid.logger.level = 4
+Celluloid.logger.level = 1
