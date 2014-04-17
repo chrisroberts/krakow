@@ -50,7 +50,6 @@ module ClusterPlugin
       channel: 'some-channel',
       discovery_interval: 0.5,
       discovery_jitter: 0,
-      low_rdy_idle_timeout: 0.5,
       max_in_flight: defined?(max_in_flight) ? max_in_flight : 10
     }.merge(opts))
   end

@@ -15,7 +15,6 @@ describe Krakow::Consumer do
     consumer.terminate if consumer.alive?
   end
 
-
   describe 'with no active producers' do
     with_cluster(nsqlookupd_count: 1)
 
@@ -29,54 +28,85 @@ describe Krakow::Consumer do
 
 
   describe 'with one active producer' do
-    let(:msg_timeout) { 1 }
-    with_cluster(nsqlookupd_count: 1, nsqd_count: 1, nsqd_options: { msg_timeout: '1s' })
-
     before do
       @producers.first.write('message')
       consumer
       wait_for { consumer.queue.length > 0 }
     end
 
-    it 'should have one connection' do
-      consumer.connections.size.must_equal 1
+    describe 'with a high msg_timeout for nsqd' do
+      with_cluster(nsqlookupd_count: 1, nsqd_count: 1, nsqd_options: { msg_timeout: '60s' })
+
+      it 'should have one connection' do
+        consumer.connections.size.must_equal 1
+      end
+
+      it 'should have a message queued' do
+        consumer.queue.size.must_equal 1
+      end
+
+      it 'should properly requeue messages' do
+        original_msg = consumer.queue.pop
+        original_msg.attempts.must_equal 1
+        original_msg.requeue
+        Timeout::timeout(1) do
+          req_msg = consumer.queue.pop
+          req_msg.message_id.must_equal original_msg.message_id
+          req_msg.attempts.must_equal 2
+        end
+      end
+
+      it 'should properly requeue messages via message_id' do
+        original_msg = consumer.queue.pop
+        original_msg.attempts.must_equal 1
+        consumer.requeue(original_msg.message_id)
+        Timeout::timeout(1) do
+          req_msg = consumer.queue.pop
+          req_msg.message_id.must_equal original_msg.message_id
+          req_msg.attempts.must_equal 2
+        end
+      end
     end
 
-    it 'should have a message queued' do
-      consumer.queue.size.must_equal 1
-    end
+    describe 'with a low msg_timeout for nsqd' do
+      let(:msg_timeout) { 1 }
+      with_cluster(nsqlookupd_count: 1, nsqd_count: 1, nsqd_options: { msg_timeout: '1s' })
 
-    it 'should properly confirm messages' do
-      consumer.queue.length.must_equal 1
-      consumer.queue.pop.confirm
-      sleep(msg_timeout * 1.1) # pause for slightly longer than msg_timeout
-      consumer.queue.must_be :empty?
-    end
+      it 'should properly confirm messages' do
+        consumer.queue.length.must_equal 1
+        consumer.queue.pop.confirm
+        sleep(msg_timeout * 1.1) # pause for slightly longer than msg_timeout
+        consumer.queue.must_be :empty?
+      end
 
-    it 'should properly requeue messages' do
-      original_msg = consumer.queue.pop
-      original_msg.requeue
-      req_msg = consumer.queue.pop.message_id.must_equal original_msg.message_id
-    end
+      it 'should confirm messages via message_id' do
+        consumer.queue.length.must_equal 1
+        msg = consumer.queue.pop
+        consumer.confirm(msg.message_id)
+        sleep(msg_timeout * 1.1) # pause for slightly longer than msg_timeout
+        consumer.queue.must_be :empty?
+      end
 
-    it 'should receive the same message twice if we fail to process it before it times out' do
-      original_msg = consumer.queue.pop
-      new_msg = consumer.queue.pop
-      new_msg.message_id.must_equal original_msg.message_id
-    end
+      it 'should receive the same message twice if we fail to process it before it times out' do
+        original_msg = consumer.queue.pop
+        new_msg = consumer.queue.pop
+        new_msg.message_id.must_equal original_msg.message_id
+        new_msg.attempts.must_equal 2
+      end
 
-    it 'should properly touch messages' do
-      original_msg = consumer.queue.pop
-      original_msg.touch
-      sleep(msg_timeout * 0.8)
-      original_msg.touch
-      sleep(msg_timeout * 0.8)
-      original_msg.confirm
-      sleep(msg_timeout * 1.1)
-      consumer.queue.must_be :empty?
+      it 'should properly touch messages' do
+        original_msg = consumer.queue.pop
+        original_msg.touch
+        sleep(msg_timeout * 0.8)
+        original_msg.touch
+        sleep(msg_timeout * 0.8)
+        original_msg.confirm
+        sleep(msg_timeout * 1.1)
+        consumer.queue.must_be :empty?
+      end
+
     end
   end
-
 
   describe 'where there are more messages on the queue than fit in flight' do
     with_cluster(nsqlookupd_count: 1, nsqd_count: 1)
