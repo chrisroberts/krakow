@@ -31,8 +31,8 @@ module Krakow
       required! :host, :port
       optional(
         :version, :queue, :callback, :responses, :notifier,
-        :features, :response_wait, :error_wait, :enforce_features,
-        :features_args
+        :features, :response_wait, :response_interval, :error_wait,
+        :enforce_features, :features_args
       )
       arguments[:queue] ||= Queue.new
       arguments[:responses] ||= Queue.new
@@ -40,6 +40,7 @@ module Krakow
       arguments[:features] ||= {}
       arguments[:features_args] ||= {}
       arguments[:response_wait] ||= 1
+      arguments[:response_interval] ||= 0.01
       arguments[:error_wait] ||= 0.0
       if(arguments[:enforce_features].nil?)
         arguments[:enforce_features] = true
@@ -73,11 +74,10 @@ module Krakow
       responses.clear if response_wait
       if(response_wait)
         response = nil
-        (response_wait / 0.1).to_i.times do |i|
+        (response_wait / response_interval).to_i.times do |i|
           response = responses.pop unless responses.empty?
           break if response
-          debug "Response wait sleep for 0.1 seconds (#{i+1} time)"
-          sleep(0.1)
+          sleep(response_interval)
         end
         if(response)
           message.response = response
@@ -101,7 +101,7 @@ module Krakow
     def goodbye_my_love!
       debug 'Tearing down connection'
       if(socket && !socket.closed?)
-        socket.write Command::Cls.new.to_line
+        socket.write Command::Cls.new.to_line rescue Errno::EPIPE
         socket.close
       end
       @socket = nil
