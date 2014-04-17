@@ -74,7 +74,9 @@ module Krakow
     # message:: Message to send
     # Write message
     def write(*message)
-      abort ArgumentError.new 'Expecting one or more messages to send. None provided.'
+      if(message.empty?)
+        abort ArgumentError.new 'Expecting one or more messages to send. None provided.'
+      end
       if(connection && connection.alive?)
         if(message.size > 1)
           debug 'Multiple message publish'
