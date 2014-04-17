@@ -12,9 +12,12 @@ module Krakow
     def initialize(args={})
       super
       required! :topic, :channel
-      optional :host, :port, :nslookupd, :nsqlookupd, :max_in_flight, :backoff_interval, :discovery_interval, :notifier, :connection_options
+      optional :host, :port, :nslookupd, :nsqlookupd, :max_in_flight,
+        :backoff_interval, :discovery_interval, :discovery_jitter,
+        :notifier, :connection_options
       arguments[:max_in_flight] ||= 1
       arguments[:discovery_interval] ||= 30
+      arguments[:discovery_jitter] ||= 10.0
       arguments[:connection_options] = {:features => {}, :config => {}}.merge(
         arguments[:connection_options] || {}
       )
@@ -28,8 +31,7 @@ module Krakow
       if(nsqlookupd)
         debug "Connections will be established via lookup #{nsqlookupd.inspect}"
         @discovery = Discovery.new(:nsqlookupd => nsqlookupd)
-        init!
-        every(discovery_interval){ init! }
+        discover
       elsif(host && port)
         debug "Connection will be established via direct connection #{host}:#{port}"
         connection = build_connection(host, port, queue)
@@ -82,6 +84,7 @@ module Krakow
     def process_message(message, connection)
       if(message.is_a?(FrameType::Message))
         distribution.register_message(message, connection)
+        message.origin = current_actor
       end
       message
     end
@@ -109,6 +112,12 @@ module Krakow
         end
       end
       distribution.redistribute! if connection
+    end
+
+    # Starts discovery interval calling
+    def discover
+      init!
+      after(discovery_interval + (discovery_jitter * rand)){ discover }
     end
 
     # connection:: Connection
@@ -158,6 +167,7 @@ module Krakow
         abort e
       end
     end
+    alias_method :finish, :confirm
 
     # message_id:: Message ID
     # timeout:: Requeue timeout (default is none)
@@ -174,6 +184,16 @@ module Krakow
         )
         distribution.failure(connection)
         update_ready!(connection)
+      end
+      true
+    end
+
+    def touch(msg)
+      message_id = message_id.message_id if message_id.respond_to?(:message_id)
+      distribution.in_flight_lookup(message_id) do |connection|
+        connection.transmit(
+          Command::Touch.new(:message_id => message_id)
+        )
       end
       true
     end
