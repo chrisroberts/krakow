@@ -90,7 +90,7 @@ module Krakow
             registry_info[:backoff_timer].cancel if registry[:backoff_timer]
             registry_info[:backoff_timer] = after(registry_info[:backoff_until] - Time.now.to_i) do
               calculate_ready!(connection)
-              set_ready_for(conection) unless less_than_ideal?
+              set_ready_for(connection) unless less_than_ideal?
             end
           end
           registry_info[:ready]
