@@ -16,7 +16,7 @@ describe Krakow::Consumer do
   end
 
   describe 'with no active producers' do
-    with_cluster(nsqlookupd_count: 1)
+    with_cluster(:nsqlookupd_count => 1)
 
     it 'should have an empty queue and not have any connections' do
       consumer
@@ -35,7 +35,7 @@ describe Krakow::Consumer do
     end
 
     describe 'with a high msg_timeout for nsqd' do
-      with_cluster(nsqlookupd_count: 1, nsqd_count: 1, nsqd_options: { msg_timeout: '60s' })
+      with_cluster(:nsqlookupd_count => 1, :nsqd_count => 1, :nsqd_options => { :msg_timeout => '60s' })
 
       it 'should have one connection' do
         consumer.connections.size.must_equal 1
@@ -70,7 +70,7 @@ describe Krakow::Consumer do
 
     describe 'with a low msg_timeout for nsqd' do
       let(:msg_timeout) { 1 }
-      with_cluster(nsqlookupd_count: 1, nsqd_count: 1, nsqd_options: { msg_timeout: '1s' })
+      with_cluster(:nsqlookupd_count => 1, :nsqd_count => 1, :nsqd_options => { :msg_timeout => '1s' })
 
       it 'should properly confirm messages' do
         consumer.queue.length.must_equal 1
@@ -109,7 +109,7 @@ describe Krakow::Consumer do
   end
 
   describe 'where there are more messages on the queue than fit in flight' do
-    with_cluster(nsqlookupd_count: 1, nsqd_count: 1)
+    with_cluster(:nsqlookupd_count => 1, :nsqd_count => 1)
     let(:max_in_flight) { 1 }
 
     it 'should process all the messages' do
@@ -129,7 +129,7 @@ describe Krakow::Consumer do
 
   describe 'when max_in_flight < num_connections' do
     let(:max_in_flight) { 1 }
-    with_cluster(nsqlookupd_count: 1, nsqd_count: 3)
+    with_cluster(:nsqlookupd_count => 1, :nsqd_count => 3)
 
 
     it 'should be able to properly get all messages from all nsqds' do
@@ -159,7 +159,7 @@ describe Krakow::Consumer do
           end
         end
 
-        consumer = new_consumer(redistribution_interval: 1)
+        consumer = new_consumer(:redistribution_interval => 1)
 
         # wait for the consumer to glom onto that never ending stream
         wait_for do
@@ -187,7 +187,7 @@ describe Krakow::Consumer do
 
   describe 'when max_in_flight >= num_connections' do
     let(:max_in_flight) { 10 }
-    with_cluster(nsqlookupd_count: 1, nsqd_count: 5)
+    with_cluster(:nsqlookupd_count => 1, :nsqd_count => 5)
 
     before do
       @expected_messages = (1..100).to_a.map(&:to_s).sort
@@ -212,7 +212,7 @@ describe Krakow::Consumer do
 
 
   describe 'two consumers on one queue' do
-    with_cluster(nsqlookupd_count: 1, nsqd_count: 1)
+    with_cluster(:nsqlookupd_count => 1, :nsqd_count => 1)
 
     it 'should get all the messages between the two of them' do
       expected_messages = (1..100).to_a.map(&:to_s).sort

@@ -2,14 +2,14 @@ require_relative '../helpers/spec_helper'
 
 describe Krakow::Producer do
 
-  with_cluster(nsqd_count: 1)
+  with_cluster(:nsqd_count => 1)
 
   before do
     @producer = Krakow::Producer.new(
-                  host: @cluster.nsqd.first.host,
-                  port: @cluster.nsqd.first.tcp_port,
-                  topic: 'hella-good',
-                  reconnect_interval: 1
+                  :host => @cluster.nsqd.first.host,
+                  :port => @cluster.nsqd.first.tcp_port,
+                  :topic => 'hella-good',
+                  :reconnect_interval => 1
                 )
   end
 

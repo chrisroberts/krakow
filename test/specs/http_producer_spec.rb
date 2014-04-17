@@ -4,23 +4,17 @@ describe Krakow::Producer::Http do
 
   let(:topic) { 'hellomoto' }
 
-  with_cluster(nsqlookupd_count: 1, nsqd_count: 1)
+  with_cluster(:nsqlookupd_count => 1, :nsqd_count => 1)
 
   before do
     @http = Krakow::Producer::Http.new(
-      endpoint: "http://#{@cluster.nsqd.first.host}:#{@cluster.nsqd.first.http_port}",
-      topic: topic
+      :endpoint => "http://#{@cluster.nsqd.first.host}:#{@cluster.nsqd.first.http_port}",
+      :topic => topic
     )
   end
 
   def new_consumer(channel)
-    Krakow::Consumer.new(
-      nslookupd: @cluster.nsqlookupd_http_endpoints,
-      topic: topic,
-      channel: channel,
-      discovery_interval: 0.5,
-      max_in_flight: 10
-    )
+    super(:topic => topic, :channel => channel)
   end
 
   it 'should write single messages successfully' do

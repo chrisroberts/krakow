@@ -2,7 +2,7 @@ require_relative '../helpers/spec_helper'
 
 describe Krakow::Consumer, 'with backoff enabled' do
 
-  with_cluster(nsqlookupd_count: 1, nsqd_count: 1)
+  with_cluster(:nsqlookupd_count => 1, :nsqd_count => 1)
 
   before do
     @producers = @cluster.nsqd.map { |q| new_producer(q) }
@@ -17,7 +17,7 @@ describe Krakow::Consumer, 'with backoff enabled' do
 
   describe 'when backoff_interval is not set' do
     before do
-      @consumer = new_consumer(discovery_interval: 1, max_in_flight: 1)
+      @consumer = new_consumer(:discovery_interval => 1, :max_in_flight => 1)
       wait_for { @consumer.connections.length == 1 }
     end
 
@@ -33,7 +33,7 @@ describe Krakow::Consumer, 'with backoff enabled' do
 
   describe 'when backoff_interval is set to 1' do
     before do
-      @consumer = new_consumer(backoff_interval: 1, discovery_interval: 1, max_in_flight: 1)
+      @consumer = new_consumer(:backoff_interval => 1, :discovery_interval => 1, :max_in_flight => 1)
       wait_for { @consumer.connections.length == 1 }
     end
 

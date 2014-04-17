@@ -2,7 +2,7 @@ require_relative '../helpers/spec_helper'
 
 describe Krakow::Consumer do
 
-  with_cluster(nsqlookupd_count: 2, nsqd_count: 3)
+  with_cluster(:nsqlookupd_count => 2, :nsqd_count => 3)
 
 
   before do
@@ -116,9 +116,9 @@ describe Krakow::Consumer do
   it 'should be able to rely on the second nsqlookupd if the first dies' do
     @cluster.nsqlookupd.first.stop
 
-    producer = new_producer(@cluster.nsqd.first, topic: 'new-topic')
+    producer = new_producer(@cluster.nsqd.first, :topic => 'new-topic')
     producer.write('new message on new topic')
-    consumer = new_consumer(topic: 'new-topic')
+    consumer = new_consumer(:topic => 'new-topic')
 
     Timeout::timeout(5) do
       msg = consumer.queue.pop

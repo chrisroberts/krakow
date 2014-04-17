@@ -1,22 +1,9 @@
 #
-# This is used by the specs so you can do stuff like this:
+# This is used by the specs to set up a cluster of nsqd and nsqlookupd processes
+# before each spec and tear them down after each spec runs.
 #
-=begin
-describe Krakow::Consumer do
+# Check out nsq-cluster here: https://github.com/wistia/nsq-cluster
 
-  extend CustomerHelper
-
-  describe 'with no active producers' do
-    with_cluster(nsqlookupd_count: 1)
-
-    it 'should not have any connections' do
-      # An nsqdlookd process will be started before this runs and
-      # destroyed when it's finished
-    end
-
-  end
-end
-=end
 require 'nsq-cluster'
 
 module ClusterPlugin
@@ -45,20 +32,20 @@ module ClusterPlugin
 
   def new_consumer(opts = {})
     Krakow::Consumer.new({
-      nslookupd: @cluster.nsqlookupd_http_endpoints,
-      topic: 'some-topic',
-      channel: 'some-channel',
-      discovery_interval: 0.5,
-      discovery_jitter: 0,
-      max_in_flight: defined?(max_in_flight) ? max_in_flight : 10
+      :nslookupd => @cluster.nsqlookupd_http_endpoints,
+      :topic => 'some-topic',
+      :channel => 'some-channel',
+      :discovery_interval => 0.5,
+      :discovery_jitter => 0,
+      :max_in_flight => defined?(max_in_flight) ? max_in_flight : 10
     }.merge(opts))
   end
 
   def new_producer(nsqd, opts = {})
     Krakow::Producer.new({
-      host: nsqd.host,
-      port: nsqd.tcp_port,
-      topic: 'some-topic'
+      :host => nsqd.host,
+      :port => nsqd.tcp_port,
+      :topic => 'some-topic'
     }.merge(opts))
   end
 
