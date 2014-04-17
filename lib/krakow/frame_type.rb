@@ -47,7 +47,7 @@ module Krakow
     end
 
     def content
-      raise NoMethodError.new 'Content method not properly defined!'
+      raise NotImplementedError.new 'Content method not properly defined!'
     end
 
   end
