@@ -5,6 +5,7 @@ module Krakow
       def initialize(args={})
         super
         required! :topic_name, :messages
+        arguments[:messages] = [messages].flatten.compact.map(&:to_s)
       end
 
       def to_line

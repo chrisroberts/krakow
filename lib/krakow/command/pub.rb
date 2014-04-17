@@ -6,6 +6,7 @@ module Krakow
       def initialize(args={})
         super
         required! :topic_name, :message
+        arguments[:message] = message.to_s
       end
 
       def to_line
