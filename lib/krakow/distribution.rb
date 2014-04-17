@@ -82,7 +82,8 @@ module Krakow
         :ready => initial_ready,
         :in_flight => 0,
         :failures => 0,
-        :backoff_until => 0
+        :backoff_until => 0,
+        :connection => connection.current_actor
       }
       true
     end
@@ -137,7 +138,7 @@ module Krakow
 
     # Return list of all connections in registry
     def connections
-      registry.keys
+      registry.values.map{|v| v[:connection]}
     end
 
     # connection:: Connection
