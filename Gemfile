@@ -1,5 +1,8 @@
 source 'https://rubygems.org'
 
-gem 'minitest'
+group :development do
+  gem 'minitest'
+  gem 'nsq-cluster'
+end
 
 gemspec

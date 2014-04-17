@@ -198,6 +198,21 @@ consumer = Krakow::Consumer.new(
 )
 ```
 
+### Running the tests
+
+Run them all!
+
+```
+ruby test/run.rb
+```
+
+Or, run part of them:
+
+```
+ruby test/specs/consumer_spec.rb
+```
+
+
 ### It doesn't work
 
 Create an issue on the github repository.
