@@ -45,7 +45,6 @@ module Krakow
       if(arguments[:enforce_features].nil?)
         arguments[:enforce_features] = true
       end
-      @socket = TCPSocket.new(host, port)
       @endpoint_settings = {}
     end
 
@@ -56,6 +55,7 @@ module Krakow
     # Initialize the connection
     def init!
       debug 'Initializing connection'
+      @socket = Celluloid::IO::TCPSocket.new(host, port)
       socket.write version.rjust(4).upcase
       identify_and_negotiate
       async.process_to_queue!
@@ -66,6 +66,7 @@ module Krakow
     # Send the message
     # TODO: Do we want to validate Command instance and abort if
     # response is already set?
+    # NOTE: Handle `Consumer` side via `Distribution` lookup
     def transmit(message)
       output = message.to_line
       debug ">>> #{output}"
@@ -125,7 +126,7 @@ module Krakow
         frame
       else
         if(socket.closed?)
-          raise Error.new("#{self} encountered closed socket!")
+          abort Error.new("#{self} encountered closed socket!")
         end
         nil
       end
