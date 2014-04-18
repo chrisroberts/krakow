@@ -188,7 +188,7 @@ module Krakow
       true
     end
 
-    def touch(msg)
+    def touch(message_id)
       message_id = message_id.message_id if message_id.respond_to?(:message_id)
       distribution.in_flight_lookup(message_id) do |connection|
         connection.transmit(
