@@ -6,11 +6,11 @@ describe Krakow::Producer do
 
   before do
     @producer = Krakow::Producer.new(
-                  :host => @cluster.nsqd.first.host,
-                  :port => @cluster.nsqd.first.tcp_port,
-                  :topic => 'hella-good',
-                  :reconnect_interval => 1
-                )
+      :host => @cluster.nsqd.first.host,
+      :port => @cluster.nsqd.first.tcp_port,
+      :topic => 'hella-good',
+      :reconnect_interval => 1
+    )
   end
 
   after do
@@ -51,7 +51,7 @@ describe Krakow::Producer do
 
     proc {
       @producer.write('hi')
-    }.must_raise Krakow::Error::ConnectionFailure
+    }.must_raise Krakow::Error::ConnectionUnavailable
 
     @producer.alive?.must_equal true
   end
