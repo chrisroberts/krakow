@@ -45,6 +45,8 @@ module Krakow
       if(arguments[:enforce_features].nil?)
         arguments[:enforce_features] = true
       end
+      @socket_retries = 0
+      @reconnect_pause = 0.5
       @endpoint_settings = {}
     end
 
@@ -70,7 +72,7 @@ module Krakow
     def transmit(message)
       output = message.to_line
       debug ">>> #{output}"
-      socket.write output
+      safe_socket{|socket| socket.write output }
       response_wait = wait_time_for(message)
       responses.clear if response_wait
       if(response_wait)
@@ -112,13 +114,13 @@ module Krakow
     # Receive message and return proper FrameType instance
     def receive
       debug 'Read wait for frame start'
-      buf = socket.recv(8)
+      buf = safe_socket{|socket| socket.recv(8) }
       if(buf)
         @receiving = true
         debug "<<< #{buf.inspect}"
         struct = FrameType.decode(buf)
         debug "Decoded structure: #{struct.inspect}"
-        struct[:data] = socket.recv(struct[:size])
+        struct[:data] = safe_socket{|socket| socket.recv(struct[:size])}
         debug "<<< #{struct[:data].inspect}"
         @receiving = false
         frame = FrameType.build(struct)
@@ -198,7 +200,7 @@ module Krakow
       ident = Command::Identify.new(
         expected_features
       )
-      socket.write(ident.to_line)
+      safe_socket{|socket| socket.write(ident.to_line) }
       response = receive
       if(expected_features[:feature_negotiation])
         begin
@@ -241,6 +243,31 @@ module Krakow
       @socket = ConnectionFeatures::Ssl::Io.new(socket, features_args)
       response = receive
       info "TLS enable complete. Response: #{response.inspect}"
+    end
+
+    protected
+
+    def safe_socket
+      begin
+        if(socket.nil? || socket.closed?)
+          raise Error::ConnectionUnavailable.new 'Current connection is closed!'
+        end
+        result = yield socket
+        @socket_retries = 0
+        result
+      rescue => e
+        warn "Socket action failed: #{e.class} -- #{e}"
+        if(socket.nil? || socket.closed?)
+          pause_interval = @reconnect_pause * @socket_retries
+          @socket_retries += 1
+          warn "Pausing for #{pause_interval} seconds before reconnect"
+          sleep(pause_interval)
+          init!
+          retry
+        else
+          raise
+        end
+      end
     end
 
   end
