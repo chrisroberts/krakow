@@ -9,7 +9,7 @@ module Krakow
         @ideal = registry.size < 1 ? 0 : max_in_flight / registry.size
         debug "Distribution calculated ideal: #{ideal}"
         if(less_than_ideal?)
-          registry.each do |connection, reg_info|
+          registry.each do |connection_id, reg_info|
             reg_info[:ready] = 0
           end
           max_in_flight.times do
@@ -101,16 +101,16 @@ module Krakow
 
       # Returns all connections without RDY state
       def waiting_connections
-        registry.find_all do |connection, info|
+        registry.find_all do |conn_id, info|
           info[:ready] < 1 && info[:in_flight] < 1 && info[:backoff_until] < Time.now.to_i
-        end.map(&:first).compact
+        end.map{|conn_id, info| info[:connection] if info}.compact
       end
 
       # Returns all connections with RDY state
       def rdy_connections
-        registry.find_all do |connection, info|
+        registry.find_all do |conn_id, info|
           info[:ready] > 0
-        end.map(&:first).compact
+        end.map{|conn_id, info| info[:connection] if info}.compact
       end
 
       # Force a connection to give up RDY state so next in stack can receive

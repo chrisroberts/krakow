@@ -36,7 +36,7 @@ module Krakow
     # confirmations or requeue.
     def unregister_message(message)
       msg_id = message.respond_to?(:message_id) ? message.message_id : message.to_s
-      connection = flight_record[msg_id]
+      connection = connection_lookup(flight_record[msg_id])
       registry_info = registry_lookup(connection)
       flight_record.delete(msg_id)
       registry_info[:in_flight] -= 1
@@ -113,12 +113,23 @@ module Krakow
       end
     end
 
+    # key:: registry key
+    # Return connection associated with given registry key
+    def connection_lookup(key)
+      con = registry[key]
+      if(con)
+        con[:connection]
+      else
+        abort KeyError.new("Failed to location connection via lookup (key: #{key.inspect})")
+      end
+    end
+
     # msg_id:: Message ID string
     # Return source connection of given `msg_id`. If block is
     # provided, the connection instance will be yielded to the block
     # and the result returned.
     def in_flight_lookup(msg_id)
-      connection = flight_record[msg_id]
+      connection = connection_lookup(flight_record[msg_id])
       unless(connection)
         abort Krakow::Error::LookupFailed.new("Failed to locate in flight message (ID: #{msg_id})")
       end
