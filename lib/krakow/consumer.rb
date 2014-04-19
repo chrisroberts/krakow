@@ -71,9 +71,11 @@ module Krakow
         :notifier => notifier,
         :features => connection_options[:features],
         :features_args => connection_options[:config],
-        :callback => {
-          :actor => current_actor,
-          :method => :process_message
+        :callbacks => {
+          :handle => {
+            :actor => current_actor,
+            :method => :process_message
+          }
         }
       )
     end
@@ -143,7 +145,7 @@ module Krakow
     def connection_failure(con, reason)
       connections.delete_if do |key, value|
         if(value == con)
-          warn "Connection failure detected. Removing connection: #{key}"
+          warn "Connection failure detected. Removing connection: #{key} - #{reason}"
           distribution.remove_connection(con)
           true
         end
