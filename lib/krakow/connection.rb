@@ -30,7 +30,7 @@ module Krakow
       super
       required! :host, :port
       optional(
-        :version, :queue, :callback, :responses, :notifier,
+        :version, :queue, :callbacks, :responses, :notifier,
         :features, :response_wait, :response_interval, :error_wait,
         :enforce_features, :features_args
       )
@@ -42,6 +42,7 @@ module Krakow
       arguments[:response_wait] ||= 1
       arguments[:response_interval] ||= 0.01
       arguments[:error_wait] ||= 0.0
+      arguments[:callbacks] ||= {}
       if(arguments[:enforce_features].nil?)
         arguments[:enforce_features] = true
       end
@@ -56,8 +57,7 @@ module Krakow
 
     # Initialize the connection
     def init!
-      debug 'Initializing connection'
-      @socket = Celluloid::IO::TCPSocket.new(host, port)
+      build_socket
       socket.write version.rjust(4).upcase
       identify_and_negotiate
       async.process_to_queue!
@@ -128,7 +128,7 @@ module Krakow
         frame
       else
         if(socket.closed?)
-          abort Error.new("#{self} encountered closed socket!")
+          abort Error::ConnectionFailure.new("#{self} encountered closed socket!")
         end
         nil
       end
@@ -160,10 +160,7 @@ module Krakow
         transmit Command::Nop.new
         nil
       else
-        if(callback && callback[:actor] && callback[:method])
-          debug "Sending #{message} to callback `#{callback[:actor]}##{callback[:method]}`"
-          message = callback[:actor].send(callback[:method], message, current_actor)
-        end
+        message = callback_for(:handle, message)
         if(!message.is_a?(FrameType::Message))
           debug "Captured non-message type response: #{message}"
           responses << message
@@ -171,6 +168,17 @@ module Krakow
         else
           message
         end
+      end
+    end
+
+    def callback_for(type, *args)
+      callback = callbacks[type]
+      if(callback)
+        debug "Processing connection callback for #{type.inspect} (#{callback.inspect})"
+        callback[:actor].send(callback[:method], *(args + [current_actor]))
+      else
+        debug "No connection callback defined for #{type.inspect}"
+        args.size == 1 ? args.first : args
       end
     end
 
@@ -247,22 +255,51 @@ module Krakow
 
     protected
 
+    # Build socket connection
+    def build_socket
+      if(socket && (socket.closed? || socket.eof?))
+        socket.close unless socket.closed?
+        @socket = nil
+        warn 'Destroyed existing socket instance from connection.'
+      end
+      unless(socket)
+        debug 'Initializing connection'
+        @socket = Celluloid::IO::TCPSocket.new(host, port)
+      else
+        warn "Socket is already initialized. Doing nothing..."
+      end
+    end
+
+    # Provides socket failure state handling around given block. Will
+    # attempt reconnect and replay
     def safe_socket
       begin
         if(socket.nil? || socket.closed?)
           raise Error::ConnectionUnavailable.new 'Current connection is closed!'
         end
-        result = yield socket
+        result = yield socket if block_given?
         @socket_retries = 0
         result
-      rescue => e
-        warn "Socket action failed: #{e.class} -- #{e}"
-        if(socket.nil? || socket.closed?)
-          pause_interval = @reconnect_pause * @socket_retries
-          @socket_retries += 1
-          warn "Pausing for #{pause_interval} seconds before reconnect"
-          sleep(pause_interval)
-          init!
+      rescue Celluloid::Error => e
+        warn "Internal error encountered. Allowing exception to bubble. #{e.class}: #{e}"
+        raise e
+      rescue StandardError, SystemCallError => e
+        if(socket.nil? || socket.closed? || socket.eof?)
+          warn "Safe socket encountered error (socket in failed state): #{e.class}: #{e}"
+          begin
+            pause_interval = @reconnect_pause * @socket_retries
+            @socket_retries += 1
+            warn "Pausing for #{pause_interval} seconds before reconnect"
+            sleep(pause_interval)
+            warn "Reconnect pause complete. Initiating socket reconnect!"
+            init!
+          rescue Celluloid::Error => e
+            warn "Internal error encountered. Allowing exception to bubble. #{e.class}: #{e}"
+            raise e
+          rescue StandardError, SystemCallError => e
+            error "Reconnect error encountered: #{e.class} - #{e}"
+            retry
+          end
           retry
         else
           raise
