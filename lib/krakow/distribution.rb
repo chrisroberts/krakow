@@ -105,7 +105,7 @@ module Krakow
     # Return lookup key (actor reference)
     def connection_key(connection)
       unless(connection.alive?)
-        error "Received connection is dead #{connection.inspect}"
+        error "Received connection is dead #{connection.inspect} <#{connection.object_id}>"
         remove_connection(connection, :nolookup)
         abort Krakow::Error::ConnectionUnavailable.new "Received dead connection instance (#{connection.inspect})"
       else
