@@ -2,6 +2,15 @@ require 'http'
 require 'uri'
 require 'ostruct'
 
+require 'cgi'
+# NOTE: Prevents weird "first" run behavior
+begin
+  require 'json'
+rescue LoadError
+  # ignore (maybe log?)
+end
+
+
 module Krakow
   class Producer
     class Http
@@ -14,13 +23,6 @@ module Krakow
       attr_reader :uri
 
       def initialize(args={})
-        # load this "on demand" to prevent weird behavior from `http`
-        # and `multi_json` interacton fun
-        begin
-          require 'json'
-        rescue LoadError
-          # ignore (maybe log?)
-        end
         super
         required! :endpoint, :topic
         optional :config, :ssl_context
@@ -42,9 +44,9 @@ module Krakow
         build.path = "/#{path}"
         response = HTTP.send(method, build.to_s, args.merge(config))
         begin
-          response = MultiJson.load(response.response.body)
+          response = MultiJson.load(response.body.to_s)
         rescue MultiJson::LoadError
-          response = {'status_code' => response == 'OK' ? 200 : nil, 'status_txt' => response, 'data' => nil}
+          response = {'status_code' => response.code, 'status_txt' => response.body.to_s, 'data' => nil}
         end
         Response.new(response)
       end
