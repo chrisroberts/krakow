@@ -50,9 +50,15 @@ describe Krakow::Consumer, 'with backoff enabled' do
     it 'should recover if we lose our connection in the middle of a backoff' do
       @consumer.queue.pop.requeue
 
+      wait_for{ @consumer.queue.size > 0 }
+
       # bounce connection
       @cluster.nsqd.first.stop
       @cluster.nsqd.first.start
+
+      wait_for(5) do
+        @consumer.connections.values.find_all(&:connected?).size == 1
+      end
 
       wait_for do
         @consumer.queue.pop.confirm
@@ -61,5 +67,3 @@ describe Krakow::Consumer, 'with backoff enabled' do
   end
 
 end
-
-

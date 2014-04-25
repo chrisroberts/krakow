@@ -4,7 +4,6 @@ describe Krakow::Consumer do
 
   with_cluster(:nsqlookupd_count => 2, :nsqd_count => 3)
 
-
   before do
     @producers = @cluster.nsqd.map { |q| new_producer(q) }
 
@@ -13,42 +12,44 @@ describe Krakow::Consumer do
       @producers[idx % @producers.length].write(m)
     end
 
-    @consumer = new_consumer
+    @consumer = new_consumer(:max_in_flight => 20)
     wait_for { @consumer.connections.length == 3 }
   end
-
 
   after do
     @producers.each { |p| p.terminate if p.alive? }
     @consumer.terminate if @consumer.alive?
   end
 
-
   it 'should continue processing messages when a queue is down' do
-    begin
-      thread = Thread.new do
-        # shut down the last nsqd
-        @producers.last.terminate
-        @cluster.nsqd.last.stop
 
-        # make sure there are more messages on each queue than max in flight
-        @producers[0].write(*['hay']*15)
-        @producers[1].write(*['hay']*15)
-      end
+    # shut down the last nsqd
+    @producers.last.terminate
+    @cluster.nsqd.last.stop
 
-      Timeout::timeout(10) do
-        30.times do
-          @consumer.queue.pop.confirm rescue Krakow::Error::ConnectionFailure
+    # make sure there are more messages on each queue than max in flight
+    @producers[0].write(*['hay']*15)
+    @producers[1].write(*['hay']*15)
+
+    received = Queue.new
+
+    50.times.map do |i|
+      Thread.new do
+        begin
+          msg = @consumer.queue.pop
+          received << msg.message
+          msg.confirm
+        rescue Krakow::Error::ConnectionFailure, Krakow::Error::ConnectionUnavailable
+          # ignore
         end
       end
-
-      # If it can get 30 messages, it clearly continued processing from the
-      # good queues and didn't get blocked by the downed queue.
-    ensure
-      thread.join
     end
-  end
 
+    wait_for{ received.size >= 30 }
+
+    received.size.must_be :>=, 30
+
+  end
 
   it 'should process messages from a new queue when it comes online' do
     begin
@@ -58,25 +59,27 @@ describe Krakow::Consumer do
       sleep(0.1)
 
       thread = Thread.new do
-        sleep(0.5)
         nsqd.start
-        sleep(0.5)
+        sleep(1)
         producer = new_producer(nsqd)
         producer.write('needle')
         producer.terminate
       end
 
       wait_for do
-        msg = @consumer.queue.pop
-        msg.confirm rescue Krakow::Error::ConnectionFailure
-        msg.content == 'needle'
+        string = nil
+        until(string == 'needle')
+          msg = @consumer.queue.pop
+          msg.confirm rescue Krakow::Error::ConnectionFailure
+          string = msg.message
+        end
+        true
       end
 
-    ensure
       thread.join
+
     end
   end
-
 
   it 'should be able to handle all queues going offline and coming back' do
     begin
@@ -95,7 +98,7 @@ describe Krakow::Consumer do
         end
       end
 
-      Timeout::timeout(5) do
+      Timeout::timeout(10) do
         received_messages = []
 
         while (expected_messages & received_messages).length < expected_messages.length do
@@ -112,7 +115,6 @@ describe Krakow::Consumer do
     end
   end
 
-
   it 'should be able to rely on the second nsqlookupd if the first dies' do
     @cluster.nsqlookupd.first.stop
 
@@ -127,4 +129,3 @@ describe Krakow::Consumer do
   end
 
 end
-

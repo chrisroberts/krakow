@@ -140,10 +140,14 @@ describe Krakow::Consumer do
       wait_for { consumer.connections.length == 3 }
 
       messages = []
+
       expected_messages.length.times do
-        msg = consumer.queue.pop
-        messages << msg.message
-        msg.confirm
+        wait_for do
+          msg = consumer.queue.pop
+          messages << msg.message
+          msg.confirm
+          true
+        end
       end
       messages.sort.must_equal expected_messages
       consumer.queue.must_be :empty?
