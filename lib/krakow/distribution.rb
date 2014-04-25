@@ -91,12 +91,20 @@ module Krakow
     # connection:: Connection
     # Remove connection from RDY distribution
     def remove_connection(connection, *args)
-      key = args.include?(:nolookup) ? connection : connection_key(connection)
+      if(args.include?(:nolookup))
+        warn "No lookup requested on key value for removal! #{connection.inspect}"
+        key = connection
+      else
+        key = connection_key(connection)
+      end
       # remove connection from registry
       registry.delete(key)
       # remove any in flight messages
       flight_record.delete_if do |k,v|
-        v == connection_key(key)
+        if(k == key)
+          warn "Removing in flight reference due to failed connection: #{k}"
+          true
+        end
       end
       true
     end
@@ -106,8 +114,8 @@ module Krakow
     def connection_key(connection)
       unless(connection.alive?)
         error "Received connection is dead #{connection.inspect} <#{connection.object_id}>"
-        remove_connection(connection, :nolookup)
-        abort Krakow::Error::ConnectionUnavailable.new "Received dead connection instance (#{connection.inspect})"
+        remove_connection(connection.object_id, :nolookup)
+        abort Krakow::Error::ConnectionFailure.new "Received dead connection instance (#{connection.inspect})"
       else
         connection.object_id
       end
@@ -120,7 +128,7 @@ module Krakow
       if(con)
         con[:connection]
       else
-        abort KeyError.new("Failed to location connection via lookup (key: #{key.inspect})")
+        abort KeyError.new("Failed to locate connection via lookup (key: #{key.inspect})")
       end
     end
 
