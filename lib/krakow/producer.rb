@@ -47,7 +47,7 @@ module Krakow
 
     # Return if connected
     def connected?
-      !!(connection && connection.alive?)
+      !!(connection && connection.alive? && connection.connected?)
     end
 
     # Process connection failure and attempt reconnection
