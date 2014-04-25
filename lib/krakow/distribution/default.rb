@@ -53,7 +53,11 @@ module Krakow
             admit_defeat = true
           end
           con = less_than_ideal_stack.pop
-          connection = con unless registry_lookup(con)[:backoff_until] > Time.now.to_i
+          if(con)
+            unless(registry_lookup(con)[:backoff_until] > Time.now.to_i)
+              connection = con
+            end
+          end
         end
         if(connection)
           registry_lookup(connection)[:ready] = 1
@@ -82,20 +86,24 @@ module Krakow
       # connection:: Connection
       # Update connection ready count
       def calculate_ready!(connection)
-        registry_info = registry_lookup(connection)
-        unless(less_than_ideal?)
-          registry_info[:ready] = ideal - registry_info[:in_flight]
-          if(registry_info[:ready] < 0 || registry_info[:backoff_until] > Time.now.to_i)
-            registry_info[:ready] = 0
-            registry_info[:backoff_timer].cancel if registry[:backoff_timer]
-            registry_info[:backoff_timer] = after(registry_info[:backoff_until] - Time.now.to_i) do
-              calculate_ready!(connection)
-              set_ready_for(connection) unless less_than_ideal?
+        begin
+          registry_info = registry_lookup(connection)
+          unless(less_than_ideal?)
+            registry_info[:ready] = ideal - registry_info[:in_flight]
+            if(registry_info[:ready] < 0 || registry_info[:backoff_until] > Time.now.to_i)
+              registry_info[:ready] = 0
+              registry_info[:backoff_timer].cancel if registry[:backoff_timer]
+              registry_info[:backoff_timer] = after(registry_info[:backoff_until] - Time.now.to_i) do
+                calculate_ready!(connection)
+                set_ready_for(connection) unless less_than_ideal?
+              end
             end
+            registry_info[:ready]
+          else
+            registry_info[:ready] = 0
           end
-          registry_info[:ready]
-        else
-          registry_info[:ready] = 0
+        rescue Error::ConnectionUnavailable
+          warn 'Unavailable connection encountered!'
         end
       end
 
