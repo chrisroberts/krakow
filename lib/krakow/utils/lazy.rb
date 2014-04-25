@@ -13,6 +13,7 @@ module Krakow
           end
         end
       end
+      alias_method :super_init, :initialize
 
       # args:: list of required keys
       # Check that required keys exist in `arguments` hash. Raise
