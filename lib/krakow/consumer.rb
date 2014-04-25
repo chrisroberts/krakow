@@ -64,20 +64,30 @@ module Krakow
     # queue:: message store queue
     # Build new `Connection`
     def build_connection(host, port, queue)
-      connection = Connection.new(
-        :host => host,
-        :port => port,
-        :queue => queue,
-        :notifier => notifier,
-        :features => connection_options[:features],
-        :features_args => connection_options[:config],
-        :callbacks => {
-          :handle => {
-            :actor => current_actor,
-            :method => :process_message
+      begin
+        connection = Connection.new(
+          :host => host,
+          :port => port,
+          :queue => queue,
+          :notifier => notifier,
+          :features => connection_options[:features],
+          :features_args => connection_options[:config],
+          :callbacks => {
+            :handle => {
+              :actor => current_actor,
+              :method => :process_message
+            },
+            :reconnect => {
+              :actor => current_actor,
+              :method => :connection_reconnect
+            }
           }
-        }
-      )
+        )
+      rescue => e
+        error "Failed to build connection (host: #{host} port: #{port} queue: #{queue}) - #{e.class}: #{e}"
+        debug "#{e.class}: #{e}\n#{e.backtrace.join("\n")}"
+        nil
+      end
     end
 
     # message:: FrameType
@@ -89,6 +99,11 @@ module Krakow
         message.origin = current_actor
       end
       message
+    end
+
+    def connection_reconnect(connection)
+      connection.transmit(Command::Sub.new(:topic_name => topic, :channel_name => channel))
+      distribution.set_ready_for(connection)
     end
 
     # connection:: Connection
@@ -145,8 +160,12 @@ module Krakow
     def connection_failure(con, reason)
       connections.delete_if do |key, value|
         if(value == con)
-          warn "Connection failure detected. Removing connection: #{key} - #{reason}"
-          distribution.remove_connection(con)
+          warn "Connection failure detected. Removing connection: #{key} - #{reason || 'no reason provided'}"
+          begin
+            distribution.remove_connection(con)
+          rescue Error::ConnectionUnavailable, Error::ConnectionFailure
+            warn 'Caught connection unavailability'
+          end
           true
         end
       end
@@ -165,8 +184,8 @@ module Krakow
           update_ready!(connection)
         end
         true
-      rescue => e
-        abort e
+      rescue Error::ConnectionUnavailable => e
+        retry
       end
     end
     alias_method :finish, :confirm
