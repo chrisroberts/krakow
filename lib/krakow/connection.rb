@@ -24,7 +24,10 @@ module Krakow
 
     finalizer :goodbye_my_love!
 
-    attr_reader :socket, :endpoint_settings
+    attr_reader(
+      :connector, :endpoint_settings, :reconnector,
+      :reconnect_notifier, :responder, :running, :socket
+    )
 
     def initialize(args={})
       super
@@ -46,9 +49,15 @@ module Krakow
       if(arguments[:enforce_features].nil?)
         arguments[:enforce_features] = true
       end
+      @connector = Mutex.new
+      @reconnector = Mutex.new
+      @responder = Mutex.new
+      @reconnect_notifier = Celluloid::Signals.new
       @socket_retries = 0
+      @socket_max_retries = 10
       @reconnect_pause = 0.5
       @endpoint_settings = {}
+      @running = false
     end
 
     def to_s
@@ -57,11 +66,9 @@ module Krakow
 
     # Initialize the connection
     def init!
-      build_socket
-      socket.write version.rjust(4).upcase
-      identify_and_negotiate
-      async.process_to_queue!
-      info 'Connection initialized'
+      connector.synchronize do
+        connect!
+      end
     end
 
     # message:: Command instance to send
@@ -71,13 +78,22 @@ module Krakow
     # NOTE: Handle `Consumer` side via `Distribution` lookup
     def transmit(message)
       output = message.to_line
-      debug ">>> #{output}"
-      safe_socket{|socket| socket.write output }
       response_wait = wait_time_for(message)
-      responses.clear if response_wait
-      if(response_wait)
+      if(response_wait > 0)
+        transmit_with_response(message, response_wait)
+      else
+        debug ">>> #{output}"
+        safe_socket{|socket| socket.write output }
+        true
+      end
+    end
+
+    def transmit_with_response(message, wait_time)
+      responder.synchronize do
+        safe_socket{|socket| socket.write(message.to_line) }
+        responses.clear
         response = nil
-        (response_wait / response_interval).to_i.times do |i|
+        (wait_time / response_interval).to_i.times do |i|
           response = responses.pop unless responses.empty?
           break if response
           sleep(response_interval)
@@ -95,8 +111,6 @@ module Krakow
             abort Error::BadResponse::NoResponse.new "No response provided for message #{message}"
           end
         end
-      else
-        true
       end
     end
 
@@ -104,8 +118,13 @@ module Krakow
     def goodbye_my_love!
       debug 'Tearing down connection'
       if(socket && !socket.closed?)
-        socket.write Command::Cls.new.to_line rescue Errno::EPIPE
-        socket.close
+        [lambda{ socket.write Command::Cls.new.to_line}, lambda{socket.close}].each do |action|
+          begin
+            action.call
+          rescue IOError, SystemCallError => e
+            warn "Socket error encountered during teardown: #{e.class}: #{e}"
+          end
+        end
       end
       @socket = nil
       info 'Connection torn down'
@@ -114,13 +133,13 @@ module Krakow
     # Receive message and return proper FrameType instance
     def receive
       debug 'Read wait for frame start'
-      buf = safe_socket{|socket| socket.recv(8) }
+      buf = socket.recv(8)
       if(buf)
         @receiving = true
         debug "<<< #{buf.inspect}"
         struct = FrameType.decode(buf)
         debug "Decoded structure: #{struct.inspect}"
-        struct[:data] = safe_socket{|socket| socket.recv(struct[:size])}
+        struct[:data] = socket.recv(struct[:size])
         debug "<<< #{struct[:data].inspect}"
         @receiving = false
         frame = FrameType.build(struct)
@@ -128,7 +147,7 @@ module Krakow
         frame
       else
         if(socket.closed?)
-          abort Error::ConnectionFailure.new("#{self} encountered closed socket!")
+          abort Error::ConnectionUnavailable.new("#{self} encountered closed socket!")
         end
         nil
       end
@@ -141,12 +160,19 @@ module Krakow
 
     # Pull message and queue
     def process_to_queue!
-      loop do
-        message = handle(receive)
-        if(message)
-          debug "Adding message to queue #{message}"
-          queue << message
-          notifier.signal(message) if notifier
+      @running = true
+      while(@running)
+        begin
+          message = handle(receive)
+          if(message)
+            debug "Adding message to queue #{message}"
+            queue << message
+            notifier.signal(message) if notifier
+          end
+        rescue Error::ConnectionUnavailable => e
+          warn "Failed to receive message: #{e.class} - #{e}"
+          @running = false
+          async.reconnect!
         end
       end
     end
@@ -182,6 +208,10 @@ module Krakow
       end
     end
 
+    # Returns configured wait time for given message type
+    #
+    # @param message [Command]
+    # @return [Numeric] seconds to wait
     def wait_time_for(message)
       case Command.response_for(message)
       when :required
@@ -253,58 +283,80 @@ module Krakow
       info "TLS enable complete. Response: #{response.inspect}"
     end
 
+    def connected?
+      socket && !socket.closed?
+    end
+
     protected
 
-    # Build socket connection
-    def build_socket
+    def teardown_socket
       if(socket && (socket.closed? || socket.eof?))
         socket.close unless socket.closed?
         @socket = nil
-        warn 'Destroyed existing socket instance from connection.'
-      end
-      unless(socket)
-        debug 'Initializing connection'
-        @socket = Celluloid::IO::TCPSocket.new(host, port)
-      else
-        warn "Socket is already initialized. Doing nothing..."
+        warn 'Existing socket instance has been destroyed from this connection'
       end
     end
 
     # Provides socket failure state handling around given block. Will
     # attempt reconnect and replay
-    def safe_socket
+    def safe_socket(*args)
       begin
         if(socket.nil? || socket.closed?)
           raise Error::ConnectionUnavailable.new 'Current connection is closed!'
         end
         result = yield socket if block_given?
-        @socket_retries = 0
         result
+      rescue Error::ConnectionUnavailable, SystemCallError, IOError => e
+        warn "Safe socket encountered error (socket in failed state): #{e.class}: #{e}"
+        reconnect!
+        retry
       rescue Celluloid::Error => e
         warn "Internal error encountered. Allowing exception to bubble. #{e.class}: #{e}"
-        raise e
-      rescue StandardError, SystemCallError => e
-        if(socket.nil? || socket.closed? || socket.eof?)
-          warn "Safe socket encountered error (socket in failed state): #{e.class}: #{e}"
-          begin
-            pause_interval = @reconnect_pause * @socket_retries
-            @socket_retries += 1
-            warn "Pausing for #{pause_interval} seconds before reconnect"
-            sleep(pause_interval)
-            warn "Reconnect pause complete. Initiating socket reconnect!"
-            init!
-          rescue Celluloid::Error => e
-            warn "Internal error encountered. Allowing exception to bubble. #{e.class}: #{e}"
-            raise e
-          rescue StandardError, SystemCallError => e
-            error "Reconnect error encountered: #{e.class} - #{e}"
-            retry
-          end
-          retry
-        else
-          raise
-        end
+        abort e
+      rescue Exception => e
+        warn "!!! Unexpected error encountered within safe socket: #{e.class}: #{e}"
+        raise
       end
+    end
+
+    def reconnect!
+      if(reconnector.try_lock)
+        begin
+          if(@socket_max_retries <= @socket_retries)
+            abort ConnectionFailure.new "Failed to re-establish connection after #{@socket_retries} tries."
+          end
+          pause_interval = @reconnect_pause * @socket_retries
+          @socket_retries += 1
+          warn "Pausing for #{pause_interval} seconds before reconnect"
+          sleep(pause_interval)
+          init!
+          @socket_retries = 0
+        rescue Celluloid::Error => e
+          warn "Internal error encountered. Allowing exception to bubble. #{e.class}: #{e}"
+          abort e
+        rescue SystemCallError, IOError => e
+          error "Reconnect error encountered: #{e.class} - #{e}"
+          retry
+        end
+        callback_for(:reconnect)
+        reconnect_notifier.broadcast(:connected)
+        reconnector.unlock
+      else
+        reconnect_notifier.wait(:connected)
+      end
+    end
+
+    def connect!
+      debug 'Initializing connection'
+      if(@socket)
+        @socket.close unless @socket.closed?
+        @socket = nil
+      end
+      @socket = Celluloid::IO::TCPSocket.new(host, port)
+      safe_socket{|socket| socket.write version.rjust(4).upcase}
+      identify_and_negotiate
+      async.process_to_queue!
+      info 'Connection initialized'
     end
 
   end
