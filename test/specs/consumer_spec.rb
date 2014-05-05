@@ -9,10 +9,11 @@ describe Krakow::Consumer do
     @producers = @cluster.nsqd.map { |q| new_producer(q) }
   end
 
-
   after do
-    @producers.each { |p| p.terminate if p.alive? }
-    consumer.terminate if consumer.alive?
+    if(@producers)
+      @producers.each { |p| p.terminate if p.alive? }
+    end
+    consumer.terminate
   end
 
   describe 'with no active producers' do
@@ -142,7 +143,7 @@ describe Krakow::Consumer do
       messages = []
 
       expected_messages.length.times do
-        wait_for do
+        wait_for(5) do
           msg = consumer.queue.pop
           messages << msg.message
           msg.confirm
