@@ -13,7 +13,7 @@ module Krakow
     def initialize(args={})
       super
       optional :watch_dog_interval, :backoff_interval
-      arguments[:watch_dog_interval] ||= 5
+      arguments[:watch_dog_interval] ||= 1.0
       @max_in_flight = arguments[:max_in_flight] || 1
       @ideal = 0
       @flight_record = {}
