@@ -26,20 +26,24 @@ class MiniTest::Test
   end
 
   # Assert that something must take longer than a certain amount of time to complete
-  def must_take_longer_than(time, &block)
+  def must_take_longer_than(time, roof=false, &block)
     start_time = Time.now.to_f
     yield
     end_time = Time.now.to_f
 
-    (end_time - start_time).must_be :>, time
+    result = (end_time - start_time)
+    result = result.ceil if roof
+    result.must_be :>, time
   end
 
-  def must_take_less_than(time, &block)
+  def must_take_less_than(time, roof=false, &block)
     start_time = Time.now.to_f
     yield
     end_time = Time.now.to_f
 
-    (end_time - start_time).must_be :<, time
+    result = (end_time - start_time)
+    result = result.ceil if roof
+    result.must_be :<, time
   end
 end
 
