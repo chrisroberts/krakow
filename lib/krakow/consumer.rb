@@ -26,7 +26,7 @@ module Krakow
     attribute :channel, String, :required => true
     attribute :host, String, :default => 'localhost'
     attribute :port, [String, Integer], :default => 4150
-    attribute :nslookupd, String
+    attribute :nsqlookupd, [Array, String]
     attribute :max_in_flight, Integer, :default => 1
     attribute :backoff_interval, Numeric
     attribute :discovery_interval, Numeric, :default => 30
