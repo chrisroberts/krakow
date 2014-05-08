@@ -41,7 +41,7 @@ describe Krakow::Consumer, 'with backoff enabled' do
       @consumer.queue.pop.requeue
       @consumer.queue.pop.requeue
 
-      must_take_longer_than(2) do
+      must_take_longer_than(2, :roof) do
         @consumer.queue.pop.confirm
       end
     end
