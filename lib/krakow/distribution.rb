@@ -14,7 +14,7 @@ module Krakow
     # @!parse include Krakow::Utils::Lazy::InstanceMethods
     # @!parse extend Krakow::Utils::Lazy::ClassMethods
 
-    attr_accessor :max_in_flight, :ideal, :flight_record, :registry
+    attr_accessor :ideal, :flight_record, :registry
 
     # @!group Attributes
 
@@ -32,7 +32,6 @@ module Krakow
 
     def initialize(args={})
       super
-      @max_in_flight = max_in_flight
       @ideal = 0
       @flight_record = {}
       @registry = {}
