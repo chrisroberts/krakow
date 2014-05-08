@@ -13,12 +13,13 @@ module Krakow
       #   @!method $1?
       #     @return [TrueClass, FalseClass] truthiness of the $1 $0
       attribute :topic_name, String, :required => true
-      attribute :message, String, :required => true
+      attribute :message, Object, :required => true
 
       # @!endgroup
 
       def to_line
-        [name, ' ', topic_name, "\n", message.length, message].pack('a*a*a*a*l>a*')
+        msg = message.to_s
+        [name, ' ', topic_name, "\n", msg.length, msg].pack('a*a*a*a*l>a*')
       end
 
       class << self

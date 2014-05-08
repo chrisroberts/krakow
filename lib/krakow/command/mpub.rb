@@ -13,11 +13,12 @@ module Krakow
       #   @!method $1?
       #     @return [TrueClass, FalseClass] truthiness of the $1 $0
       attribute :topic_name, String, :required => true
-      attribute :messages, [Array, String], :required => true
+      attribute :messages, Array, :required => true
 
       # @!endgroup
       def to_line
         formatted_messages = messages.map do |message|
+          message = message.to_s
           [message.length, message].pack('l>a*')
         end.join
         [name, ' ', topic_name, "\n", formatted_messages.length, messages.size, formatted_messages].pack('a*a*a*a*l>l>a*')
