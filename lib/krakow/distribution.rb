@@ -16,17 +16,17 @@ module Krakow
 
     attr_accessor :max_in_flight, :ideal, :flight_record, :registry
 
-    # @!group Properties
+    # @!group Attributes
 
-    # @!macro [attach] property
+    # @!macro [attach] attribute
     #   @!method $1
     #     @return [$2] the $1 $0
     #   @!method $1?
     #     @return [TrueClass, FalseClass] truthiness of the $1 $0
-    property :consumer, Krakow::Consumer, :required => true
-    property :watch_dog_interval, Numeric, :default => 1.0
-    property :backoff_interval, Numeric
-    property :max_in_flight, Integer, :default => 1
+    attribute :consumer, Krakow::Consumer, :required => true
+    attribute :watch_dog_interval, Numeric, :default => 1.0
+    attribute :backoff_interval, Numeric
+    attribute :max_in_flight, Integer, :default => 1
 
     # @!endgroup
 

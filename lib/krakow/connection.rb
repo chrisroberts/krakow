@@ -40,26 +40,26 @@ module Krakow
 
     attr_reader :connector, :reconnector, :reconnect_notifier, :responder, :running
 
-    # @!group Properties
+    # @!group Attributes
 
-    # @!macro [attach] property
+    # @!macro [attach] attribute
     #   @!method $1
     #     @return [$2] the $1 $0
     #   @!method $1?
     #     @return [TrueClass, FalseClass] truthiness of the $1 $0
-    property :host, String, :required => true
-    property :port, [String,Integer], :required => true
-    property :version, String, :default => 'v2'
-    property :queue, Queue, :default => ->{ Queue.new }
-    property :callbacks, Hash, :default => ->{ Hash.new }
-    property :responses, Queue, :default => ->{ Queue.new }
-    property :notifier, Celluloid::Actor
-    property :features, Hash, :default => ->{ Hash.new }
-    property :response_wait, Numeric, :default => 1.0
-    property :response_interval, Numeric, :default => 0.03
-    property :error_wait, Numeric, :default => 0
-    property :enforce_features, [TrueClass,FalseClass], :default => true
-    property :features_args, Hash, :default => ->{ Hash.new }
+    attribute :host, String, :required => true
+    attribute :port, [String,Integer], :required => true
+    attribute :version, String, :default => 'v2'
+    attribute :queue, Queue, :default => ->{ Queue.new }
+    attribute :callbacks, Hash, :default => ->{ Hash.new }
+    attribute :responses, Queue, :default => ->{ Queue.new }
+    attribute :notifier, Celluloid::Actor
+    attribute :features, Hash, :default => ->{ Hash.new }
+    attribute :response_wait, Numeric, :default => 1.0
+    attribute :response_interval, Numeric, :default => 0.03
+    attribute :error_wait, Numeric, :default => 0
+    attribute :enforce_features, [TrueClass,FalseClass], :default => true
+    attribute :features_args, Hash, :default => ->{ Hash.new }
 
     # @!endgroup
 

@@ -8,17 +8,17 @@ module Krakow
       # @return [Krakow::Consumer]
       attr_accessor :origin
 
-      # @!group Properties
+      # @!group Attributes
 
-      # @!macro [attach] property
+      # @!macro [attach] attribute
       #   @!method $1
       #     @return [$2] the $1 $0
       #   @!method $1?
       #     @return [TrueClass, FalseClass] truthiness of the $1 $0
-      property :attempts, Integer, :required => true
-      property :timestamp, Integer, :required => true
-      property :message_id, String, :required => true
-      property :message, String, :required => true
+      attribute :attempts, Integer, :required => true
+      attribute :timestamp, Integer, :required => true
+      attribute :message_id, String, :required => true
+      attribute :message, String, :required => true
 
       # @!endgroup
 

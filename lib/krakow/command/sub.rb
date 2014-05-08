@@ -5,15 +5,15 @@ module Krakow
     # Subscribe to topic/channel
     class Sub < Command
 
-      # @!group Properties
+      # @!group Attributes
 
-      # @!macro [attach] property
+      # @!macro [attach] attribute
       #   @!method $1
       #     @return [$2] the $1 $0
       #   @!method $1?
       #     @return [TrueClass, FalseClass] truthiness of the $1 $0
-      property :topic_name, String, :required => true
-      property :channel_name, String, :required => true
+      attribute :topic_name, String, :required => true
+      attribute :channel_name, String, :required => true
 
       # @!endgroup
 

@@ -6,24 +6,24 @@ module Krakow
     # Update client metadata on server / negotiate features
     class Identify < Command
 
-      # @!group Properties
+      # @!group Attributes
 
-      # @!macro [attach] property
+      # @!macro [attach] attribute
       #   @!method $1
       #     @return [$2] the $1 $0
       #   @!method $1?
       #     @return [TrueClass, FalseClass] truthiness of the $1 $0
-      property :short_id, [String, Numeric], :required => true
-      property :long_id, [String, Numeric], :required => true
-      property :feature_negotiation, [TrueClass, FalseClass]
-      property :heartbeat_interval, Numeric
-      property :output_buffer_size, Integer
-      property :output_buffer_timeout, Integer
-      property :tls_v1, [TrueClass, FalseClass]
-      property :snappy, [TrueClass, FalseClass]
-      property :deflate, [TrueClass, FalseClass]
-      property :deflate_level, Integer
-      property :sample_rate, Integer
+      attribute :short_id, [String, Numeric], :required => true
+      attribute :long_id, [String, Numeric], :required => true
+      attribute :feature_negotiation, [TrueClass, FalseClass]
+      attribute :heartbeat_interval, Numeric
+      attribute :output_buffer_size, Integer
+      attribute :output_buffer_timeout, Integer
+      attribute :tls_v1, [TrueClass, FalseClass]
+      attribute :snappy, [TrueClass, FalseClass]
+      attribute :deflate, [TrueClass, FalseClass]
+      attribute :deflate_level, Integer
+      attribute :sample_rate, Integer
 
       # @!endgroup
 

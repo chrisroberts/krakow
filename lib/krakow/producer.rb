@@ -18,19 +18,19 @@ module Krakow
 
     attr_reader :connection
 
-    # @!group Properties
+    # @!group Attributes
 
-    # @!macro [attach] property
+    # @!macro [attach] attribute
     #   @!method $1
     #     @return [$2] the $1 $0
     #   @!method $1?
     #     @return [TrueClass, FalseClass] truthiness of the $1 $0
-    property :host, String, :required => true
-    property :port, [String, Integer], :required => true
-    property :topic, String, :required => true
-    property :reconnect_retries, Integer, :default => 10
-    property :reconnect_interval, Integer, :default => 5
-    property :connection_options, Hash, :default => ->{ Hash.new }
+    attribute :host, String, :required => true
+    attribute :port, [String, Integer], :required => true
+    attribute :topic, String, :required => true
+    attribute :reconnect_retries, Integer, :default => 10
+    attribute :reconnect_interval, Integer, :default => 5
+    attribute :connection_options, Hash, :default => ->{ Hash.new }
 
     # @!endgroup
 

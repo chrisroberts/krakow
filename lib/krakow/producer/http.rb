@@ -28,17 +28,17 @@ module Krakow
 
       attr_reader :uri
 
-      # @!group Properties
+      # @!group Attributes
 
-      # @!macro [attach] property
+      # @!macro [attach] attribute
       #   @!method $1
       #     @return [$2] the $1 $0
       #   @!method $1?
       #     @return [TrueClass, FalseClass] truthiness of the $1 $0
-      property :endpoint, String, :required => true
-      property :topic, String, :required => true
-      property :config, Hash, :default => ->{ Hash.new }
-      property :ssl_context, Hash
+      attribute :endpoint, String, :required => true
+      attribute :topic, String, :required => true
+      attribute :config, Hash, :default => ->{ Hash.new }
+      attribute :ssl_context, Hash
 
       # @!endgroup
 

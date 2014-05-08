@@ -5,14 +5,14 @@ module Krakow
     # Error from server
     class Error < FrameType
 
-      # @!group Properties
+      # @!group Attributes
 
-      # @!macro [attach] property
+      # @!macro [attach] attribute
       #   @!method $1
       #     @return [$2] the $1 $0
       #   @!method $1?
       #     @return [TrueClass, FalseClass] truthiness of the $1 $0
-      property :error, String, :required => true
+      attribute :error, String, :required => true
 
       # @!endgroup
 

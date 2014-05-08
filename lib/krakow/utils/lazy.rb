@@ -19,7 +19,7 @@ module Krakow
         # @return [Object]
         def initialize(args={})
           @arguments = {}.tap do |hash|
-            self.class.properties.each do |name, options|
+            self.class.attributes.each do |name, options|
               val = args[name]
               if(options[:required] && !args.has_key?(name))
                 raise ArgumentError.new("Missing required option: `#{name}`")
@@ -51,7 +51,7 @@ module Krakow
       # Class methods for laziness
       module ClassMethods
 
-        # Add new property to class
+        # Add new attributes to class
         #
         # @param name [String]
         # @param type [Class, Array<Class>]
@@ -59,9 +59,9 @@ module Krakow
         # @option options [true, false] :required must be provided on initialization
         # @option options [Object, Proc] :default default value
         # @return [nil]
-        def property(name, type, options={})
+        def attribute(name, type, options={})
           name = name.to_sym
-          properties[name] = {:type => type}.merge(options)
+          attributes[name] = {:type => type}.merge(options)
           define_method(name) do
             arguments[name]
           end
@@ -71,18 +71,18 @@ module Krakow
           nil
         end
 
-        # Return properties
+        # Return attributes
         #
         # @param args [Symbol] :required or :optional
         # @return [Array<Hash>]
-        def properties(*args)
-          @properties ||= {}
+        def attributes(*args)
+          @attributes ||= {}
           if(args.include?(:required))
-            Hash[@properties.find_all{|k,v| v[:required]}]
+            Hash[@attributes.find_all{|k,v| v[:required]}]
           elsif(args.include?(:optional))
-            Hash[@properties.find_all{|k,v| !v[:required]}]
+            Hash[@attributes.find_all{|k,v| !v[:required]}]
           else
-            @properties
+            @attributes
           end
         end
 

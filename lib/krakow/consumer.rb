@@ -15,24 +15,24 @@ module Krakow
 
     attr_reader :connections, :discovery, :distribution, :queue
 
-    # @!group Properties
+    # @!group Attributes
 
-    # @!macro [attach] property
+    # @!macro [attach] attribute
     #   @!method $1
     #     @return [$2] the $1 $0
     #   @!method $1?
     #     @return [TrueClass, FalseClass] truthiness of the $1 $0
-    property :topic, String, :required => true
-    property :channel, String, :required => true
-    property :host, String, :default => 'localhost'
-    property :port, [String, Integer], :default => 4150
-    property :nslookupd, String
-    property :max_in_flight, Integer, :default => 1
-    property :backoff_interval, Numeric
-    property :discovery_interval, Numeric, :default => 30
-    property :discovery_jitter, Numeric, :default => 10.0
-    property :notifier, Celluloid::Actor
-    property :connection_options, Hash, :default => ->{ Hash.new }
+    attribute :topic, String, :required => true
+    attribute :channel, String, :required => true
+    attribute :host, String, :default => 'localhost'
+    attribute :port, [String, Integer], :default => 4150
+    attribute :nslookupd, String
+    attribute :max_in_flight, Integer, :default => 1
+    attribute :backoff_interval, Numeric
+    attribute :discovery_interval, Numeric, :default => 30
+    attribute :discovery_jitter, Numeric, :default => 10.0
+    attribute :notifier, Celluloid::Actor
+    attribute :connection_options, Hash, :default => ->{ Hash.new }
 
     # @!endgroup
 

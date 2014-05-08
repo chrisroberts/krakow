@@ -5,15 +5,15 @@ module Krakow
     # Re-queue a message
     class Req < Command
 
-      # @!group Properties
+      # @!group Attributes
 
-      # @!macro [attach] property
+      # @!macro [attach] attribute
       #   @!method $1
       #     @return [$2] the $1 $0
       #   @!method $1?
       #     @return [TrueClass, FalseClass] truthiness of the $1 $0
-      property :message_id, String, :required => true
-      property :timeout, Integer, :required => true
+      attribute :message_id, String, :required => true
+      attribute :timeout, Integer, :required => true
 
       # @!endgroup
 
