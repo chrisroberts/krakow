@@ -25,7 +25,7 @@ module Krakow
                 raise ArgumentError.new("Missing required option: `#{name}`")
               end
               if(val && options[:type] && !(valid = [options[:type]].flatten.compact).detect{|k| val.is_a?(k)})
-                raise TypeError.new("Invalid type for option `#{name}`. Valid - #{valid.map(&:to_s).join(',')}")
+                raise TypeError.new("Invalid type for option `#{name}` (#{val} <#{val.class}>). Valid - #{valid.map(&:to_s).join(',')}")
               end
               if(val.nil? && options[:default] && !args.has_key?(name))
                 val = options[:default].respond_to?(:call) ? options[:default].call : options[:default]
@@ -63,10 +63,10 @@ module Krakow
           name = name.to_sym
           attributes[name] = {:type => type}.merge(options)
           define_method(name) do
-            arguments[name]
+            arguments[name.to_sym]
           end
           define_method("#{name}?") do
-            !!arguments[name]
+            !!arguments[name.to_sym]
           end
           nil
         end
@@ -86,6 +86,16 @@ module Krakow
           end
         end
 
+        # Directly set attribute hash
+        #
+        # @param attrs [Hash]
+        # @return [TrueClass]
+        # @todo need deep dup here
+        def set_attributes(attrs)
+          @attributes = attrs.dup
+          true
+        end
+
       end
 
       class << self
@@ -97,6 +107,14 @@ module Krakow
           klass.class_eval do
             include InstanceMethods
             extend ClassMethods
+
+            class << self
+
+              def inherited(klass)
+                klass.set_attributes(self.attributes)
+              end
+
+            end
           end
         end
 
