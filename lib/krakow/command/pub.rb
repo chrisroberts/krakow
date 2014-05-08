@@ -1,13 +1,21 @@
+require 'krakow'
 
 module Krakow
   class Command
+    # Publish single message
     class Pub < Command
 
-      def initialize(args={})
-        super
-        required! :topic_name, :message
-        arguments[:message] = message.to_s
-      end
+      # @!group Properties
+
+      # @!macro [attach] property
+      #   @!method $1
+      #     @return [$2] the $1 $0
+      #   @!method $1?
+      #     @return [TrueClass, FalseClass] truthiness of the $1 $0
+      property :topic_name, String, :required => true
+      property :message, String, :required => true
+
+      # @!endgroup
 
       def to_line
         [name, ' ', topic_name, "\n", message.length, message].pack('a*a*a*a*l>a*')

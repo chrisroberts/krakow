@@ -1,10 +1,9 @@
+require 'krakow'
+
 module Krakow
   class Command
+    # Close connection
     class Cls < Command
-
-      def initialize(args={})
-        super
-      end
 
       def to_line
         "#{name}\n"

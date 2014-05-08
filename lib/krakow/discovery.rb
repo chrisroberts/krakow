@@ -1,19 +1,30 @@
 require 'uri'
 require 'http'
 require 'multi_json'
+require 'krakow'
 
 module Krakow
+
+  # Provides queue topic discovery
   class Discovery
 
     include Utils::Lazy
 
-    def initialize(args={})
-      super
-      required! :nsqlookupd
-    end
+    # @!group Properties
 
-    # topic:: Topic name
-    # Return list of end points with given topic name available
+    # @!macro [attach] property
+    #   @!method $1
+    #     @return [$2] the $1 $0
+    #   @!method $1?
+    #     @return [TrueClass, FalseClass] truthiness of the $1 $0
+    property :nsqlookupd, String, :required => true
+
+    # @!endgroup
+
+    # Get list of end points with given topic name available
+    #
+    # @param topic [String] topic name
+    # @return [Array<Hash>]
     def lookup(topic)
       result = [nsqlookupd].flatten.map do |location|
         uri = URI.parse(location)

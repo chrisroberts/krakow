@@ -1,18 +1,24 @@
 require 'snappy'
 require 'digest/crc'
+require 'krakow'
 
-# TODO: Add support for max size + chunks
-# TODO: Include support for remaining types
 module Krakow
   module ConnectionFeatures
+    # Snappy functionality
+    # @todo Add support for max size + chunks
+    # @todo Include support for remaining types
     module SnappyFrames
+      # Snappy-able IO
       class Io
 
+        # Header identifier
         IDENTIFIER = "\x73\x4e\x61\x50\x70\x59".force_encoding('ASCII-8BIT')
         ident_size = [IDENTIFIER.size].pack('L<')
         ident_size.slice!(-1,1)
+        # Size of identifier
         IDENTIFIER_SIZE = ident_size
 
+        # Mapping of types
         CHUNK_TYPE = {
           "\xff".force_encoding('ASCII-8BIT') => :identifier,
           "\x00".force_encoding('ASCII-8BIT') => :compressed,
@@ -21,6 +27,10 @@ module Krakow
 
         attr_reader :io, :buffer
 
+        # Create new snappy-able IO
+        #
+        # @param io [IO] IO to wrap
+        # @return [Io]
         def initialize(io, args={})
           @io = io
           @snappy_write_ident = false
@@ -28,14 +38,25 @@ module Krakow
         end
 
         # Proxy to underlying socket
+        #
+        # @param args [Object]
+        # @return [Object]
         def method_missing(*args)
           io.__send__(*args)
         end
 
+        # Mask the checksum
+        #
+        # @param checksum [String]
+        # @return [String]
         def checksum_mask(checksum)
           (((checksum >> 15) | (checksum << 17)) + 0xa282ead8) & 0xffffffff
         end
 
+        # Receive bytes from the IO
+        #
+        # @param n [Integer] nuber of bytes
+        # @return [String]
         def recv(n)
           read_stream unless buffer.size >= n
           result = buffer.slice!(0,n)
@@ -43,6 +64,9 @@ module Krakow
         end
         alias_method :read, :recv
 
+        # Read contents from stream
+        #
+        # @return [String]
         def read_stream
           header = io.recv(4)
           ident = CHUNK_TYPE[header.slice!(0)]
@@ -68,6 +92,10 @@ module Krakow
           end
         end
 
+        # Write string to IO
+        #
+        # @param string [String]
+        # @return [Integer] number of bytes written
         def write(string)
           unless(@snappy_writer_ident)
             send_snappy_identifier
@@ -83,6 +111,9 @@ module Krakow
           io.write output
         end
 
+        # Send the identifier for snappy content
+        #
+        # @return [Integer] bytes written
         def send_snappy_identifier
           io.write [CHUNK_TYPE.key(:identifier), IDENTIFIER_SIZE, IDENTIFIER].pack('a*a*a*')
         end

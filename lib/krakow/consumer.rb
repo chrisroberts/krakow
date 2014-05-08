@@ -1,7 +1,13 @@
+require 'krakow'
+
 module Krakow
+  # Consume messages from a server
   class Consumer
 
     include Utils::Lazy
+    # @!parse include Krakow::Utils::Lazy::InstanceMethods
+    # @!parse extend Krakow::Utils::Lazy::ClassMethods
+
     include Celluloid
 
     trap_exit :connection_failure
@@ -9,23 +15,37 @@ module Krakow
 
     attr_reader :connections, :discovery, :distribution, :queue
 
+    # @!group Properties
+
+    # @!macro [attach] property
+    #   @!method $1
+    #     @return [$2] the $1 $0
+    #   @!method $1?
+    #     @return [TrueClass, FalseClass] truthiness of the $1 $0
+    property :topic, String, :required => true
+    property :channel, String, :required => true
+    property :host, String, :default => 'localhost'
+    property :port, [String, Integer], :default => 4150
+    property :nslookupd, String
+    property :max_in_flight, Integer, :default => 1
+    property :backoff_interval, Numeric
+    property :discovery_interval, Numeric, :default => 30
+    property :discovery_jitter, Numeric, :default => 10.0
+    property :notifier, Celluloid::Actor
+    property :connection_options, Hash, :default => ->{ Hash.new }
+
+    # @!endgroup
+
     def initialize(args={})
       super
-      required! :topic, :channel
-      optional :host, :port, :nslookupd, :nsqlookupd, :max_in_flight,
-        :backoff_interval, :discovery_interval, :discovery_jitter,
-        :notifier, :connection_options
-      arguments[:max_in_flight] ||= 1
-      arguments[:discovery_interval] ||= 30
-      arguments[:discovery_jitter] ||= 10.0
       arguments[:connection_options] = {:features => {}, :config => {}}.merge(
         arguments[:connection_options] || {}
       )
-      arguments[:nsqlookupd] ||= arguments[:nslookupd]
       @connections = {}
       @distribution = Distribution::Default.new(
         :max_in_flight => max_in_flight,
-        :backoff_interval => backoff_interval
+        :backoff_interval => backoff_interval,
+        :consumer => current_actor
       )
       @queue = Queue.new
       if(nsqlookupd)
@@ -46,10 +66,22 @@ module Krakow
       end
     end
 
+    # Returns [Krakow::Connection] associated to key
+    #
+    # @param key [Object] identifier
+    # @return [Krakow::Connection] associated connection
+    def connection(key)
+      @connections[key]
+    end
+
+    # @return [String] stringify object
     def to_s
       "<#{self.class.name}:#{object_id} T:#{topic} C:#{channel}>"
     end
 
+    # Instance destructor
+    #
+    # @return [nil]
     def goodbye_my_love!
       debug 'Tearing down consumer'
       connections.values.each do |con|
@@ -57,12 +89,15 @@ module Krakow
       end
       distribution.terminate if distribution && distribution.alive?
       info 'Consumer torn down'
+      nil
     end
 
-    # host:: remote address
-    # port:: remote port
-    # queue:: message store queue
-    # Build new `Connection`
+    # Build a new [Krakow::Connection]
+    #
+    # @param host [String] remote host
+    # @param port [String, Integer] remote port
+    # @param queue [String] queue name
+    # @return [Krakow::Connection, nil] new connection or nil
     def build_connection(host, port, queue)
       begin
         connection = Connection.new(
@@ -90,29 +125,41 @@ module Krakow
       end
     end
 
-    # message:: FrameType
-    # connection:: Connection
-    # Process message if required
+    # Process a given message if required
+    #
+    # @param message [Krakow::FrameType]
+    # @param connection [Krakow::Connection]
+    # @return [Krakow::FrameType]
     def process_message(message, connection)
       if(message.is_a?(FrameType::Message))
-        distribution.register_message(message, connection)
+        distribution.register_message(message, connection.identifier)
         message.origin = current_actor
       end
       message
     end
 
+    # Action to take when a connection has reconnected
+    #
+    # @param connection [Krakow::Connection]
+    # @return [nil]
     def connection_reconnect(connection)
       connection.transmit(Command::Sub.new(:topic_name => topic, :channel_name => channel))
       distribution.set_ready_for(connection)
+      nil
     end
 
-    # connection:: Connection
     # Send RDY for connection based on distribution rules
+    #
+    # @param connection [Krakow::Connection]
+    # @return [nil]
     def update_ready!(connection)
       distribution.set_ready_for(connection)
+      nil
     end
 
-    # Requests lookup and adds connections
+    # Initialize the consumer by starting lookup and adding connections
+    #
+    # @return [nil]
     def init!
       debug 'Running consumer `init!` connection builds'
       found = discovery.lookup(topic)
@@ -129,22 +176,27 @@ module Krakow
         end
       end
       distribution.redistribute! if connection
+      nil
     end
 
-    # Starts discovery interval calling
+    # Start the discovery interval lookup
+    #
+    # @return [nil]
     def discover
       init!
       after(discovery_interval + (discovery_jitter * rand)){ discover }
     end
 
-    # connection:: Connection
-    # Registers connection with subscription. Returns false if failed
+    # Register connection with distribution
+    #
+    # @param connection [Krakow::Connection]
+    # @return [TrueClass, FalseClass] true if subscription was successful
     def register(connection)
       begin
         connection.init!
         connection.transmit(Command::Sub.new(:topic_name => topic, :channel_name => channel))
         self.link connection
-        connections["#{connection.host}_#{connection.port}"] = connection
+        connections[connection.identifier] = connection
         distribution.add_connection(connection)
         true
       rescue Error::BadResponse => e
@@ -154,45 +206,56 @@ module Krakow
       end
     end
 
-    # con:: actor
-    # reason:: Exception
-    # Remove connection from register if found
-    def connection_failure(con, reason)
+    # Remove connection references when connection is terminated
+    #
+    # @param actor [Object] terminated actor
+    # @param reason [Exception] reason for termination
+    # @return [nil]
+    def connection_failure(actor, reason)
       connections.delete_if do |key, value|
-        if(value == con)
+        if(value == actor && reason.nil?)
           warn "Connection failure detected. Removing connection: #{key} - #{reason || 'no reason provided'}"
           begin
-            distribution.remove_connection(con)
+            distribution.remove_connection(key)
           rescue Error::ConnectionUnavailable, Error::ConnectionFailure
             warn 'Caught connection unavailability'
           end
+          distribution.redistribute!
           true
         end
       end
-      distribution.redistribute!
+      nil
     end
 
-    # message_id:: Message ID (or message if you want to be lazy)
     # Confirm message has been processed
+    #
+    # @param message_id [String, Krakow::FrameType::Message]
+    # @return [TrueClass]
+    # @raise [KeyError] connection not found
     def confirm(message_id)
       message_id = message_id.message_id if message_id.respond_to?(:message_id)
       begin
         distribution.in_flight_lookup(message_id) do |connection|
           distribution.unregister_message(message_id)
           connection.transmit(Command::Fin.new(:message_id => message_id))
-          distribution.success(connection)
+          distribution.success(connection.identifier)
           update_ready!(connection)
         end
         true
+      rescue KeyError => e
+        error "Message confirmation failed: #{e}"
+        abort e
       rescue Error::ConnectionUnavailable => e
         retry
       end
     end
     alias_method :finish, :confirm
 
-    # message_id:: Message ID
-    # timeout:: Requeue timeout (default is none)
-    # Requeue message (processing failure)
+    # Requeue message (generally due to processing failure)
+    #
+    # @param message_id [String, Krakow::FrameType::Message]
+    # @param timeout [Numeric]
+    # @return [TrueClass]
     def requeue(message_id, timeout=0)
       message_id = message_id.message_id if message_id.respond_to?(:message_id)
       distribution.in_flight_lookup(message_id) do |connection|
@@ -203,12 +266,16 @@ module Krakow
             :timeout => timeout
           )
         )
-        distribution.failure(connection)
+        distribution.failure(connection.identifier)
         update_ready!(connection)
       end
       true
     end
 
+    # Touch message (to extend timeout)
+    #
+    # @param message_id [String, Krakow::FrameType::Message]
+    # @return [TrueClass]
     def touch(message_id)
       message_id = message_id.message_id if message_id.respond_to?(:message_id)
       distribution.in_flight_lookup(message_id) do |connection|

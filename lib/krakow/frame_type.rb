@@ -1,4 +1,8 @@
+require 'krakow'
+
 module Krakow
+  # Received message
+  # @abstract
   class FrameType
 
     autoload :Error, 'krakow/frame_type/error'
@@ -6,25 +10,34 @@ module Krakow
     autoload :Response, 'krakow/frame_type/response'
 
     include Utils::Lazy
+    # @!parse include Krakow::Utils::Lazy::InstanceMethods
+    # @!parse extend Krakow::Utils::Lazy::ClassMethods
 
+    # Registered frame types
     FRAME_TYPE_MAP = [
       FrameType::Response,
       FrameType::Error,
       FrameType::Message
     ]
+    # Size bytes
     SIZE_BYTES = 4
 
     class << self
 
-      # bytes:: 8 bytes
-      # Return information about incoming frame
+      # Information about incoming frame
+      # @param bytes [String]
+      # @return [Hash]
       def decode(bytes)
         size, type = bytes.unpack('l>l>')
         {:size => size - SIZE_BYTES, :type => type}
       end
 
-      # args:: arguments (:type, :data, :size)
       # Build proper FrameType instance based on args
+      # @param args [Hash]
+      # @option args [FrameType] :type class of frame
+      # @option args [String] :data
+      # @option args [Integer] :size
+      # @return [FrameType]
       def build(args={})
         klass = FRAME_TYPE_MAP[args[:type].to_i]
         if(klass == FrameType::Response)
@@ -42,10 +55,9 @@ module Krakow
       end
     end
 
-    def initialize(args={})
-      super
-    end
-
+    # Content of message
+    #
+    # @return [String]
     def content
       raise NotImplementedError.new 'Content method not properly defined!'
     end

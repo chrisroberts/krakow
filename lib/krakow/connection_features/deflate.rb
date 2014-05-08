@@ -1,12 +1,19 @@
 require 'zlib'
+require 'krakow'
 
 module Krakow
   module ConnectionFeatures
+    # Deflate functionality
     module Deflate
+      # Deflatable IO
       class Io
 
         attr_reader :io, :buffer, :headers, :inflator, :deflator
 
+        # Create new deflatable IO
+        #
+        # @param io [IO] IO to wrap
+        # @return [Io]
         def initialize(io, args={})
           @io = io
           @buffer = ''
@@ -15,10 +22,17 @@ module Krakow
         end
 
         # Proxy to underlying socket
+        #
+        # @param args [Object]
+        # @return [Object]
         def method_missing(*args)
           io.__send__(*args)
         end
 
+        # Receive bytes from the IO
+        #
+        # @param n [Integer] nuber of bytes
+        # @return [String]
         def recv(n)
           until(buffer.length >= n)
             read_stream
@@ -28,6 +42,9 @@ module Krakow
         end
         alias_method :read, :recv
 
+        # Read contents from stream
+        #
+        # @return [String]
         def read_stream
           str = io.read
           unless(str.empty?)
@@ -35,6 +52,10 @@ module Krakow
           end
         end
 
+        # Write string to IO
+        #
+        # @param string [String]
+        # @return [Integer] number of bytes written
         def write(string)
           unless(string.empty?)
             output = deflator.deflate(string)
@@ -45,10 +66,14 @@ module Krakow
           end
         end
 
+        # Close the IO
+        #
+        # @return [TrueClass]
         def close(*args)
           super
           deflator.deflate(nil, Zlib::FINISH)
           deflator.close
+          true
         end
 
       end

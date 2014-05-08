@@ -1,4 +1,8 @@
+require 'krakow'
+
 module Krakow
+  # Message distribution
+  # @abstract
   class Distribution
 
     autoload :Default, 'krakow/distribution/default'
@@ -7,101 +11,125 @@ module Krakow
 
     include Celluloid
     include Utils::Lazy
+    # @!parse include Krakow::Utils::Lazy::InstanceMethods
+    # @!parse extend Krakow::Utils::Lazy::ClassMethods
 
     attr_accessor :max_in_flight, :ideal, :flight_record, :registry
 
+    # @!group Properties
+
+    # @!macro [attach] property
+    #   @!method $1
+    #     @return [$2] the $1 $0
+    #   @!method $1?
+    #     @return [TrueClass, FalseClass] truthiness of the $1 $0
+    property :consumer, Krakow::Consumer, :required => true
+    property :watch_dog_interval, Numeric, :default => 1.0
+    property :backoff_interval, Numeric
+    property :max_in_flight, Integer, :default => 1
+
+    # @!endgroup
+
     def initialize(args={})
       super
-      optional :watch_dog_interval, :backoff_interval
-      arguments[:watch_dog_interval] ||= 1.0
-      @max_in_flight = arguments[:max_in_flight] || 1
+      @max_in_flight = max_in_flight
       @ideal = 0
       @flight_record = {}
       @registry = {}
     end
 
-    # Reset flight distributions
+    # [Abstract] Reset flight distributions
     def redistribute!
       raise NotImplementedError.new 'Custom `#redistrubute!` method must be provided!'
     end
 
-    # connection:: Connection
-    # Determine RDY value for given connection
-    def calculate_ready!(connection)
+    # [Abstract] Determine RDY value for given connection
+    # @param connection_identifier [String]
+    # @return [Integer]
+    def calculate_ready!(connection_identifier)
       raise NotImplementedError.new 'Custom `#calculate_ready!` method must be provided!'
     end
 
-    # message:: FrameType::Message or message ID string
-    # Remove message metadata from registry. Should be used after
-    # confirmations or requeue.
+    # Remove message metadata from registry
+    #
+    # @param message [Krakow::FrameType::Message, String] message or ID
+    # @return [Krakow::Connection]
     def unregister_message(message)
       msg_id = message.respond_to?(:message_id) ? message.message_id : message.to_s
       connection = connection_lookup(flight_record[msg_id])
-      registry_info = registry_lookup(connection)
+      registry_info = registry_lookup(connection.identifier)
       flight_record.delete(msg_id)
       registry_info[:in_flight] -= 1
-      calculate_ready!(connection)
+      calculate_ready!(connection.identifier)
       connection
     end
 
-    # connection:: Connection
     # Return the currently configured RDY value for given connnection
-    def ready_for(connection)
-      registry_lookup(connection)[:ready]
+    #
+    # @param connection_identifier [String]
+    # @return [Integer]
+    def ready_for(connection_identifier)
+      registry_lookup(connection_identifier)[:ready]
     end
 
-    # connection:: Connection
+
     # Send RDY for given connection
+    #
+    # @param connection [Krakow::Connection]
+    # @return [Krakow::FrameType::Error,nil]
     def set_ready_for(connection, *_)
       connection.transmit(
         Command::Rdy.new(
-          :count => ready_for(connection)
+          :count => ready_for(connection.identifier)
         )
       )
     end
 
     # Initial ready value used for new connections
+    #
+    # @return [Integer]
     def initial_ready
       ideal > 0 ? 1 : 0
     end
 
-    # message:: FrameType::Message
-    # connection:: Connection
     # Registers message into registry and configures for distribution
-    def register_message(message, connection)
-      registry_info = registry_lookup(connection)
+    #
+    # @param message [FrameType::Message]
+    # @param connection_identifier [String]
+    # @return [Integer]
+    def register_message(message, connection_identifier)
+      registry_info = registry_lookup(connection_identifier)
       registry_info[:in_flight] += 1
-      flight_record[message.message_id] = connection_key(connection)
-      calculate_ready!(connection)
+      flight_record[message.message_id] = connection_identifier
+      calculate_ready!(connection_identifier)
     end
 
-    # connection:: Connection
     # Add connection to make available for RDY distribution
+    #
+    # @param connection [Krakow::Connection]
+    # @return [TrueClass]
     def add_connection(connection)
-      registry[connection_key(connection)] = {
-        :ready => initial_ready,
-        :in_flight => 0,
-        :failures => 0,
-        :backoff_until => 0,
-        :connection => connection.current_actor
-      }
+      unless(registry[connection.identifier])
+        registry[connection.identifier] = {
+          :ready => initial_ready,
+          :in_flight => 0,
+          :failures => 0,
+          :backoff_until => 0
+        }
+      end
       true
     end
 
-    # connection:: Connection
     # Remove connection from RDY distribution
-    def remove_connection(connection, *args)
-      if(args.include?(:nolookup))
-        warn "No lookup requested on key value for removal! #{connection.inspect}"
-        key = connection
-      else
-        key = connection_key(connection)
-      end
+    #
+    # @param connection_identifier [String]
+    # @return [TrueClass]
+    def remove_connection(connection_identifier, *args)
       # remove connection from registry
-      registry.delete(key)
+      registry.delete(connection_identifier)
       # remove any in flight messages
       flight_record.delete_if do |k,v|
-        if(k == key)
+        if(k == connection_identifier)
           warn "Removing in flight reference due to failed connection: #{k}"
           true
         end
@@ -109,33 +137,20 @@ module Krakow
       true
     end
 
-    # connection:: Connection
-    # Return lookup key (actor reference)
-    def connection_key(connection)
-      unless(connection.alive?)
-        error "Received connection is dead #{connection.inspect} <#{connection.object_id}>"
-        remove_connection(connection.object_id, :nolookup)
-        abort Krakow::Error::ConnectionFailure.new "Received dead connection instance (#{connection.inspect})"
-      else
-        connection.object_id
-      end
-    end
-
-    # key:: registry key
     # Return connection associated with given registry key
-    def connection_lookup(key)
-      con = registry[key]
-      if(con)
-        con[:connection]
-      else
-        abort KeyError.new("Failed to locate connection via lookup (key: #{key.inspect})")
-      end
+    #
+    # @param identifier [String] connection identifier
+    # @return [Krakow::Connection, nil]
+    def connection_lookup(identifier)
+      consumer.connection(identifier)
     end
 
-    # msg_id:: Message ID string
-    # Return source connection of given `msg_id`. If block is
-    # provided, the connection instance will be yielded to the block
-    # and the result returned.
+    # Return source connection for given message ID
+    #
+    # @param msg_id [String]
+    # @yield execute with connection
+    # @yieldparam connection [Krakow::Connection]
+    # @return [Krakow::Connection, Object]
     def in_flight_lookup(msg_id)
       connection = connection_lookup(flight_record[msg_id])
       unless(connection)
@@ -148,34 +163,42 @@ module Krakow
       end
     end
 
-    # connection:: Connection
     # Return registry information for given connection
-    def registry_lookup(connection)
-      registry[connection_key(connection)] ||
-        abort(Krakow::Error::LookupFailed.new("Failed to locate connection information in registry (#{connection})"))
+    # @param connection_identifier [String]
+    # @return [Hash] registry information
+    # @raise [Krakow::Error::LookupFailed]
+    def registry_lookup(connection_identifier)
+      registry[connection_identifier] ||
+        abort(Krakow::Error::LookupFailed.new("Failed to locate connection information in registry (#{connection_identifier})"))
     end
 
-    # Return list of all connections in registry
+    # @return [Array<Krakow::Connection>] connections in registry
     def connections
-      registry.values.map{|v| v[:connection]}
+      registry.keys.map do |identifier|
+        connection_lookup(identifier)
+      end.compact
     end
 
-    # connection:: Connection
     # Log failure of processed message
-    def failure(connection)
+    #
+    # @param connection_identifier [String]
+    # @return [TrueClass]
+    def failure(connection_identifier)
       if(backoff_interval)
-        registry_info = registry_lookup(connection)
+        registry_info = registry_lookup(connection_identifier)
         registry_info[:failures] += 1
         registry_info[:backoff_until] = Time.now.to_i + (registry_info[:failures] * backoff_interval)
       end
       true
     end
 
-    # connection:: Connection
     # Log success of processed message
-    def success(connection)
+    #
+    # @param connection_identifier [String]
+    # @return [TrueClass]
+    def success(connection_identifier)
       if(backoff_interval)
-        registry_info = registry_lookup(connection)
+        registry_info = registry_lookup(connection_identifier)
         if(registry_info[:failures] > 1)
           registry_info[:failures] -= 1
           registry_info[:backoff_until] = Time.now.to_i + (registry_info[:failures] * backoff_interval)
@@ -183,6 +206,7 @@ module Krakow
           registry_info[:failures] = 0
         end
       end
+      true
     end
 
   end

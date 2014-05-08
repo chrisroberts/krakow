@@ -1,20 +1,33 @@
+require 'krakow'
+
 module Krakow
+  # Messages for sending to remote server
   class Command
 
     include Utils::Lazy
+    # @!parse include Utils::Lazy::InstanceMethods
+    # @!parse extend Utils::Lazy::ClassMethods
 
     class << self
 
+      # Allowed OK return values
+      #
+      # @return [Array<String>]
       def ok
         []
       end
 
+      # Allowed ERROR return values
+      #
+      # @return [Array<String>]
       def error
         []
       end
 
-      # message:: Krakow::Message
-      # Returns type of response expected (:none, :error_only, :required)
+      # Response type expected
+      #
+      # @param message [Krakow::Message] message to check
+      # @return [Symbol] response expected (:none, :error_only, :required)
       def response_for(message)
         if(message.class.ok.empty?)
           if(message.class.error.empty?)
@@ -29,23 +42,32 @@ module Krakow
 
     end
 
+    # @return [Krakow::FrameType] response to command
     attr_accessor :response
 
-    # Return command name
+    # @return [String] name of command
     def name
       self.class.name.split('::').last.upcase
     end
 
     # Convert to line output
+    #
+    # @return [String] socket ready string
     def to_line(*args)
       raise NotImplementedError.new 'No line conversion method defined!'
     end
 
+    # Is response OK
+    #
+    # @return [TrueClass, FalseClass]
     def ok?(response)
       response = response.content if response.is_a?(FrameType)
       self.class.ok.include?(response)
     end
 
+    # Is response ERROR
+    #
+    # @return [TrueClass, FalseClass]
     def error?(response)
       response = response.content if response.is_a?(FrameType)
       self.class.error.include?(response)

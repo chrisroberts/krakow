@@ -1,11 +1,20 @@
+require 'krakow'
+
 module Krakow
   class Command
+    # Update RDY state
     class Rdy < Command
 
-      def initialize(args={})
-        super
-        required! :count
-      end
+      # @!group Properties
+
+      # @!macro [attach] property
+      #   @!method $1
+      #     @return [$2] the $1 $0
+      #   @!method $1?
+      #     @return [TrueClass, FalseClass] truthiness of the $1 $0
+      property :count, Integer, :required => true
+
+      # @!endgroup
 
       def to_line
         "#{name} #{count}\n"

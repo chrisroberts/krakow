@@ -1,6 +1,7 @@
 require 'celluloid/autostart'
 require 'multi_json'
 
+# NSQ client and producer library
 module Krakow
 
   autoload :Command, 'krakow/command'

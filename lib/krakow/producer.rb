@@ -1,9 +1,16 @@
+require 'krakow'
+
 module Krakow
+
+  # TCP based producer
   class Producer
 
     autoload :Http, 'krakow/producer/http'
 
     include Utils::Lazy
+    # @!parse include Utils::Lazy::InstanceMethods
+    # @!parse extend Utils::Lazy::ClassMethods
+
     include Celluloid
 
     trap_exit  :connection_failure
@@ -11,19 +18,33 @@ module Krakow
 
     attr_reader :connection
 
+    # @!group Properties
+
+    # @!macro [attach] property
+    #   @!method $1
+    #     @return [$2] the $1 $0
+    #   @!method $1?
+    #     @return [TrueClass, FalseClass] truthiness of the $1 $0
+    property :host, String, :required => true
+    property :port, [String, Integer], :required => true
+    property :topic, String, :required => true
+    property :reconnect_retries, Integer, :default => 10
+    property :reconnect_interval, Integer, :default => 5
+    property :connection_options, Hash, :default => ->{ Hash.new }
+
+    # @!endgroup
+
     def initialize(args={})
       super
-      required! :host, :port, :topic
-      optional :reconnect_retries, :reconnect_interval, :connection_options
-      arguments[:reconnect_retries] ||= 10
-      arguments[:reconnect_interval] ||= 5
       arguments[:connection_options] = {:features => {}, :config => {}}.merge(
-        arguments[:connection_options] || {}
+        arguments.fetch(:connection_options, {})
       )
       connect
     end
 
     # Establish connection to configured `host` and `port`
+    #
+    # @return nil
     def connect
       info "Establishing connection to: #{host}:#{port}"
       begin
@@ -36,21 +57,25 @@ module Krakow
         connection.init!
         self.link connection
         info "Connection established: #{connection}"
+        nil
       rescue => e
         abort e
       end
     end
 
+    # @return [String] stringify object
     def to_s
       "<#{self.class.name}:#{object_id} {#{host}:#{port}} T:#{topic}>"
     end
 
-    # Return if connected
+    # @return [TrueClass, FalseClass] currently connected to server
     def connected?
       !!(connection && connection.alive? && connection.connected?)
     end
 
     # Process connection failure and attempt reconnection
+    #
+    # @return [TrueClass]
     def connection_failure(*args)
       @connection = nil
       begin
@@ -60,8 +85,11 @@ module Krakow
         warn "Failed to establish connection to #{host}:#{port}. Pausing #{reconnect_interval} before retry"
         sleep reconnect_interval
       end
+      true
     end
 
+    # Instance destructor
+    # @return nil
     def goodbye_my_love!
       debug 'Tearing down producer'
       if(connection && connection.alive?)
@@ -69,10 +97,14 @@ module Krakow
       end
       @connection = nil
       info 'Producer torn down'
+      nil
     end
 
-    # message:: Message to send
-    # Write message
+    # Write message to server
+    #
+    # @param message [String] message to write
+    # @return [Krakow::FrameType::Error,nil]
+    # @raise [Krakow::Error::ConnectionUnavailable]
     def write(*message)
       if(message.empty?)
         abort ArgumentError.new 'Expecting one or more messages to send. None provided.'

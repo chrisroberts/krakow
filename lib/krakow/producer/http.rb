@@ -10,27 +10,47 @@ rescue LoadError
   # ignore (maybe log?)
 end
 
+require 'krakow'
 
 module Krakow
   class Producer
+
+    # HTTP based producer
     class Http
 
+      include Utils::Lazy
+      # @!parse include Krakow::Utils::Lazy::InstanceMethods
+      # @!parse extend Krakow::Utils::Lazy::ClassMethods
+
+      # Wrapper for HTTP response hash
       class Response < OpenStruct
       end
 
-      include Utils::Lazy
-
       attr_reader :uri
+
+      # @!group Properties
+
+      # @!macro [attach] property
+      #   @!method $1
+      #     @return [$2] the $1 $0
+      #   @!method $1?
+      #     @return [TrueClass, FalseClass] truthiness of the $1 $0
+      property :endpoint, String, :required => true
+      property :topic, String, :required => true
+      property :config, Hash, :default => ->{ Hash.new }
+      property :ssl_context, Hash
+
+      # @!endgroup
 
       def initialize(args={})
         super
-        required! :endpoint, :topic
-        optional :config, :ssl_context
-        arguments[:config] ||= {}
         build_ssl_context if ssl_context
         @uri = URI.parse(endpoint)
       end
 
+      # Create a new SSL context
+      #
+      # @return [OpenSSL::SSL::SSLContext]
       def build_ssl_context
         require 'openssl'
         context = OpenSSL::SSL::SSLContext.new
@@ -39,6 +59,12 @@ module Krakow
         config[:ssl_context] = context
       end
 
+      # Send a message via HTTP
+      #
+      # @param method [String, Symbol] HTTP method to use (:get, :put, etc)
+      # @param path [String] URI path
+      # @param args [Hash] payload hash
+      # @return [Response]
       def send_message(method, path, args={})
         build = uri.dup
         build.path = "/#{path}"
@@ -51,6 +77,10 @@ module Krakow
         Response.new(response)
       end
 
+      # Send messages
+      #
+      # @param payload [String] message
+      # @return [Response]
       def write(*payload)
         if(payload.size == 1)
           payload = payload.first
@@ -66,18 +96,28 @@ module Krakow
         end
       end
 
+      # Create the topic
+      #
+      # @return [Response]
       def create_topic
         send_message(:post, :create_topic,
           :params => {:topic => topic}
         )
       end
 
+      # Delete the topic
+      #
+      # @return [Response]
       def delete_topic
         send_message(:post, :delete_topic,
           :params => {:topic => topic}
         )
       end
 
+      # Create channel on topic
+      #
+      # @param chan [String] channel name
+      # @return [Response]
       def create_channel(chan)
         send_message(:post, :create_channel,
           :params => {
@@ -87,6 +127,10 @@ module Krakow
         )
       end
 
+      # Delete channel on topic
+      #
+      # @param chan [String] channel name
+      # @return [Response]
       def delete_channel(chan)
         send_message(:post, :delete_channel,
           :params => {
@@ -96,12 +140,19 @@ module Krakow
         )
       end
 
+      # Remove all messages from topic
+      #
+      # @return [Response]
       def empty_topic
         send_message(:post, :empty_topic,
           :params => {:topic => topic}
         )
       end
 
+      # Remove all messages from given channel on topic
+      #
+      # @param chan [String] channel name
+      # @return [Response]
       def empty_channel(chan)
         send_message(:post, :empty_channel,
           :params => {
@@ -111,6 +162,10 @@ module Krakow
         )
       end
 
+      # Pause messages on given channel
+      #
+      # @param chan [String] channel name
+      # @return [Response]
       def pause_channel(chan)
         send_message(:post, :pause_channel,
           :params => {
@@ -120,6 +175,10 @@ module Krakow
         )
       end
 
+      # Resume messages on a given channel
+      #
+      # @param chan [String] channel name
+      # @return [Response]
       def unpause_channel(chan)
         send_message(:post, :unpause_channel,
           :params => {
@@ -129,6 +188,10 @@ module Krakow
         )
       end
 
+      # Server stats
+      #
+      # @param format [String] format of data
+      # @return [Response]
       def stats(format='json')
         send_message(:get, :stats,
           :params => {
@@ -137,10 +200,16 @@ module Krakow
         )
       end
 
+      # Ping the server
+      #
+      # @return [Response]
       def ping
         send_message(:get, :ping)
       end
 
+      # Server information
+      #
+      # @return [Response]
       def info
         send_message(:get, :info)
       end

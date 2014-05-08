@@ -1,13 +1,21 @@
+require 'krakow'
+
 module Krakow
   class Command
+    # Publish multiple messages
     class Mpub < Command
 
-      def initialize(args={})
-        super
-        required! :topic_name, :messages
-        arguments[:messages] = [messages].flatten.compact.map(&:to_s)
-      end
+      # @!group Properties
 
+      # @!macro [attach] property
+      #   @!method $1
+      #     @return [$2] the $1 $0
+      #   @!method $1?
+      #     @return [TrueClass, FalseClass] truthiness of the $1 $0
+      property :topic_name, String, :required => true
+      property :messages, [Array, String], :required => true
+
+      # @!endgroup
       def to_line
         formatted_messages = messages.map do |message|
           [message.length, message].pack('l>a*')

@@ -1,10 +1,9 @@
+require 'krakow'
+
 module Krakow
   class Command
+    # No-op
     class Nop < Command
-
-      def initialize(args={})
-        super
-      end
 
       def to_line
         "#{name}\n"

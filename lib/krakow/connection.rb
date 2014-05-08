@@ -1,13 +1,18 @@
-require 'krakow/version'
+require 'krakow'
 require 'celluloid/io'
-require 'celluloid/autostart'
 
 module Krakow
+
+  # Provides TCP connection to NSQD
   class Connection
 
     include Utils::Lazy
+    # @!parse include Krakow::Utils::Lazy::InstanceMethods
+    # @!parse extend Krakow::Utils::Lazy::ClassMethods
+
     include Celluloid::IO
 
+    # Available connection features
     FEATURES = [
       :max_rdy_count,
       :max_msg_timeout,
@@ -19,36 +24,63 @@ module Krakow
       :snappy,
       :sample_rate
     ]
+
+    # List of features that may not be enabled together
     EXCLUSIVE_FEATURES = [[:snappy, :deflate]]
+
+    # List of features that may be enabled by the client
     ENABLEABLE_FEATURES = [:tls_v1, :snappy, :deflate]
 
     finalizer :goodbye_my_love!
 
-    attr_reader(
-      :connector, :endpoint_settings, :reconnector,
-      :reconnect_notifier, :responder, :running, :socket
-    )
+    # @return [Hash] current configuration for endpoint
+    attr_reader :endpoint_settings
+    # @return [Socket-ish] underlying socket like instance
+    attr_reader :socket
 
+    attr_reader :connector, :reconnector, :reconnect_notifier, :responder, :running
+
+    # @!group Properties
+
+    # @!macro [attach] property
+    #   @!method $1
+    #     @return [$2] the $1 $0
+    #   @!method $1?
+    #     @return [TrueClass, FalseClass] truthiness of the $1 $0
+    property :host, String, :required => true
+    property :port, [String,Integer], :required => true
+    property :version, String, :default => 'v2'
+    property :queue, Queue, :default => ->{ Queue.new }
+    property :callbacks, Hash, :default => ->{ Hash.new }
+    property :responses, Queue, :default => ->{ Queue.new }
+    property :notifier, Celluloid::Actor
+    property :features, Hash, :default => ->{ Hash.new }
+    property :response_wait, Numeric, :default => 1.0
+    property :response_interval, Numeric, :default => 0.03
+    property :error_wait, Numeric, :default => 0
+    property :enforce_features, [TrueClass,FalseClass], :default => true
+    property :features_args, Hash, :default => ->{ Hash.new }
+
+    # @!endgroup
+
+    # Create new instance
+    #
+    # @param args [Hash]
+    # @option args [String] :host (required) server host
+    # @option args [String, Numeric] :port (required) server port
+    # @option args [String] :version
+    # @option args [Queue] :queue received message queue
+    # @option args [Hash] :callbacks
+    # @option args [Queue] :responses received responses queue
+    # @option args [Celluloid::Actor] :notifier actor to notify on new message
+    # @option args [Hash] :features features to enable
+    # @option args [Numeric] :response_wait time to wait for response
+    # @option args [Numeric] :response_interval sleep interval for wait loop
+    # @option args [Numeric] :error_wait time to wait for error response
+    # @option args [TrueClass, FalseClass] :enforce_features fail if features are unavailable
+    # @option args [Hash] :feature_args options for connection features
     def initialize(args={})
       super
-      required! :host, :port
-      optional(
-        :version, :queue, :callbacks, :responses, :notifier,
-        :features, :response_wait, :response_interval, :error_wait,
-        :enforce_features, :features_args
-      )
-      arguments[:queue] ||= Queue.new
-      arguments[:responses] ||= Queue.new
-      arguments[:version] ||= 'v2'
-      arguments[:features] ||= {}
-      arguments[:features_args] ||= {}
-      arguments[:response_wait] ||= 1
-      arguments[:response_interval] ||= 0.01
-      arguments[:error_wait] ||= 0.0
-      arguments[:callbacks] ||= {}
-      if(arguments[:enforce_features].nil?)
-        arguments[:enforce_features] = true
-      end
       @connector = Mutex.new
       @reconnector = Mutex.new
       @responder = Mutex.new
@@ -60,22 +92,30 @@ module Krakow
       @running = false
     end
 
+    # @return [String] identifier for this connection
+    def identifier
+      [host, port, queue].join('__')
+    end
+
+    # @return [String] stringify object
     def to_s
       "<#{self.class.name}:#{object_id} {#{host}:#{port}}>"
     end
 
     # Initialize the connection
+    #
+    # @return [nil]
     def init!
       connector.synchronize do
         connect!
       end
+      nil
     end
 
-    # message:: Command instance to send
-    # Send the message
-    # TODO: Do we want to validate Command instance and abort if
-    # response is already set?
-    # NOTE: Handle `Consumer` side via `Distribution` lookup
+    # Send message to remote server
+    #
+    # @param message [Krakow::Message] message to send
+    # @return [TrueClass, Krakow::FrameType] response if expected or true
     def transmit(message)
       output = message.to_line
       response_wait = wait_time_for(message)
@@ -88,6 +128,10 @@ module Krakow
       end
     end
 
+    # Sends message and waits for response
+    #
+    # @param message [Krakow::Message] message to send
+    # @return [Krakow::FrameType] response
     def transmit_with_response(message, wait_time)
       responder.synchronize do
         safe_socket{|socket| socket.write(message.to_line) }
@@ -114,7 +158,9 @@ module Krakow
       end
     end
 
-    # Cleanup prior to destruction
+    # Destructor method for cleanup
+    #
+    # @return [nil]
     def goodbye_my_love!
       debug 'Tearing down connection'
       if(socket && !socket.closed?)
@@ -128,9 +174,13 @@ module Krakow
       end
       @socket = nil
       info 'Connection torn down'
+      nil
     end
 
-    # Receive message and return proper FrameType instance
+    # Receive from server
+    #
+    # @return [Krakow::FrameType, nil] message or nothing if read was empty
+    # @raise [Error::ConnectionUnavailable] socket is closed
     def receive
       debug 'Read wait for frame start'
       buf = socket.recv(8)
@@ -153,12 +203,14 @@ module Krakow
       end
     end
 
-    # Currently in the process of receiving a message
+    # @return [TrueClass, FalseClass] is connection currently receiving a message
     def receiving?
       !!@receiving
     end
 
-    # Pull message and queue
+    # Receive messages and place into queue
+    #
+    # @return [nil]
     def process_to_queue!
       @running = true
       while(@running)
@@ -175,10 +227,13 @@ module Krakow
           async.reconnect!
         end
       end
+      nil
     end
 
-    # message:: FrameType instance
-    # Handle message if not an actual message
+    # Handle non-message type Krakow::FrameType
+    #
+    # @param message [Krakow::FrameType] received message
+    # @return [Krakow::FrameType, nil]
     def handle(message)
       # Grab heartbeats upfront
       if(message.is_a?(FrameType::Response) && message.response == '_heartbeat_')
@@ -197,6 +252,13 @@ module Krakow
       end
     end
 
+    # Execute callback for given type
+    #
+    # @overload callback_for(type, arg, connection)
+    #   @param type [Symbol] type of callback
+    #   @param arg [Object] argument for callback (can be multiple)
+    #   @param connection [Krakow::Connection] current connection
+    # @return [Object] result of callback
     def callback_for(type, *args)
       callback = callbacks[type]
       if(callback)
@@ -210,7 +272,7 @@ module Krakow
 
     # Returns configured wait time for given message type
     #
-    # @param message [Command]
+    # @param message [Krakow::Command]
     # @return [Numeric] seconds to wait
     def wait_time_for(message)
       case Command.response_for(message)
@@ -221,6 +283,7 @@ module Krakow
       end
     end
 
+    # @return [Hash] default settings for IDENTIFY
     def identify_defaults
       unless(@identify_defaults)
         @identify_defaults = {
@@ -233,6 +296,9 @@ module Krakow
       @identify_defaults
     end
 
+    # IDENTIFY with server and negotiate features
+    #
+    # @return [TrueClass]
     def identify_and_negotiate
       expected_features = identify_defaults.merge(features)
       ident = Command::Identify.new(
@@ -262,43 +328,63 @@ module Krakow
       true
     end
 
+    # Enable snappy feature on underlying socket
+    #
+    # @return [TrueClass]
     def snappy
       info 'Loading support for snappy compression and converting connection'
       @socket = ConnectionFeatures::SnappyFrames::Io.new(socket, features_args)
       response = receive
       info "Snappy connection conversion complete. Response: #{response.inspect}"
+      true
     end
 
+    # Enable deflate feature on underlying socket
+    #
+    # @return [TrueClass]
     def deflate
       debug 'Loading support for deflate compression and converting connection'
       @socket = ConnectionFeatures::Deflate::Io.new(socket, features_args)
       response = receive
       info "Deflate connection conversion complete. Response: #{response.inspect}"
+      true
     end
 
+    # Enable TLS feature on underlying socket
+    #
+    # @return [TrueClass]
     def tls_v1
       info 'Enabling TLS for connection'
       @socket = ConnectionFeatures::Ssl::Io.new(socket, features_args)
       response = receive
       info "TLS enable complete. Response: #{response.inspect}"
+      true
     end
 
+    # @return [TrueClass, FalseClass] underlying socket is connected
     def connected?
       socket && !socket.closed?
     end
 
     protected
 
+    # Destruct the underlying socket
+    #
+    # @return [nil]
     def teardown_socket
       if(socket && (socket.closed? || socket.eof?))
         socket.close unless socket.closed?
         @socket = nil
         warn 'Existing socket instance has been destroyed from this connection'
       end
+      nil
     end
 
-    # Provides socket failure state handling around given block. Will
-    # attempt reconnect and replay
+    # Provides socket failure state handling around given block
+    #
+    # @yield [socket] execute within socket safety layer
+    # @yieldparam [socket] underlying socket
+    # @return [Object] result of executed block
     def safe_socket(*args)
       begin
         if(socket.nil? || socket.closed?)
@@ -319,6 +405,9 @@ module Krakow
       end
     end
 
+    # Reconnect the underlying socket
+    #
+    # @return [nil]
     def reconnect!
       if(reconnector.try_lock)
         begin
@@ -344,8 +433,12 @@ module Krakow
       else
         reconnect_notifier.wait(:connected)
       end
+      nil
     end
 
+    # Connect the underlying socket
+    #
+    # @return [nil]
     def connect!
       debug 'Initializing connection'
       if(@socket)
@@ -357,6 +450,7 @@ module Krakow
       identify_and_negotiate
       async.process_to_queue!
       info 'Connection initialized'
+      nil
     end
 
   end
