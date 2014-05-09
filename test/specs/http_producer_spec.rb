@@ -70,7 +70,7 @@ describe Krakow::Producer::Http do
     et_response.status_code.must_equal 200
     et_response.status_txt.must_equal 'OK'
     consumer = new_consumer('chan1')
-    sleep(0.2)
+    wait_for{ !consumer.connections.empty? }
     consumer.connections.wont_be :empty?
     consumer.queue.size.must_equal 0
     consumer.terminate
@@ -107,7 +107,7 @@ describe Krakow::Producer::Http do
     consumer1.queue.size.must_equal 3
     consumer2.queue.size.must_equal 0
     @http.unpause_channel('chan2').status_code.must_equal 200
-    sleep(0.2)
+    wait_for{ consumer2.queue.size >= 3 }
     consumer2.queue.size.must_equal 3
     consumer1.terminate
     consumer2.terminate
