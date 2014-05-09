@@ -84,6 +84,7 @@ module Krakow
       rescue => e
         warn "Failed to establish connection to #{host}:#{port}. Pausing #{reconnect_interval} before retry"
         sleep reconnect_interval
+        connect
       end
       true
     end
