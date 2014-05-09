@@ -47,8 +47,7 @@ describe Krakow::Producer do
 
   it 'should raise connection errors when trying to write and the connection is not available' do
     @cluster.nsqd.first.stop
-    sleep(0.1) # allow disconnect
-
+    wait_for(1){ !@producer.connected? }
     proc {
       @producer.write('hi')
     }.must_raise Krakow::Error::ConnectionUnavailable
@@ -59,10 +58,10 @@ describe Krakow::Producer do
 
   it 'should be able to reconnect automatically' do
     @cluster.nsqd.first.stop
-    sleep(0.2)
+    wait_for(1){ !@producer.connected? }
     @producer.connected?.must_equal false
     @cluster.nsqd.first.start
-    sleep(1)
+    wait_for(2){ @producer.connected? }
     @producer.write('ohai')
     @producer.connected?.must_equal true
 
