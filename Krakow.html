@@ -1,0 +1,153 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>
+  Module: Krakow
+  
+    &mdash; Documentation by YARD 0.8.7.4
+  
+</title>
+
+  <link rel="stylesheet" href="css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  hasFrames = window.top.frames.main ? true : false;
+  relpath = '';
+  framesUrl = "frames.html#!Krakow.html";
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div id="header">
+      <div id="menu">
+  
+    <a href="_index.html">Index (K)</a> &raquo;
+    
+    
+    <span class="title">Krakow</span>
+  
+
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="class_list.html">
+      Class List
+    </a>
+  
+    <a class="full_list_link" id="method_list_link"
+        href="method_list.html">
+      Method List
+    </a>
+  
+    <a class="full_list_link" id="file_list_link"
+        href="file_list.html">
+      File List
+    </a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+
+    <iframe id="search_frame"></iframe>
+
+    <div id="content"><h1>Module: Krakow
+  
+  
+  
+</h1>
+
+<dl class="box">
+  
+  
+    
+  
+    
+  
+  
+  
+    <dt class="r1 last">Defined in:</dt>
+    <dd class="r1 last">lib/krakow.rb<span class="defines">,<br />
+  lib/krakow/utils.rb,<br /> lib/krakow/version.rb,<br /> lib/krakow/command.rb,<br /> lib/krakow/consumer.rb,<br /> lib/krakow/producer.rb,<br /> lib/krakow/discovery.rb,<br /> lib/krakow/utils/lazy.rb,<br /> lib/krakow/connection.rb,<br /> lib/krakow/frame_type.rb,<br /> lib/krakow/exceptions.rb,<br /> lib/krakow/command/sub.rb,<br /> lib/krakow/command/nop.rb,<br /> lib/krakow/command/rdy.rb,<br /> lib/krakow/command/pub.rb,<br /> lib/krakow/command/fin.rb,<br /> lib/krakow/command/req.rb,<br /> lib/krakow/command/cls.rb,<br /> lib/krakow/distribution.rb,<br /> lib/krakow/command/mpub.rb,<br /> lib/krakow/utils/logging.rb,<br /> lib/krakow/producer/http.rb,<br /> lib/krakow/command/touch.rb,<br /> lib/krakow/command/identify.rb,<br /> lib/krakow/frame_type/error.rb,<br /> lib/krakow/frame_type/message.rb,<br /> lib/krakow/frame_type/response.rb,<br /> lib/krakow/connection_features.rb,<br /> lib/krakow/distribution/default.rb,<br /> lib/krakow/connection_features/ssl.rb,<br /> lib/krakow/connection_features/deflate.rb,<br /> lib/krakow/connection_features/snappy_frames.rb</span>
+</dd>
+  
+</dl>
+<div class="clear"></div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    
+<p>NSQ client and producer library</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><h2>Defined Under Namespace</h2>
+<p class="children">
+  
+    
+      <strong class="modules">Modules:</strong> <span class='object_link'><a href="Krakow/ConnectionFeatures.html" title="Krakow::ConnectionFeatures (module)">ConnectionFeatures</a></span>, <span class='object_link'><a href="Krakow/Utils.html" title="Krakow::Utils (module)">Utils</a></span>
+    
+  
+    
+      <strong class="classes">Classes:</strong> <span class='object_link'><a href="Krakow/Command.html" title="Krakow::Command (class)">Command</a></span>, <span class='object_link'><a href="Krakow/Connection.html" title="Krakow::Connection (class)">Connection</a></span>, <span class='object_link'><a href="Krakow/Consumer.html" title="Krakow::Consumer (class)">Consumer</a></span>, <span class='object_link'><a href="Krakow/Discovery.html" title="Krakow::Discovery (class)">Discovery</a></span>, <span class='object_link'><a href="Krakow/Distribution.html" title="Krakow::Distribution (class)">Distribution</a></span>, <span class='object_link'><a href="Krakow/Error.html" title="Krakow::Error (class)">Error</a></span>, <span class='object_link'><a href="Krakow/FrameType.html" title="Krakow::FrameType (class)">FrameType</a></span>, <span class='object_link'><a href="Krakow/Producer.html" title="Krakow::Producer (class)">Producer</a></span>, <span class='object_link'><a href="Krakow/Version.html" title="Krakow::Version (class)">Version</a></span>
+    
+  
+</p>
+
+  <h2>Constant Summary</h2>
+  
+    <dl class="constants">
+      
+        <dt id="VERSION-constant" class="">VERSION =
+          <div class="docstring">
+  <div class="discussion">
+    
+<p>Current version</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='const'>Version</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>0.2.3</span><span class='tstring_end'>'</span></span><span class='rparen'>)</span></pre></dd>
+      
+    </dl>
+  
+
+
+
+
+
+
+
+
+
+</div>
+
+    <div id="footer">
+  Generated on Sat May 10 12:40:46 2014 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.8.7.4 (ruby-1.9.3).
+</div>
+
+  </body>
+</html>

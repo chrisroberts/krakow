@@ -1,0 +1,1307 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>
+  Class: Krakow::FrameType
+  
+    &mdash; Documentation by YARD 0.8.7.4
+  
+</title>
+
+  <link rel="stylesheet" href="../css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="../css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  hasFrames = window.top.frames.main ? true : false;
+  relpath = '../';
+  framesUrl = "../frames.html#!Krakow/FrameType.html";
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div id="header">
+      <div id="menu">
+  
+    <a href="../_index.html">Index (F)</a> &raquo;
+    <span class='title'><span class='object_link'><a href="../Krakow.html" title="Krakow (module)">Krakow</a></span></span>
+     &raquo; 
+    <span class="title">FrameType</span>
+  
+
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="../class_list.html">
+      Class List
+    </a>
+  
+    <a class="full_list_link" id="method_list_link"
+        href="../method_list.html">
+      Method List
+    </a>
+  
+    <a class="full_list_link" id="file_list_link"
+        href="../file_list.html">
+      File List
+    </a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+
+    <iframe id="search_frame"></iframe>
+
+    <div id="content"><h1>Class: Krakow::FrameType
+  <span class="abstract note title">Abstract</span>
+  
+  
+</h1>
+
+<dl class="box">
+  
+    <dt class="r1">Inherits:</dt>
+    <dd class="r1">
+      <span class="inheritName">Object</span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next">Krakow::FrameType</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+      </dd>
+    
+  
+  
+    
+      <dt class="r2">Extended by:</dt>
+      <dd class="r2"><span class='object_link'><a href="Utils/Lazy/ClassMethods.html" title="Krakow::Utils::Lazy::ClassMethods (module)">Utils::Lazy::ClassMethods</a></span></dd>
+      
+    
+  
+    
+      <dt class="r1">Includes:</dt>
+      <dd class="r1"><span class='object_link'><a href="Utils/Lazy.html" title="Krakow::Utils::Lazy (module)">Utils::Lazy</a></span>, <span class='object_link'><a href="Utils/Lazy/InstanceMethods.html" title="Krakow::Utils::Lazy::InstanceMethods (module)">Utils::Lazy::InstanceMethods</a></span></dd>
+      
+    
+  
+  
+  
+    <dt class="r2 last">Defined in:</dt>
+    <dd class="r2 last">lib/krakow/frame_type.rb<span class="defines">,<br />
+  lib/krakow/frame_type/error.rb,<br /> lib/krakow/frame_type/message.rb,<br /> lib/krakow/frame_type/response.rb</span>
+</dd>
+  
+</dl>
+<div class="clear"></div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    <div class="note abstract">
+  <strong>This class is abstract.</strong>
+  <div class='inline'></div>
+</div>
+
+<p>Received message</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><div id="subclasses">
+  <h2>Direct Known Subclasses</h2>
+  <p class="children"><span class='object_link'><a href="FrameType/Error.html" title="Krakow::FrameType::Error (class)">Error</a></span>, <span class='object_link'><a href="FrameType/Message.html" title="Krakow::FrameType::Message (class)">Message</a></span>, <span class='object_link'><a href="FrameType/Response.html" title="Krakow::FrameType::Response (class)">Response</a></span></p>
+</div>
+<h2>Defined Under Namespace</h2>
+<p class="children">
+  
+    
+  
+    
+      <strong class="classes">Classes:</strong> <span class='object_link'><a href="FrameType/Error.html" title="Krakow::FrameType::Error (class)">Error</a></span>, <span class='object_link'><a href="FrameType/Message.html" title="Krakow::FrameType::Message (class)">Message</a></span>, <span class='object_link'><a href="FrameType/Response.html" title="Krakow::FrameType::Response (class)">Response</a></span>
+    
+  
+</p>
+
+  <h2>Constant Summary</h2>
+  
+    <dl class="constants">
+      
+        <dt id="FRAME_TYPE_MAP-constant" class="">FRAME_TYPE_MAP =
+          <div class="docstring">
+  <div class="discussion">
+    
+<p>Registered frame types</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='lbracket'>[</span>
+  <span class='const'>FrameType</span><span class='op'>::</span><span class='const'>Response</span><span class='comma'>,</span>
+  <span class='const'>FrameType</span><span class='op'>::</span><span class='const'>Error</span><span class='comma'>,</span>
+  <span class='const'>FrameType</span><span class='op'>::</span><span class='const'>Message</span>
+<span class='rbracket'>]</span></pre></dd>
+      
+        <dt id="SIZE_BYTES-constant" class="">SIZE_BYTES =
+          <div class="docstring">
+  <div class="discussion">
+    
+<p>Size bytes</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='int'>4</span></pre></dd>
+      
+    </dl>
+  
+
+
+
+
+  <h2>Instance Attribute Summary <small>(<a href="#" class="summary_toggle">collapse</a>)</small></h2>
+  <ul class="summary">
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#arguments-instance_method" title="#arguments (instance method)">- (Hash) <strong>arguments</strong> </a>
+    
+
+    
+  </span>
+  
+    <span class="note title not_defined_here">
+      included
+      from <span class='object_link'><a href="Utils/Lazy/InstanceMethods.html#arguments-instance_method" title="Krakow::Utils::Lazy::InstanceMethods#arguments (method)">Utils::Lazy::InstanceMethods</a></span>
+    </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Argument hash.</p>
+</div></span>
+  
+</li>
+
+    
+  </ul>
+
+
+
+
+  
+    <h2>
+      Class Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#attribute-class_method" title="#attribute (class method)">+ (nil) <strong>attribute</strong>(name, type, options = {}) </a>
+    
+
+    
+  </span>
+  
+    <span class="note title not_defined_here">
+      extended
+      from <span class='object_link'><a href="Utils/Lazy/ClassMethods.html#attribute-class_method" title="Krakow::Utils::Lazy::ClassMethods#attribute (method)">Utils::Lazy::ClassMethods</a></span>
+    </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Add new attributes to class.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#attributes-class_method" title="#attributes (class method)">+ (Array&lt;Hash&gt;) <strong>attributes</strong>(*args) </a>
+    
+
+    
+  </span>
+  
+    <span class="note title not_defined_here">
+      extended
+      from <span class='object_link'><a href="Utils/Lazy/ClassMethods.html#attributes-class_method" title="Krakow::Utils::Lazy::ClassMethods#attributes (method)">Utils::Lazy::ClassMethods</a></span>
+    </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Return attributes.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#build-class_method" title="build (class method)">+ (FrameType) <strong>build</strong>(args = {}) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Build proper FrameType instance based on args.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#decode-class_method" title="decode (class method)">+ (Hash) <strong>decode</strong>(bytes) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Information about incoming frame.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#set_attributes-class_method" title="#set_attributes (class method)">+ (TrueClass) <strong>set_attributes</strong>(attrs) </a>
+    
+
+    
+  </span>
+  
+    <span class="note title not_defined_here">
+      extended
+      from <span class='object_link'><a href="Utils/Lazy/ClassMethods.html#set_attributes-class_method" title="Krakow::Utils::Lazy::ClassMethods#set_attributes (method)">Utils::Lazy::ClassMethods</a></span>
+    </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Directly set attribute hash.</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+    <h2>
+      Instance Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#content-instance_method" title="#content (instance method)">- (String) <strong>content</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Content of message.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#initialize-instance_method" title="#initialize (instance method)">- (Object) <strong>initialize</strong>(args = {}) </a>
+    
+
+    
+      (also: #super_init)
+    
+  </span>
+  
+    <span class="note title not_defined_here">
+      included
+      from <span class='object_link'><a href="Utils/Lazy/InstanceMethods.html#initialize-instance_method" title="Krakow::Utils::Lazy::InstanceMethods#initialize (method)">Utils::Lazy::InstanceMethods</a></span>
+    </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Create new instance.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#inspect-instance_method" title="#inspect (instance method)">- (String) <strong>inspect</strong> </a>
+    
+
+    
+  </span>
+  
+    <span class="note title not_defined_here">
+      included
+      from <span class='object_link'><a href="Utils/Lazy/InstanceMethods.html#inspect-instance_method" title="Krakow::Utils::Lazy::InstanceMethods#inspect (method)">Utils::Lazy::InstanceMethods</a></span>
+    </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#log-instance_method" title="#log (instance method)">- (Logger<sup>?</sup>) <strong>log</strong>(*args) </a>
+    
+
+    
+  </span>
+  
+    <span class="note title not_defined_here">
+      included
+      from <span class='object_link'><a href="Utils/Logging.html#log-instance_method" title="Krakow::Utils::Logging#log (method)">Utils::Logging</a></span>
+    </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Log message.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#to_s-instance_method" title="#to_s (instance method)">- (String) <strong>to_s</strong> </a>
+    
+
+    
+  </span>
+  
+    <span class="note title not_defined_here">
+      included
+      from <span class='object_link'><a href="Utils/Lazy/InstanceMethods.html#to_s-instance_method" title="Krakow::Utils::Lazy::InstanceMethods#to_s (method)">Utils::Lazy::InstanceMethods</a></span>
+    </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <div id="instance_attr_details" class="attr_details">
+    <h2>Instance Attribute Details</h2>
+    
+      
+      <span id=""></span>
+      <div class="method_details first">
+  <h3 class="signature first" id="arguments-instance_method">
+  
+    - (<tt>Hash</tt>) <strong>arguments</strong>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+    <span class="not_defined_here">
+      Originally defined in module
+        <span class='object_link'><a href="Utils/Lazy/InstanceMethods.html#arguments-instance_method" title="Krakow::Utils::Lazy::InstanceMethods#arguments (method)">Utils::Lazy::InstanceMethods</a></span>
+    </span>
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns argument hash</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>argument hash</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div>
+</div>
+    
+  </div>
+
+
+  <div id="class_method_details" class="method_details_list">
+    <h2>Class Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="attribute-class_method">
+  
+    + (<tt>nil</tt>) <strong>attribute</strong>(name, type, options = {}) 
+  
+
+  
+
+  
+    <span class="not_defined_here">
+      Originally defined in module
+        <span class='object_link'><a href="Utils/Lazy/ClassMethods.html#attribute-class_method" title="Krakow::Utils::Lazy::ClassMethods#attribute (method)">Utils::Lazy::ClassMethods</a></span>
+    </span>
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Add new attributes to class</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>name</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>type</span>
+      
+      
+        <span class='type'>(<tt>Class</tt>, <tt>Array&lt;Class&gt;</tt>)</span>
+      
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>options</span>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>{}</tt>)</em>
+      
+      
+    </li>
+  
+</ul>
+
+  
+    
+    
+    
+    
+    
+    
+    <p class="tag_title">Options Hash (<tt>options</tt>):</p>
+    <ul class="option">
+      
+        <li>
+          <span class="name">:required</span>
+          <span class="type">(<tt>true</tt>, <tt>false</tt>)</span>
+          <span class="default">
+            
+          </span>
+          
+            &mdash; <div class='inline'>
+<p>must be provided on initialization</p>
+</div>
+          
+        </li>
+      
+        <li>
+          <span class="name">:default</span>
+          <span class="type">(<tt>Object</tt>, <tt>Proc</tt>)</span>
+          <span class="default">
+            
+          </span>
+          
+            &mdash; <div class='inline'>
+<p>default value</p>
+</div>
+          
+        </li>
+      
+    </ul>
+  
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>nil</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="attributes-class_method">
+  
+    + (<tt>Array&lt;Hash&gt;</tt>) <strong>attributes</strong>(*args) 
+  
+
+  
+
+  
+    <span class="not_defined_here">
+      Originally defined in module
+        <span class='object_link'><a href="Utils/Lazy/ClassMethods.html#attributes-class_method" title="Krakow::Utils::Lazy::ClassMethods#attributes (method)">Utils::Lazy::ClassMethods</a></span>
+    </span>
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Return attributes</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>args</span>
+      
+      
+        <span class='type'>(<tt>Symbol</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>:required or :optional</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Array&lt;Hash&gt;</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="build-class_method">
+  
+    + (<tt><span class='object_link'><a href="" title="Krakow::FrameType (class)">FrameType</a></span></tt>) <strong>build</strong>(args = {}) 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Build proper FrameType instance based on args</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>args</span>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>{}</tt>)</em>
+      
+      
+    </li>
+  
+</ul>
+
+  
+    
+    
+    <p class="tag_title">Options Hash (<tt>args</tt>):</p>
+    <ul class="option">
+      
+        <li>
+          <span class="name">:type</span>
+          <span class="type">(<tt><span class='object_link'><a href="" title="Krakow::FrameType (class)">FrameType</a></span></tt>)</span>
+          <span class="default">
+            
+          </span>
+          
+            &mdash; <div class='inline'>
+<p>class of frame</p>
+</div>
+          
+        </li>
+      
+        <li>
+          <span class="name">:data</span>
+          <span class="type">(<tt>String</tt>)</span>
+          <span class="default">
+            
+          </span>
+          
+        </li>
+      
+        <li>
+          <span class="name">:size</span>
+          <span class="type">(<tt>Integer</tt>)</span>
+          <span class="default">
+            
+          </span>
+          
+        </li>
+      
+    </ul>
+  
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="" title="Krakow::FrameType (class)">FrameType</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/frame_type.rb', line 41</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_build'>build</span><span class='lparen'>(</span><span class='id identifier rubyid_args'>args</span><span class='op'>=</span><span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_klass'>klass</span> <span class='op'>=</span> <span class='const'>FRAME_TYPE_MAP</span><span class='lbracket'>[</span><span class='id identifier rubyid_args'>args</span><span class='lbracket'>[</span><span class='symbol'>:type</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span><span class='rbracket'>]</span>
+  <span class='kw'>if</span><span class='lparen'>(</span><span class='id identifier rubyid_klass'>klass</span> <span class='op'>==</span> <span class='const'>FrameType</span><span class='op'>::</span><span class='const'>Response</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_klass'>klass</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='symbol'>:response</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_args'>args</span><span class='lbracket'>[</span><span class='symbol'>:data</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+  <span class='kw'>elsif</span><span class='lparen'>(</span><span class='id identifier rubyid_klass'>klass</span> <span class='op'>==</span> <span class='const'>FrameType</span><span class='op'>::</span><span class='const'>Error</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_klass'>klass</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='symbol'>:error</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_args'>args</span><span class='lbracket'>[</span><span class='symbol'>:data</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+  <span class='kw'>elsif</span><span class='lparen'>(</span><span class='id identifier rubyid_klass'>klass</span> <span class='op'>==</span> <span class='const'>FrameType</span><span class='op'>::</span><span class='const'>Message</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_unpacked'>unpacked</span> <span class='op'>=</span> <span class='id identifier rubyid_args'>args</span><span class='lbracket'>[</span><span class='symbol'>:data</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_unpack'>unpack</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Q&gt;s&gt;a16a</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_args'>args</span><span class='lbracket'>[</span><span class='symbol'>:size</span><span class='rbracket'>]</span><span class='rbrace'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_klass'>klass</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span>
+      <span class='const'>Hash</span><span class='lbracket'>[</span><span class='op'>*</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='symbol'>:timestamp</span><span class='comma'>,</span> <span class='symbol'>:attempts</span><span class='comma'>,</span> <span class='symbol'>:message_id</span><span class='comma'>,</span> <span class='symbol'>:message</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_zip'>zip</span><span class='lparen'>(</span><span class='id identifier rubyid_unpacked'>unpacked</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_flatten'>flatten</span><span class='rparen'>)</span><span class='rbracket'>]</span>
+    <span class='rparen'>)</span>
+  <span class='kw'>else</span>
+    <span class='id identifier rubyid_raise'>raise</span> <span class='const'>TypeError</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Unknown frame type received: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_args'>args</span><span class='lbracket'>[</span><span class='symbol'>:type</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='rbrace'>}</span><span class='tstring_content'> - </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_klass'>klass</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='rbrace'>}</span><span class='tstring_end'>&quot;</span></span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="decode-class_method">
+  
+    + (<tt>Hash</tt>) <strong>decode</strong>(bytes) 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Information about incoming frame</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>bytes</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+30
+31
+32
+33</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/frame_type.rb', line 30</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_decode'>decode</span><span class='lparen'>(</span><span class='id identifier rubyid_bytes'>bytes</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_size'>size</span><span class='comma'>,</span> <span class='id identifier rubyid_type'>type</span> <span class='op'>=</span> <span class='id identifier rubyid_bytes'>bytes</span><span class='period'>.</span><span class='id identifier rubyid_unpack'>unpack</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>l&gt;l&gt;</span><span class='tstring_end'>'</span></span><span class='rparen'>)</span>
+  <span class='lbrace'>{</span><span class='symbol'>:size</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_size'>size</span> <span class='op'>-</span> <span class='const'>SIZE_BYTES</span><span class='comma'>,</span> <span class='symbol'>:type</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_type'>type</span><span class='rbrace'>}</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="set_attributes-class_method">
+  
+    + (<tt>TrueClass</tt>) <strong>set_attributes</strong>(attrs) 
+  
+
+  
+
+  
+    <span class="not_defined_here">
+      Originally defined in module
+        <span class='object_link'><a href="Utils/Lazy/ClassMethods.html#set_attributes-class_method" title="Krakow::Utils::Lazy::ClassMethods#set_attributes (method)">Utils::Lazy::ClassMethods</a></span>
+    </span>
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+  <div class="note todo">
+    <strong>TODO:</strong>
+    <div class='inline'>
+<p>need deep dup here</p>
+</div>
+  </div>
+
+
+<p>Directly set attribute hash</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>attrs</span>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>TrueClass</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div>
+</div>
+    
+  </div>
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="content-instance_method">
+  
+    - (<tt>String</tt>) <strong>content</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Content of message</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+61
+62
+63</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/frame_type.rb', line 61</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_content'>content</span>
+  <span class='id identifier rubyid_raise'>raise</span> <span class='const'>NotImplementedError</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>Content method not properly defined!</span><span class='tstring_end'>'</span></span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="initialize-instance_method">
+  
+    - (<tt>Object</tt>) <strong>initialize</strong>(args = {}) 
+  
+
+  
+    <span class="aliases">Also known as:
+    <span class="names"><span id='super_init-instance_method'>super_init</span></span>
+    </span>
+  
+
+  
+    <span class="not_defined_here">
+      Originally defined in module
+        <span class='object_link'><a href="Utils/Lazy/InstanceMethods.html#initialize-instance_method" title="Krakow::Utils::Lazy::InstanceMethods#initialize (method)">Utils::Lazy::InstanceMethods</a></span>
+    </span>
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Create new instance</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>args</span>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>{}</tt>)</em>
+      
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Object</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="inspect-instance_method">
+  
+    - (<tt>String</tt>) <strong>inspect</strong> 
+  
+
+  
+
+  
+    <span class="not_defined_here">
+      Originally defined in module
+        <span class='object_link'><a href="Utils/Lazy/InstanceMethods.html#inspect-instance_method" title="Krakow::Utils::Lazy::InstanceMethods#inspect (method)">Utils::Lazy::InstanceMethods</a></span>
+    </span>
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="log-instance_method">
+  
+    - (<tt>Logger</tt><sup>?</sup>) <strong>log</strong>(*args) 
+  
+
+  
+
+  
+    <span class="not_defined_here">
+      Originally defined in module
+        <span class='object_link'><a href="Utils/Logging.html#log-instance_method" title="Krakow::Utils::Logging#log (method)">Utils::Logging</a></span>
+    </span>
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Log message</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>args</span>
+      
+      
+        <span class='type'>(<tt>Array</tt>, <tt>nil</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Logger</tt>, <tt>nil</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="to_s-instance_method">
+  
+    - (<tt>String</tt>) <strong>to_s</strong> 
+  
+
+  
+
+  
+    <span class="not_defined_here">
+      Originally defined in module
+        <span class='object_link'><a href="Utils/Lazy/InstanceMethods.html#to_s-instance_method" title="Krakow::Utils::Lazy::InstanceMethods#to_s (method)">Utils::Lazy::InstanceMethods</a></span>
+    </span>
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div>
+</div>
+    
+  </div>
+
+</div>
+
+    <div id="footer">
+  Generated on Sat May 10 12:40:48 2014 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.8.7.4 (ruby-1.9.3).
+</div>
+
+  </body>
+</html>

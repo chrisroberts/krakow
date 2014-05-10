@@ -1,0 +1,1254 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>
+  Class: Krakow::FrameType::Message
+  
+    &mdash; Documentation by YARD 0.8.7.4
+  
+</title>
+
+  <link rel="stylesheet" href="../../css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="../../css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  hasFrames = window.top.frames.main ? true : false;
+  relpath = '../../';
+  framesUrl = "../../frames.html#!Krakow/FrameType/Message.html";
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div id="header">
+      <div id="menu">
+  
+    <a href="../../_index.html">Index (M)</a> &raquo;
+    <span class='title'><span class='object_link'><a href="../../Krakow.html" title="Krakow (module)">Krakow</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../FrameType.html" title="Krakow::FrameType (class)">FrameType</a></span></span>
+     &raquo; 
+    <span class="title">Message</span>
+  
+
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="../../class_list.html">
+      Class List
+    </a>
+  
+    <a class="full_list_link" id="method_list_link"
+        href="../../method_list.html">
+      Method List
+    </a>
+  
+    <a class="full_list_link" id="file_list_link"
+        href="../../file_list.html">
+      File List
+    </a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+
+    <iframe id="search_frame"></iframe>
+
+    <div id="content"><h1>Class: Krakow::FrameType::Message
+  
+  
+  
+</h1>
+
+<dl class="box">
+  
+    <dt class="r1">Inherits:</dt>
+    <dd class="r1">
+      <span class="inheritName"><span class='object_link'><a href="../FrameType.html" title="Krakow::FrameType (class)">Krakow::FrameType</a></span></span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next"><span class='object_link'><a href="../FrameType.html" title="Krakow::FrameType (class)">Krakow::FrameType</a></span></li>
+          
+            <li class="next">Krakow::FrameType::Message</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+      </dd>
+    
+  
+  
+    
+  
+    
+  
+  
+  
+    <dt class="r2 last">Defined in:</dt>
+    <dd class="r2 last">lib/krakow/frame_type/message.rb</dd>
+  
+</dl>
+<div class="clear"></div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    
+<p>Message received from server</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+  <h2>Constant Summary</h2>
+  
+
+
+
+
+  <h2>Instance Attribute Summary <small>(<a href="#" class="summary_toggle">collapse</a>)</small></h2>
+  <ul class="summary">
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#arguments-instance_method" title="#arguments (instance method)">- (Hash) <strong>arguments</strong> </a>
+    
+
+    
+  </span>
+  
+    <span class="note title not_defined_here">
+      included
+      from <span class='object_link'><a href="../Utils/Lazy/InstanceMethods.html#arguments-instance_method" title="Krakow::Utils::Lazy::InstanceMethods#arguments (method)">Utils::Lazy::InstanceMethods</a></span>
+    </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Argument hash.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#origin-instance_method" title="#origin (instance method)">- (Krakow::Consumer) <strong>origin</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+    
+  </ul>
+
+
+
+
+  
+    <h2>
+      Attributes
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#attempts-instance_method" title="#attempts (instance method)">- (Integer) <strong>attempts</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The attempts attribute.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#attempts%3F-instance_method" title="#attempts? (instance method)">- (TrueClass, FalseClass) <strong>attempts?</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Truthiness of the attempts attribute.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#message-instance_method" title="#message (instance method)">- (String) <strong>message</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The message attribute.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#message%3F-instance_method" title="#message? (instance method)">- (TrueClass, FalseClass) <strong>message?</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Truthiness of the message attribute.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#message_id-instance_method" title="#message_id (instance method)">- (String) <strong>message_id</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The message_id attribute.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#message_id%3F-instance_method" title="#message_id? (instance method)">- (TrueClass, FalseClass) <strong>message_id?</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Truthiness of the message_id attribute.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#timestamp-instance_method" title="#timestamp (instance method)">- (Integer) <strong>timestamp</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The timestamp attribute.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#timestamp%3F-instance_method" title="#timestamp? (instance method)">- (TrueClass, FalseClass) <strong>timestamp?</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Truthiness of the timestamp attribute.</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+    <h2>
+      Instance Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#confirm-instance_method" title="#confirm (instance method)">- (Object) <strong>confirm</strong>(*args) </a>
+    
+
+    
+      (also: #finish)
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Proxy to [Krakow::Consumer#confirm].</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#content-instance_method" title="#content (instance method)">- (String) <strong>content</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Message content.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#requeue-instance_method" title="#requeue (instance method)">- (Object) <strong>requeue</strong>(*args) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Proxy to [Krakow::Consumer#requeue].</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#touch-instance_method" title="#touch (instance method)">- (Object) <strong>touch</strong>(*args) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Proxy to [Krakow::Consumer#touch].</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <div id="instance_attr_details" class="attr_details">
+    <h2>Instance Attribute Details</h2>
+    
+      
+      <span id=""></span>
+      <div class="method_details first">
+  <h3 class="signature first" id="arguments-instance_method">
+  
+    - (<tt>Hash</tt>) <strong>arguments</strong>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+    <span class="not_defined_here">
+      Originally defined in module
+        <span class='object_link'><a href="../Utils/Lazy/InstanceMethods.html#arguments-instance_method" title="Krakow::Utils::Lazy::InstanceMethods#arguments (method)">Utils::Lazy::InstanceMethods</a></span>
+    </span>
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns argument hash</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>argument hash</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div>
+</div>
+    
+      
+      <span id="origin=-instance_method"></span>
+      <div class="method_details ">
+  <h3 class="signature " id="origin-instance_method">
+  
+    - (<tt><span class='object_link'><a href="../Consumer.html" title="Krakow::Consumer (class)">Krakow::Consumer</a></span></tt>) <strong>origin</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="../Consumer.html" title="Krakow::Consumer (class)">Krakow::Consumer</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+9
+10
+11</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/frame_type/message.rb', line 9</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_origin'>origin</span>
+  <span class='ivar'>@origin</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="attempts-instance_method">
+  
+    - (<tt>Integer</tt>) <strong>attempts</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the attempts attribute</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Integer</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the attempts attribute</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+18</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/frame_type/message.rb', line 18</span>
+
+<span class='id identifier rubyid_attribute'>attribute</span> <span class='symbol'>:attempts</span><span class='comma'>,</span> <span class='const'>Integer</span><span class='comma'>,</span> <span class='symbol'>:required</span> <span class='op'>=&gt;</span> <span class='kw'>true</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="attempts?-instance_method">
+  
+    - (<tt>TrueClass</tt>, <tt>FalseClass</tt>) <strong>attempts?</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns truthiness of the attempts attribute</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>TrueClass</tt>, <tt>FalseClass</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>truthiness of the attempts attribute</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+18</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/frame_type/message.rb', line 18</span>
+
+<span class='id identifier rubyid_attribute'>attribute</span> <span class='symbol'>:attempts</span><span class='comma'>,</span> <span class='const'>Integer</span><span class='comma'>,</span> <span class='symbol'>:required</span> <span class='op'>=&gt;</span> <span class='kw'>true</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="confirm-instance_method">
+  
+    - (<tt>Object</tt>) <strong>confirm</strong>(*args) 
+  
+
+  
+    <span class="aliases">Also known as:
+    <span class="names"><span id='finish-instance_method'>finish</span></span>
+    </span>
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Proxy to [Krakow::Consumer#confirm]</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+42
+43
+44</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/frame_type/message.rb', line 42</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_confirm'>confirm</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_origin'>origin</span><span class='period'>.</span><span class='id identifier rubyid_confirm'>confirm</span><span class='lparen'>(</span><span class='op'>*</span><span class='lbracket'>[</span><span class='kw'>self</span><span class='comma'>,</span> <span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_compact'>compact</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="content-instance_method">
+  
+    - (<tt>String</tt>) <strong>content</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Message content</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+28
+29
+30</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/frame_type/message.rb', line 28</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_content'>content</span>
+  <span class='id identifier rubyid_message'>message</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="message-instance_method">
+  
+    - (<tt>String</tt>) <strong>message</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the message attribute</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the message attribute</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+21</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/frame_type/message.rb', line 21</span>
+
+<span class='id identifier rubyid_attribute'>attribute</span> <span class='symbol'>:message</span><span class='comma'>,</span> <span class='const'>String</span><span class='comma'>,</span> <span class='symbol'>:required</span> <span class='op'>=&gt;</span> <span class='kw'>true</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="message?-instance_method">
+  
+    - (<tt>TrueClass</tt>, <tt>FalseClass</tt>) <strong>message?</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns truthiness of the message attribute</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>TrueClass</tt>, <tt>FalseClass</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>truthiness of the message attribute</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+21</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/frame_type/message.rb', line 21</span>
+
+<span class='id identifier rubyid_attribute'>attribute</span> <span class='symbol'>:message</span><span class='comma'>,</span> <span class='const'>String</span><span class='comma'>,</span> <span class='symbol'>:required</span> <span class='op'>=&gt;</span> <span class='kw'>true</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="message_id-instance_method">
+  
+    - (<tt>String</tt>) <strong>message_id</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the message_id attribute</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the message_id attribute</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+20</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/frame_type/message.rb', line 20</span>
+
+<span class='id identifier rubyid_attribute'>attribute</span> <span class='symbol'>:message_id</span><span class='comma'>,</span> <span class='const'>String</span><span class='comma'>,</span> <span class='symbol'>:required</span> <span class='op'>=&gt;</span> <span class='kw'>true</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="message_id?-instance_method">
+  
+    - (<tt>TrueClass</tt>, <tt>FalseClass</tt>) <strong>message_id?</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns truthiness of the message_id attribute</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>TrueClass</tt>, <tt>FalseClass</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>truthiness of the message_id attribute</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+20</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/frame_type/message.rb', line 20</span>
+
+<span class='id identifier rubyid_attribute'>attribute</span> <span class='symbol'>:message_id</span><span class='comma'>,</span> <span class='const'>String</span><span class='comma'>,</span> <span class='symbol'>:required</span> <span class='op'>=&gt;</span> <span class='kw'>true</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="requeue-instance_method">
+  
+    - (<tt>Object</tt>) <strong>requeue</strong>(*args) 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Proxy to [Krakow::Consumer#requeue]</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+48
+49
+50</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/frame_type/message.rb', line 48</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_requeue'>requeue</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_origin'>origin</span><span class='period'>.</span><span class='id identifier rubyid_requeue'>requeue</span><span class='lparen'>(</span><span class='op'>*</span><span class='lbracket'>[</span><span class='kw'>self</span><span class='comma'>,</span> <span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_compact'>compact</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="timestamp-instance_method">
+  
+    - (<tt>Integer</tt>) <strong>timestamp</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the timestamp attribute</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Integer</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the timestamp attribute</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+19</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/frame_type/message.rb', line 19</span>
+
+<span class='id identifier rubyid_attribute'>attribute</span> <span class='symbol'>:timestamp</span><span class='comma'>,</span> <span class='const'>Integer</span><span class='comma'>,</span> <span class='symbol'>:required</span> <span class='op'>=&gt;</span> <span class='kw'>true</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="timestamp?-instance_method">
+  
+    - (<tt>TrueClass</tt>, <tt>FalseClass</tt>) <strong>timestamp?</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns truthiness of the timestamp attribute</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>TrueClass</tt>, <tt>FalseClass</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>truthiness of the timestamp attribute</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+19</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/frame_type/message.rb', line 19</span>
+
+<span class='id identifier rubyid_attribute'>attribute</span> <span class='symbol'>:timestamp</span><span class='comma'>,</span> <span class='const'>Integer</span><span class='comma'>,</span> <span class='symbol'>:required</span> <span class='op'>=&gt;</span> <span class='kw'>true</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="touch-instance_method">
+  
+    - (<tt>Object</tt>) <strong>touch</strong>(*args) 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Proxy to [Krakow::Consumer#touch]</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+53
+54
+55</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/frame_type/message.rb', line 53</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_touch'>touch</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_origin'>origin</span><span class='period'>.</span><span class='id identifier rubyid_touch'>touch</span><span class='lparen'>(</span><span class='op'>*</span><span class='lbracket'>[</span><span class='kw'>self</span><span class='comma'>,</span> <span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_compact'>compact</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+
+    <div id="footer">
+  Generated on Sat May 10 12:40:49 2014 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.8.7.4 (ruby-1.9.3).
+</div>
+
+  </body>
+</html>

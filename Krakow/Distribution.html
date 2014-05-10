@@ -1,0 +1,3300 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>
+  Class: Krakow::Distribution
+  
+    &mdash; Documentation by YARD 0.8.7.4
+  
+</title>
+
+  <link rel="stylesheet" href="../css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="../css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  hasFrames = window.top.frames.main ? true : false;
+  relpath = '../';
+  framesUrl = "../frames.html#!Krakow/Distribution.html";
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div id="header">
+      <div id="menu">
+  
+    <a href="../_index.html">Index (D)</a> &raquo;
+    <span class='title'><span class='object_link'><a href="../Krakow.html" title="Krakow (module)">Krakow</a></span></span>
+     &raquo; 
+    <span class="title">Distribution</span>
+  
+
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="../class_list.html">
+      Class List
+    </a>
+  
+    <a class="full_list_link" id="method_list_link"
+        href="../method_list.html">
+      Method List
+    </a>
+  
+    <a class="full_list_link" id="file_list_link"
+        href="../file_list.html">
+      File List
+    </a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+
+    <iframe id="search_frame"></iframe>
+
+    <div id="content"><h1>Class: Krakow::Distribution
+  <span class="abstract note title">Abstract</span>
+  
+  
+</h1>
+
+<dl class="box">
+  
+    <dt class="r1">Inherits:</dt>
+    <dd class="r1">
+      <span class="inheritName">Object</span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next">Krakow::Distribution</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+      </dd>
+    
+  
+  
+    
+      <dt class="r2">Extended by:</dt>
+      <dd class="r2"><span class='object_link'><a href="Utils/Lazy/ClassMethods.html" title="Krakow::Utils::Lazy::ClassMethods (module)">Utils::Lazy::ClassMethods</a></span></dd>
+      
+    
+  
+    
+      <dt class="r1">Includes:</dt>
+      <dd class="r1">Celluloid, <span class='object_link'><a href="Utils/Lazy.html" title="Krakow::Utils::Lazy (module)">Utils::Lazy</a></span>, <span class='object_link'><a href="Utils/Lazy/InstanceMethods.html" title="Krakow::Utils::Lazy::InstanceMethods (module)">Utils::Lazy::InstanceMethods</a></span></dd>
+      
+    
+  
+  
+  
+    <dt class="r2 last">Defined in:</dt>
+    <dd class="r2 last">lib/krakow/distribution.rb<span class="defines">,<br />
+  lib/krakow/distribution/default.rb</span>
+</dd>
+  
+</dl>
+<div class="clear"></div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    <div class="note abstract">
+  <strong>This class is abstract.</strong>
+  <div class='inline'></div>
+</div>
+
+<p>Message distribution</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><div id="subclasses">
+  <h2>Direct Known Subclasses</h2>
+  <p class="children"><span class='object_link'><a href="Distribution/Default.html" title="Krakow::Distribution::Default (class)">Default</a></span></p>
+</div>
+<h2>Defined Under Namespace</h2>
+<p class="children">
+  
+    
+  
+    
+      <strong class="classes">Classes:</strong> <span class='object_link'><a href="Distribution/Default.html" title="Krakow::Distribution::Default (class)">Default</a></span>
+    
+  
+</p>
+
+
+
+
+  <h2>Instance Attribute Summary <small>(<a href="#" class="summary_toggle">collapse</a>)</small></h2>
+  <ul class="summary">
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#arguments-instance_method" title="#arguments (instance method)">- (Hash) <strong>arguments</strong> </a>
+    
+
+    
+  </span>
+  
+    <span class="note title not_defined_here">
+      included
+      from <span class='object_link'><a href="Utils/Lazy/InstanceMethods.html#arguments-instance_method" title="Krakow::Utils::Lazy::InstanceMethods#arguments (method)">Utils::Lazy::InstanceMethods</a></span>
+    </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Argument hash.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#flight_record-instance_method" title="#flight_record (instance method)">- (Object) <strong>flight_record</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute flight_record.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#ideal-instance_method" title="#ideal (instance method)">- (Object) <strong>ideal</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute ideal.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#registry-instance_method" title="#registry (instance method)">- (Object) <strong>registry</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute registry.</p>
+</div></span>
+  
+</li>
+
+    
+  </ul>
+
+
+
+
+  
+    <h2>
+      Attributes
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#backoff_interval-instance_method" title="#backoff_interval (instance method)">- (Numeric) <strong>backoff_interval</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The backoff_interval attribute.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#backoff_interval%3F-instance_method" title="#backoff_interval? (instance method)">- (TrueClass, FalseClass) <strong>backoff_interval?</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Truthiness of the backoff_interval attribute.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#consumer-instance_method" title="#consumer (instance method)">- (Krakow::Consumer) <strong>consumer</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The consumer attribute.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#consumer%3F-instance_method" title="#consumer? (instance method)">- (TrueClass, FalseClass) <strong>consumer?</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Truthiness of the consumer attribute.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#max_in_flight-instance_method" title="#max_in_flight (instance method)">- (Integer) <strong>max_in_flight</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The max_in_flight attribute.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#max_in_flight%3F-instance_method" title="#max_in_flight? (instance method)">- (TrueClass, FalseClass) <strong>max_in_flight?</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Truthiness of the max_in_flight attribute.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#watch_dog_interval-instance_method" title="#watch_dog_interval (instance method)">- (Numeric) <strong>watch_dog_interval</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The watch_dog_interval attribute.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#watch_dog_interval%3F-instance_method" title="#watch_dog_interval? (instance method)">- (TrueClass, FalseClass) <strong>watch_dog_interval?</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Truthiness of the watch_dog_interval attribute.</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+    <h2>
+      Class Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#attribute-class_method" title="#attribute (class method)">+ (nil) <strong>attribute</strong>(name, type, options = {}) </a>
+    
+
+    
+  </span>
+  
+    <span class="note title not_defined_here">
+      extended
+      from <span class='object_link'><a href="Utils/Lazy/ClassMethods.html#attribute-class_method" title="Krakow::Utils::Lazy::ClassMethods#attribute (method)">Utils::Lazy::ClassMethods</a></span>
+    </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Add new attributes to class.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#attributes-class_method" title="#attributes (class method)">+ (Array&lt;Hash&gt;) <strong>attributes</strong>(*args) </a>
+    
+
+    
+  </span>
+  
+    <span class="note title not_defined_here">
+      extended
+      from <span class='object_link'><a href="Utils/Lazy/ClassMethods.html#attributes-class_method" title="Krakow::Utils::Lazy::ClassMethods#attributes (method)">Utils::Lazy::ClassMethods</a></span>
+    </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Return attributes.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#set_attributes-class_method" title="#set_attributes (class method)">+ (TrueClass) <strong>set_attributes</strong>(attrs) </a>
+    
+
+    
+  </span>
+  
+    <span class="note title not_defined_here">
+      extended
+      from <span class='object_link'><a href="Utils/Lazy/ClassMethods.html#set_attributes-class_method" title="Krakow::Utils::Lazy::ClassMethods#set_attributes (method)">Utils::Lazy::ClassMethods</a></span>
+    </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Directly set attribute hash.</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+    <h2>
+      Instance Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#add_connection-instance_method" title="#add_connection (instance method)">- (TrueClass) <strong>add_connection</strong>(connection) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Add connection to make available for RDY distribution.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#calculate_ready%21-instance_method" title="#calculate_ready! (instance method)">- (Integer) <strong>calculate_ready!</strong>(connection_identifier) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><dl class="rdoc-list"><dt>Abstract</dt>
+<dd>
+<p>Determine RDY value for given connection.</p>
+</dd></dl>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#connection_lookup-instance_method" title="#connection_lookup (instance method)">- (Krakow::Connection<sup>?</sup>) <strong>connection_lookup</strong>(identifier) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Return connection associated with given registry key.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#connections-instance_method" title="#connections (instance method)">- (Array&lt;Krakow::Connection&gt;) <strong>connections</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Connections in registry.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#failure-instance_method" title="#failure (instance method)">- (TrueClass) <strong>failure</strong>(connection_identifier) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Log failure of processed message.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#in_flight_lookup-instance_method" title="#in_flight_lookup (instance method)">- (Krakow::Connection, Object) <strong>in_flight_lookup</strong>(msg_id) {|connection| ... }</a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Return source connection for given message ID.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#initial_ready-instance_method" title="#initial_ready (instance method)">- (Integer) <strong>initial_ready</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Initial ready value used for new connections.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#initialize-instance_method" title="#initialize (instance method)">- (Distribution) <strong>initialize</strong>(args = {}) </a>
+    
+
+    
+  </span>
+  
+  
+    <span class="note title constructor">constructor</span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>A new instance of Distribution.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#inspect-instance_method" title="#inspect (instance method)">- (String) <strong>inspect</strong> </a>
+    
+
+    
+  </span>
+  
+    <span class="note title not_defined_here">
+      included
+      from <span class='object_link'><a href="Utils/Lazy/InstanceMethods.html#inspect-instance_method" title="Krakow::Utils::Lazy::InstanceMethods#inspect (method)">Utils::Lazy::InstanceMethods</a></span>
+    </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#log-instance_method" title="#log (instance method)">- (Logger<sup>?</sup>) <strong>log</strong>(*args) </a>
+    
+
+    
+  </span>
+  
+    <span class="note title not_defined_here">
+      included
+      from <span class='object_link'><a href="Utils/Logging.html#log-instance_method" title="Krakow::Utils::Logging#log (method)">Utils::Logging</a></span>
+    </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Log message.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#ready_for-instance_method" title="#ready_for (instance method)">- (Integer) <strong>ready_for</strong>(connection_identifier) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Return the currently configured RDY value for given connnection.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#redistribute%21-instance_method" title="#redistribute! (instance method)">- (Object) <strong>redistribute!</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><dl class="rdoc-list"><dt>Abstract</dt>
+<dd>
+<p>Reset flight distributions.</p>
+</dd></dl>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#register_message-instance_method" title="#register_message (instance method)">- (Integer) <strong>register_message</strong>(message, connection_identifier) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Registers message into registry and configures for distribution.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#registry_lookup-instance_method" title="#registry_lookup (instance method)">- (Hash) <strong>registry_lookup</strong>(connection_identifier) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Return registry information for given connection.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#remove_connection-instance_method" title="#remove_connection (instance method)">- (TrueClass) <strong>remove_connection</strong>(connection_identifier, *args) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Remove connection from RDY distribution.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#set_ready_for-instance_method" title="#set_ready_for (instance method)">- (Krakow::FrameType::Error<sup>?</sup>) <strong>set_ready_for</strong>(connection, *_) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Send RDY for given connection.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#success-instance_method" title="#success (instance method)">- (TrueClass) <strong>success</strong>(connection_identifier) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Log success of processed message.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#to_s-instance_method" title="#to_s (instance method)">- (String) <strong>to_s</strong> </a>
+    
+
+    
+  </span>
+  
+    <span class="note title not_defined_here">
+      included
+      from <span class='object_link'><a href="Utils/Lazy/InstanceMethods.html#to_s-instance_method" title="Krakow::Utils::Lazy::InstanceMethods#to_s (method)">Utils::Lazy::InstanceMethods</a></span>
+    </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#unregister_message-instance_method" title="#unregister_message (instance method)">- (Krakow::Connection) <strong>unregister_message</strong>(message) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Remove message metadata from registry.</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <div id="constructor_details" class="method_details_list">
+  <h2>Constructor Details</h2>
+  
+    <div class="method_details first">
+  <h3 class="signature first" id="initialize-instance_method">
+  
+    - (<tt><span class='object_link'><a href="" title="Krakow::Distribution (class)">Distribution</a></span></tt>) <strong>initialize</strong>(args = {}) 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns a new instance of Distribution</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+33
+34
+35
+36
+37
+38</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/distribution.rb', line 33</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_args'>args</span><span class='op'>=</span><span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
+  <span class='kw'>super</span>
+  <span class='ivar'>@ideal</span> <span class='op'>=</span> <span class='int'>0</span>
+  <span class='ivar'>@flight_record</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
+  <span class='ivar'>@registry</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+  
+</div>
+
+  <div id="instance_attr_details" class="attr_details">
+    <h2>Instance Attribute Details</h2>
+    
+      
+      <span id=""></span>
+      <div class="method_details first">
+  <h3 class="signature first" id="arguments-instance_method">
+  
+    - (<tt>Hash</tt>) <strong>arguments</strong>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+    <span class="not_defined_here">
+      Originally defined in module
+        <span class='object_link'><a href="Utils/Lazy/InstanceMethods.html#arguments-instance_method" title="Krakow::Utils::Lazy::InstanceMethods#arguments (method)">Utils::Lazy::InstanceMethods</a></span>
+    </span>
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns argument hash</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>argument hash</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div>
+</div>
+    
+      
+      <span id="flight_record=-instance_method"></span>
+      <div class="method_details ">
+  <h3 class="signature " id="flight_record-instance_method">
+  
+    - (<tt>Object</tt>) <strong>flight_record</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute flight_record</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+17
+18
+19</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/distribution.rb', line 17</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_flight_record'>flight_record</span>
+  <span class='ivar'>@flight_record</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id="ideal=-instance_method"></span>
+      <div class="method_details ">
+  <h3 class="signature " id="ideal-instance_method">
+  
+    - (<tt>Object</tt>) <strong>ideal</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute ideal</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+17
+18
+19</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/distribution.rb', line 17</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_ideal'>ideal</span>
+  <span class='ivar'>@ideal</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id="registry=-instance_method"></span>
+      <div class="method_details ">
+  <h3 class="signature " id="registry-instance_method">
+  
+    - (<tt>Object</tt>) <strong>registry</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute registry</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+17
+18
+19</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/distribution.rb', line 17</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_registry'>registry</span>
+  <span class='ivar'>@registry</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+
+  <div id="class_method_details" class="method_details_list">
+    <h2>Class Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="attribute-class_method">
+  
+    + (<tt>nil</tt>) <strong>attribute</strong>(name, type, options = {}) 
+  
+
+  
+
+  
+    <span class="not_defined_here">
+      Originally defined in module
+        <span class='object_link'><a href="Utils/Lazy/ClassMethods.html#attribute-class_method" title="Krakow::Utils::Lazy::ClassMethods#attribute (method)">Utils::Lazy::ClassMethods</a></span>
+    </span>
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Add new attributes to class</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>name</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>type</span>
+      
+      
+        <span class='type'>(<tt>Class</tt>, <tt>Array&lt;Class&gt;</tt>)</span>
+      
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>options</span>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>{}</tt>)</em>
+      
+      
+    </li>
+  
+</ul>
+
+  
+    
+    
+    
+    
+    
+    
+    <p class="tag_title">Options Hash (<tt>options</tt>):</p>
+    <ul class="option">
+      
+        <li>
+          <span class="name">:required</span>
+          <span class="type">(<tt>true</tt>, <tt>false</tt>)</span>
+          <span class="default">
+            
+          </span>
+          
+            &mdash; <div class='inline'>
+<p>must be provided on initialization</p>
+</div>
+          
+        </li>
+      
+        <li>
+          <span class="name">:default</span>
+          <span class="type">(<tt>Object</tt>, <tt>Proc</tt>)</span>
+          <span class="default">
+            
+          </span>
+          
+            &mdash; <div class='inline'>
+<p>default value</p>
+</div>
+          
+        </li>
+      
+    </ul>
+  
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>nil</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="attributes-class_method">
+  
+    + (<tt>Array&lt;Hash&gt;</tt>) <strong>attributes</strong>(*args) 
+  
+
+  
+
+  
+    <span class="not_defined_here">
+      Originally defined in module
+        <span class='object_link'><a href="Utils/Lazy/ClassMethods.html#attributes-class_method" title="Krakow::Utils::Lazy::ClassMethods#attributes (method)">Utils::Lazy::ClassMethods</a></span>
+    </span>
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Return attributes</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>args</span>
+      
+      
+        <span class='type'>(<tt>Symbol</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>:required or :optional</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Array&lt;Hash&gt;</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="set_attributes-class_method">
+  
+    + (<tt>TrueClass</tt>) <strong>set_attributes</strong>(attrs) 
+  
+
+  
+
+  
+    <span class="not_defined_here">
+      Originally defined in module
+        <span class='object_link'><a href="Utils/Lazy/ClassMethods.html#set_attributes-class_method" title="Krakow::Utils::Lazy::ClassMethods#set_attributes (method)">Utils::Lazy::ClassMethods</a></span>
+    </span>
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+  <div class="note todo">
+    <strong>TODO:</strong>
+    <div class='inline'>
+<p>need deep dup here</p>
+</div>
+  </div>
+
+
+<p>Directly set attribute hash</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>attrs</span>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>TrueClass</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div>
+</div>
+    
+  </div>
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="add_connection-instance_method">
+  
+    - (<tt>TrueClass</tt>) <strong>add_connection</strong>(connection) 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Add connection to make available for RDY distribution</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>connection</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Connection.html" title="Krakow::Connection (class)">Krakow::Connection</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>TrueClass</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/distribution.rb', line 110</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_add_connection'>add_connection</span><span class='lparen'>(</span><span class='id identifier rubyid_connection'>connection</span><span class='rparen'>)</span>
+  <span class='kw'>unless</span><span class='lparen'>(</span><span class='id identifier rubyid_registry'>registry</span><span class='lbracket'>[</span><span class='id identifier rubyid_connection'>connection</span><span class='period'>.</span><span class='id identifier rubyid_identifier'>identifier</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_registry'>registry</span><span class='lbracket'>[</span><span class='id identifier rubyid_connection'>connection</span><span class='period'>.</span><span class='id identifier rubyid_identifier'>identifier</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='lbrace'>{</span>
+      <span class='symbol'>:ready</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_initial_ready'>initial_ready</span><span class='comma'>,</span>
+      <span class='symbol'>:in_flight</span> <span class='op'>=&gt;</span> <span class='int'>0</span><span class='comma'>,</span>
+      <span class='symbol'>:failures</span> <span class='op'>=&gt;</span> <span class='int'>0</span><span class='comma'>,</span>
+      <span class='symbol'>:backoff_until</span> <span class='op'>=&gt;</span> <span class='int'>0</span>
+    <span class='rbrace'>}</span>
+  <span class='kw'>end</span>
+  <span class='kw'>true</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="backoff_interval-instance_method">
+  
+    - (<tt>Numeric</tt>) <strong>backoff_interval</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the backoff_interval attribute</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Numeric</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the backoff_interval attribute</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+28</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/distribution.rb', line 28</span>
+
+<span class='id identifier rubyid_attribute'>attribute</span> <span class='symbol'>:backoff_interval</span><span class='comma'>,</span> <span class='const'>Numeric</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="backoff_interval?-instance_method">
+  
+    - (<tt>TrueClass</tt>, <tt>FalseClass</tt>) <strong>backoff_interval?</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns truthiness of the backoff_interval attribute</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>TrueClass</tt>, <tt>FalseClass</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>truthiness of the backoff_interval attribute</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+28</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/distribution.rb', line 28</span>
+
+<span class='id identifier rubyid_attribute'>attribute</span> <span class='symbol'>:backoff_interval</span><span class='comma'>,</span> <span class='const'>Numeric</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="calculate_ready!-instance_method">
+  
+    - (<tt>Integer</tt>) <strong>calculate_ready!</strong>(connection_identifier) 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <dl class="rdoc-list"><dt>Abstract</dt>
+<dd>
+<p>Determine RDY value for given connection</p>
+</dd></dl>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>connection_identifier</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Integer</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+48
+49
+50</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/distribution.rb', line 48</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_calculate_ready!'>calculate_ready!</span><span class='lparen'>(</span><span class='id identifier rubyid_connection_identifier'>connection_identifier</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_raise'>raise</span> <span class='const'>NotImplementedError</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>Custom `#calculate_ready!` method must be provided!</span><span class='tstring_end'>'</span></span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="connection_lookup-instance_method">
+  
+    - (<tt><span class='object_link'><a href="Connection.html" title="Krakow::Connection (class)">Krakow::Connection</a></span></tt><sup>?</sup>) <strong>connection_lookup</strong>(identifier) 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Return connection associated with given registry key</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>identifier</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>connection identifier</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Connection.html" title="Krakow::Connection (class)">Krakow::Connection</a></span></tt>, <tt>nil</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+143
+144
+145</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/distribution.rb', line 143</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_connection_lookup'>connection_lookup</span><span class='lparen'>(</span><span class='id identifier rubyid_identifier'>identifier</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_consumer'>consumer</span><span class='period'>.</span><span class='id identifier rubyid_connection'>connection</span><span class='lparen'>(</span><span class='id identifier rubyid_identifier'>identifier</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="connections-instance_method">
+  
+    - (<tt>Array&lt;<span class='object_link'><a href="Connection.html" title="Krakow::Connection (class)">Krakow::Connection</a></span>&gt;</tt>) <strong>connections</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns connections in registry</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Array&lt;<span class='object_link'><a href="Connection.html" title="Krakow::Connection (class)">Krakow::Connection</a></span>&gt;</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>connections in registry</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+175
+176
+177
+178
+179</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/distribution.rb', line 175</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_connections'>connections</span>
+  <span class='id identifier rubyid_registry'>registry</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_identifier'>identifier</span><span class='op'>|</span>
+    <span class='id identifier rubyid_connection_lookup'>connection_lookup</span><span class='lparen'>(</span><span class='id identifier rubyid_identifier'>identifier</span><span class='rparen'>)</span>
+  <span class='kw'>end</span><span class='period'>.</span><span class='id identifier rubyid_compact'>compact</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="consumer-instance_method">
+  
+    - (<tt><span class='object_link'><a href="Consumer.html" title="Krakow::Consumer (class)">Krakow::Consumer</a></span></tt>) <strong>consumer</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the consumer attribute</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Consumer.html" title="Krakow::Consumer (class)">Krakow::Consumer</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the consumer attribute</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+26</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/distribution.rb', line 26</span>
+
+<span class='id identifier rubyid_attribute'>attribute</span> <span class='symbol'>:consumer</span><span class='comma'>,</span> <span class='const'>Krakow</span><span class='op'>::</span><span class='const'>Consumer</span><span class='comma'>,</span> <span class='symbol'>:required</span> <span class='op'>=&gt;</span> <span class='kw'>true</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="consumer?-instance_method">
+  
+    - (<tt>TrueClass</tt>, <tt>FalseClass</tt>) <strong>consumer?</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns truthiness of the consumer attribute</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>TrueClass</tt>, <tt>FalseClass</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>truthiness of the consumer attribute</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+26</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/distribution.rb', line 26</span>
+
+<span class='id identifier rubyid_attribute'>attribute</span> <span class='symbol'>:consumer</span><span class='comma'>,</span> <span class='const'>Krakow</span><span class='op'>::</span><span class='const'>Consumer</span><span class='comma'>,</span> <span class='symbol'>:required</span> <span class='op'>=&gt;</span> <span class='kw'>true</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="failure-instance_method">
+  
+    - (<tt>TrueClass</tt>) <strong>failure</strong>(connection_identifier) 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Log failure of processed message</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>connection_identifier</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>TrueClass</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+185
+186
+187
+188
+189
+190
+191
+192</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/distribution.rb', line 185</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_failure'>failure</span><span class='lparen'>(</span><span class='id identifier rubyid_connection_identifier'>connection_identifier</span><span class='rparen'>)</span>
+  <span class='kw'>if</span><span class='lparen'>(</span><span class='id identifier rubyid_backoff_interval'>backoff_interval</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_registry_info'>registry_info</span> <span class='op'>=</span> <span class='id identifier rubyid_registry_lookup'>registry_lookup</span><span class='lparen'>(</span><span class='id identifier rubyid_connection_identifier'>connection_identifier</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_registry_info'>registry_info</span><span class='lbracket'>[</span><span class='symbol'>:failures</span><span class='rbracket'>]</span> <span class='op'>+=</span> <span class='int'>1</span>
+    <span class='id identifier rubyid_registry_info'>registry_info</span><span class='lbracket'>[</span><span class='symbol'>:backoff_until</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='const'>Time</span><span class='period'>.</span><span class='id identifier rubyid_now'>now</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span> <span class='op'>+</span> <span class='lparen'>(</span><span class='id identifier rubyid_registry_info'>registry_info</span><span class='lbracket'>[</span><span class='symbol'>:failures</span><span class='rbracket'>]</span> <span class='op'>*</span> <span class='id identifier rubyid_backoff_interval'>backoff_interval</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+  <span class='kw'>true</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="in_flight_lookup-instance_method">
+  
+    - (<tt><span class='object_link'><a href="Connection.html" title="Krakow::Connection (class)">Krakow::Connection</a></span></tt>, <tt>Object</tt>) <strong>in_flight_lookup</strong>(msg_id) {|connection| ... }
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Return source connection for given message ID</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>msg_id</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Yields:</p>
+<ul class="yield">
+  
+    <li>
+      
+      
+        <span class='type'></span>
+      
+      
+      
+        
+        <div class='inline'>
+<p>execute with connection</p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Yield Parameters:</p>
+<ul class="yieldparam">
+  
+    <li>
+      
+        <span class='name'>connection</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Connection.html" title="Krakow::Connection (class)">Krakow::Connection</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Connection.html" title="Krakow::Connection (class)">Krakow::Connection</a></span></tt>, <tt>Object</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/distribution.rb', line 153</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_in_flight_lookup'>in_flight_lookup</span><span class='lparen'>(</span><span class='id identifier rubyid_msg_id'>msg_id</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_connection'>connection</span> <span class='op'>=</span> <span class='id identifier rubyid_connection_lookup'>connection_lookup</span><span class='lparen'>(</span><span class='id identifier rubyid_flight_record'>flight_record</span><span class='lbracket'>[</span><span class='id identifier rubyid_msg_id'>msg_id</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+  <span class='kw'>unless</span><span class='lparen'>(</span><span class='id identifier rubyid_connection'>connection</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_abort'>abort</span> <span class='const'>Krakow</span><span class='op'>::</span><span class='const'>Error</span><span class='op'>::</span><span class='const'>LookupFailed</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Failed to locate in flight message (ID: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_msg_id'>msg_id</span><span class='rbrace'>}</span><span class='tstring_content'>)</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+  <span class='kw'>if</span><span class='lparen'>(</span><span class='id identifier rubyid_block_given?'>block_given?</span><span class='rparen'>)</span>
+    <span class='kw'>yield</span> <span class='id identifier rubyid_connection'>connection</span>
+  <span class='kw'>else</span>
+    <span class='id identifier rubyid_connection'>connection</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="initial_ready-instance_method">
+  
+    - (<tt>Integer</tt>) <strong>initial_ready</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Initial ready value used for new connections</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Integer</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+90
+91
+92</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/distribution.rb', line 90</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_initial_ready'>initial_ready</span>
+  <span class='id identifier rubyid_ideal'>ideal</span> <span class='op'>&gt;</span> <span class='int'>0</span> <span class='op'>?</span> <span class='int'>1</span> <span class='op'>:</span> <span class='int'>0</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="inspect-instance_method">
+  
+    - (<tt>String</tt>) <strong>inspect</strong> 
+  
+
+  
+
+  
+    <span class="not_defined_here">
+      Originally defined in module
+        <span class='object_link'><a href="Utils/Lazy/InstanceMethods.html#inspect-instance_method" title="Krakow::Utils::Lazy::InstanceMethods#inspect (method)">Utils::Lazy::InstanceMethods</a></span>
+    </span>
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="log-instance_method">
+  
+    - (<tt>Logger</tt><sup>?</sup>) <strong>log</strong>(*args) 
+  
+
+  
+
+  
+    <span class="not_defined_here">
+      Originally defined in module
+        <span class='object_link'><a href="Utils/Logging.html#log-instance_method" title="Krakow::Utils::Logging#log (method)">Utils::Logging</a></span>
+    </span>
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Log message</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>args</span>
+      
+      
+        <span class='type'>(<tt>Array</tt>, <tt>nil</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Logger</tt>, <tt>nil</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="max_in_flight-instance_method">
+  
+    - (<tt>Integer</tt>) <strong>max_in_flight</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the max_in_flight attribute</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Integer</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the max_in_flight attribute</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+29</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/distribution.rb', line 29</span>
+
+<span class='id identifier rubyid_attribute'>attribute</span> <span class='symbol'>:max_in_flight</span><span class='comma'>,</span> <span class='const'>Integer</span><span class='comma'>,</span> <span class='symbol'>:default</span> <span class='op'>=&gt;</span> <span class='int'>1</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="max_in_flight?-instance_method">
+  
+    - (<tt>TrueClass</tt>, <tt>FalseClass</tt>) <strong>max_in_flight?</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns truthiness of the max_in_flight attribute</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>TrueClass</tt>, <tt>FalseClass</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>truthiness of the max_in_flight attribute</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+29</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/distribution.rb', line 29</span>
+
+<span class='id identifier rubyid_attribute'>attribute</span> <span class='symbol'>:max_in_flight</span><span class='comma'>,</span> <span class='const'>Integer</span><span class='comma'>,</span> <span class='symbol'>:default</span> <span class='op'>=&gt;</span> <span class='int'>1</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="ready_for-instance_method">
+  
+    - (<tt>Integer</tt>) <strong>ready_for</strong>(connection_identifier) 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Return the currently configured RDY value for given connnection</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>connection_identifier</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Integer</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+70
+71
+72</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/distribution.rb', line 70</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_ready_for'>ready_for</span><span class='lparen'>(</span><span class='id identifier rubyid_connection_identifier'>connection_identifier</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_registry_lookup'>registry_lookup</span><span class='lparen'>(</span><span class='id identifier rubyid_connection_identifier'>connection_identifier</span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='symbol'>:ready</span><span class='rbracket'>]</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="redistribute!-instance_method">
+  
+    - (<tt>Object</tt>) <strong>redistribute!</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <dl class="rdoc-list"><dt>Abstract</dt>
+<dd>
+<p>Reset flight distributions</p>
+</dd></dl>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+41
+42
+43</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/distribution.rb', line 41</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_redistribute!'>redistribute!</span>
+  <span class='id identifier rubyid_raise'>raise</span> <span class='const'>NotImplementedError</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>Custom `#redistrubute!` method must be provided!</span><span class='tstring_end'>'</span></span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="register_message-instance_method">
+  
+    - (<tt>Integer</tt>) <strong>register_message</strong>(message, connection_identifier) 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Registers message into registry and configures for distribution</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>message</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="FrameType/Message.html" title="Krakow::FrameType::Message (class)">FrameType::Message</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>connection_identifier</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Integer</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+99
+100
+101
+102
+103
+104</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/distribution.rb', line 99</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_register_message'>register_message</span><span class='lparen'>(</span><span class='id identifier rubyid_message'>message</span><span class='comma'>,</span> <span class='id identifier rubyid_connection_identifier'>connection_identifier</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_registry_info'>registry_info</span> <span class='op'>=</span> <span class='id identifier rubyid_registry_lookup'>registry_lookup</span><span class='lparen'>(</span><span class='id identifier rubyid_connection_identifier'>connection_identifier</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_registry_info'>registry_info</span><span class='lbracket'>[</span><span class='symbol'>:in_flight</span><span class='rbracket'>]</span> <span class='op'>+=</span> <span class='int'>1</span>
+  <span class='id identifier rubyid_flight_record'>flight_record</span><span class='lbracket'>[</span><span class='id identifier rubyid_message'>message</span><span class='period'>.</span><span class='id identifier rubyid_message_id'>message_id</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_connection_identifier'>connection_identifier</span>
+  <span class='id identifier rubyid_calculate_ready!'>calculate_ready!</span><span class='lparen'>(</span><span class='id identifier rubyid_connection_identifier'>connection_identifier</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="registry_lookup-instance_method">
+  
+    - (<tt>Hash</tt>) <strong>registry_lookup</strong>(connection_identifier) 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Return registry information for given connection</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>connection_identifier</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>registry information</p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Raises:</p>
+<ul class="raise">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Error/LookupFailed.html" title="Krakow::Error::LookupFailed (class)">Krakow::Error::LookupFailed</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+169
+170
+171
+172</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/distribution.rb', line 169</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_registry_lookup'>registry_lookup</span><span class='lparen'>(</span><span class='id identifier rubyid_connection_identifier'>connection_identifier</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_registry'>registry</span><span class='lbracket'>[</span><span class='id identifier rubyid_connection_identifier'>connection_identifier</span><span class='rbracket'>]</span> <span class='op'>||</span>
+    <span class='id identifier rubyid_abort'>abort</span><span class='lparen'>(</span><span class='const'>Krakow</span><span class='op'>::</span><span class='const'>Error</span><span class='op'>::</span><span class='const'>LookupFailed</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Failed to locate connection information in registry (</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_connection_identifier'>connection_identifier</span><span class='rbrace'>}</span><span class='tstring_content'>)</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="remove_connection-instance_method">
+  
+    - (<tt>TrueClass</tt>) <strong>remove_connection</strong>(connection_identifier, *args) 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Remove connection from RDY distribution</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>connection_identifier</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>TrueClass</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/distribution.rb', line 126</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_remove_connection'>remove_connection</span><span class='lparen'>(</span><span class='id identifier rubyid_connection_identifier'>connection_identifier</span><span class='comma'>,</span> <span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='rparen'>)</span>
+  <span class='comment'># remove connection from registry
+</span>  <span class='id identifier rubyid_registry'>registry</span><span class='period'>.</span><span class='id identifier rubyid_delete'>delete</span><span class='lparen'>(</span><span class='id identifier rubyid_connection_identifier'>connection_identifier</span><span class='rparen'>)</span>
+  <span class='comment'># remove any in flight messages
+</span>  <span class='id identifier rubyid_flight_record'>flight_record</span><span class='period'>.</span><span class='id identifier rubyid_delete_if'>delete_if</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_k'>k</span><span class='comma'>,</span><span class='id identifier rubyid_v'>v</span><span class='op'>|</span>
+    <span class='kw'>if</span><span class='lparen'>(</span><span class='id identifier rubyid_k'>k</span> <span class='op'>==</span> <span class='id identifier rubyid_connection_identifier'>connection_identifier</span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_warn'>warn</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Removing in flight reference due to failed connection: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_k'>k</span><span class='rbrace'>}</span><span class='tstring_end'>&quot;</span></span>
+      <span class='kw'>true</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+  <span class='kw'>true</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="set_ready_for-instance_method">
+  
+    - (<tt><span class='object_link'><a href="FrameType/Error.html" title="Krakow::FrameType::Error (class)">Krakow::FrameType::Error</a></span></tt><sup>?</sup>) <strong>set_ready_for</strong>(connection, *_) 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Send RDY for given connection</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>connection</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Connection.html" title="Krakow::Connection (class)">Krakow::Connection</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="FrameType/Error.html" title="Krakow::FrameType::Error (class)">Krakow::FrameType::Error</a></span></tt>, <tt>nil</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+79
+80
+81
+82
+83
+84
+85</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/distribution.rb', line 79</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_set_ready_for'>set_ready_for</span><span class='lparen'>(</span><span class='id identifier rubyid_connection'>connection</span><span class='comma'>,</span> <span class='op'>*</span><span class='id identifier rubyid__'>_</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_connection'>connection</span><span class='period'>.</span><span class='id identifier rubyid_transmit'>transmit</span><span class='lparen'>(</span>
+    <span class='const'>Command</span><span class='op'>::</span><span class='const'>Rdy</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span>
+      <span class='symbol'>:count</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_ready_for'>ready_for</span><span class='lparen'>(</span><span class='id identifier rubyid_connection'>connection</span><span class='period'>.</span><span class='id identifier rubyid_identifier'>identifier</span><span class='rparen'>)</span>
+    <span class='rparen'>)</span>
+  <span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="success-instance_method">
+  
+    - (<tt>TrueClass</tt>) <strong>success</strong>(connection_identifier) 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Log success of processed message</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>connection_identifier</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>TrueClass</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/distribution.rb', line 198</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_success'>success</span><span class='lparen'>(</span><span class='id identifier rubyid_connection_identifier'>connection_identifier</span><span class='rparen'>)</span>
+  <span class='kw'>if</span><span class='lparen'>(</span><span class='id identifier rubyid_backoff_interval'>backoff_interval</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_registry_info'>registry_info</span> <span class='op'>=</span> <span class='id identifier rubyid_registry_lookup'>registry_lookup</span><span class='lparen'>(</span><span class='id identifier rubyid_connection_identifier'>connection_identifier</span><span class='rparen'>)</span>
+    <span class='kw'>if</span><span class='lparen'>(</span><span class='id identifier rubyid_registry_info'>registry_info</span><span class='lbracket'>[</span><span class='symbol'>:failures</span><span class='rbracket'>]</span> <span class='op'>&gt;</span> <span class='int'>1</span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_registry_info'>registry_info</span><span class='lbracket'>[</span><span class='symbol'>:failures</span><span class='rbracket'>]</span> <span class='op'>-=</span> <span class='int'>1</span>
+      <span class='id identifier rubyid_registry_info'>registry_info</span><span class='lbracket'>[</span><span class='symbol'>:backoff_until</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='const'>Time</span><span class='period'>.</span><span class='id identifier rubyid_now'>now</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span> <span class='op'>+</span> <span class='lparen'>(</span><span class='id identifier rubyid_registry_info'>registry_info</span><span class='lbracket'>[</span><span class='symbol'>:failures</span><span class='rbracket'>]</span> <span class='op'>*</span> <span class='id identifier rubyid_backoff_interval'>backoff_interval</span><span class='rparen'>)</span>
+    <span class='kw'>else</span>
+      <span class='id identifier rubyid_registry_info'>registry_info</span><span class='lbracket'>[</span><span class='symbol'>:failures</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='int'>0</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+  <span class='kw'>true</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="to_s-instance_method">
+  
+    - (<tt>String</tt>) <strong>to_s</strong> 
+  
+
+  
+
+  
+    <span class="not_defined_here">
+      Originally defined in module
+        <span class='object_link'><a href="Utils/Lazy/InstanceMethods.html#to_s-instance_method" title="Krakow::Utils::Lazy::InstanceMethods#to_s (method)">Utils::Lazy::InstanceMethods</a></span>
+    </span>
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="unregister_message-instance_method">
+  
+    - (<tt><span class='object_link'><a href="Connection.html" title="Krakow::Connection (class)">Krakow::Connection</a></span></tt>) <strong>unregister_message</strong>(message) 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Remove message metadata from registry</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>message</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="FrameType/Message.html" title="Krakow::FrameType::Message (class)">Krakow::FrameType::Message</a></span></tt>, <tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>message or ID</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Connection.html" title="Krakow::Connection (class)">Krakow::Connection</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+56
+57
+58
+59
+60
+61
+62
+63
+64</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/distribution.rb', line 56</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_unregister_message'>unregister_message</span><span class='lparen'>(</span><span class='id identifier rubyid_message'>message</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_msg_id'>msg_id</span> <span class='op'>=</span> <span class='id identifier rubyid_message'>message</span><span class='period'>.</span><span class='id identifier rubyid_respond_to?'>respond_to?</span><span class='lparen'>(</span><span class='symbol'>:message_id</span><span class='rparen'>)</span> <span class='op'>?</span> <span class='id identifier rubyid_message'>message</span><span class='period'>.</span><span class='id identifier rubyid_message_id'>message_id</span> <span class='op'>:</span> <span class='id identifier rubyid_message'>message</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span>
+  <span class='id identifier rubyid_connection'>connection</span> <span class='op'>=</span> <span class='id identifier rubyid_connection_lookup'>connection_lookup</span><span class='lparen'>(</span><span class='id identifier rubyid_flight_record'>flight_record</span><span class='lbracket'>[</span><span class='id identifier rubyid_msg_id'>msg_id</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_registry_info'>registry_info</span> <span class='op'>=</span> <span class='id identifier rubyid_registry_lookup'>registry_lookup</span><span class='lparen'>(</span><span class='id identifier rubyid_connection'>connection</span><span class='period'>.</span><span class='id identifier rubyid_identifier'>identifier</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_flight_record'>flight_record</span><span class='period'>.</span><span class='id identifier rubyid_delete'>delete</span><span class='lparen'>(</span><span class='id identifier rubyid_msg_id'>msg_id</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_registry_info'>registry_info</span><span class='lbracket'>[</span><span class='symbol'>:in_flight</span><span class='rbracket'>]</span> <span class='op'>-=</span> <span class='int'>1</span>
+  <span class='id identifier rubyid_calculate_ready!'>calculate_ready!</span><span class='lparen'>(</span><span class='id identifier rubyid_connection'>connection</span><span class='period'>.</span><span class='id identifier rubyid_identifier'>identifier</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_connection'>connection</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="watch_dog_interval-instance_method">
+  
+    - (<tt>Numeric</tt>) <strong>watch_dog_interval</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the watch_dog_interval attribute</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Numeric</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the watch_dog_interval attribute</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+27</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/distribution.rb', line 27</span>
+
+<span class='id identifier rubyid_attribute'>attribute</span> <span class='symbol'>:watch_dog_interval</span><span class='comma'>,</span> <span class='const'>Numeric</span><span class='comma'>,</span> <span class='symbol'>:default</span> <span class='op'>=&gt;</span> <span class='float'>1.0</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="watch_dog_interval?-instance_method">
+  
+    - (<tt>TrueClass</tt>, <tt>FalseClass</tt>) <strong>watch_dog_interval?</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns truthiness of the watch_dog_interval attribute</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>TrueClass</tt>, <tt>FalseClass</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>truthiness of the watch_dog_interval attribute</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+27</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/distribution.rb', line 27</span>
+
+<span class='id identifier rubyid_attribute'>attribute</span> <span class='symbol'>:watch_dog_interval</span><span class='comma'>,</span> <span class='const'>Numeric</span><span class='comma'>,</span> <span class='symbol'>:default</span> <span class='op'>=&gt;</span> <span class='float'>1.0</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+
+    <div id="footer">
+  Generated on Sat May 10 12:40:49 2014 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.8.7.4 (ruby-1.9.3).
+</div>
+
+  </body>
+</html>

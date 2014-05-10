@@ -1,0 +1,2180 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>
+  Class: Krakow::Command::Identify
+  
+    &mdash; Documentation by YARD 0.8.7.4
+  
+</title>
+
+  <link rel="stylesheet" href="../../css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="../../css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  hasFrames = window.top.frames.main ? true : false;
+  relpath = '../../';
+  framesUrl = "../../frames.html#!Krakow/Command/Identify.html";
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div id="header">
+      <div id="menu">
+  
+    <a href="../../_index.html">Index (I)</a> &raquo;
+    <span class='title'><span class='object_link'><a href="../../Krakow.html" title="Krakow (module)">Krakow</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../Command.html" title="Krakow::Command (class)">Command</a></span></span>
+     &raquo; 
+    <span class="title">Identify</span>
+  
+
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="../../class_list.html">
+      Class List
+    </a>
+  
+    <a class="full_list_link" id="method_list_link"
+        href="../../method_list.html">
+      Method List
+    </a>
+  
+    <a class="full_list_link" id="file_list_link"
+        href="../../file_list.html">
+      File List
+    </a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+
+    <iframe id="search_frame"></iframe>
+
+    <div id="content"><h1>Class: Krakow::Command::Identify
+  
+  
+  
+</h1>
+
+<dl class="box">
+  
+    <dt class="r1">Inherits:</dt>
+    <dd class="r1">
+      <span class="inheritName"><span class='object_link'><a href="../Command.html" title="Krakow::Command (class)">Krakow::Command</a></span></span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next"><span class='object_link'><a href="../Command.html" title="Krakow::Command (class)">Krakow::Command</a></span></li>
+          
+            <li class="next">Krakow::Command::Identify</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+      </dd>
+    
+  
+  
+    
+  
+    
+  
+  
+  
+    <dt class="r2 last">Defined in:</dt>
+    <dd class="r2 last">lib/krakow/command/identify.rb</dd>
+  
+</dl>
+<div class="clear"></div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    
+<p>Update client metadata on server / negotiate features</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+
+
+
+  <h2>Instance Attribute Summary <small>(<a href="#" class="summary_toggle">collapse</a>)</small></h2>
+  <ul class="summary">
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#response-instance_method" title="#response (instance method)">- (Krakow::FrameType) <strong>response</strong> </a>
+    
+
+    
+  </span>
+  
+    <span class="note title not_defined_here">
+      inherited
+      from <span class='object_link'><a href="../Command.html#response-instance_method" title="Krakow::Command#response (method)">Krakow::Command</a></span>
+    </span>
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Response to command.</p>
+</div></span>
+  
+</li>
+
+    
+  </ul>
+
+
+
+
+  
+    <h2>
+      Attributes
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#deflate-instance_method" title="#deflate (instance method)">- ([TrueClass, FalseClass]) <strong>deflate</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The deflate attribute.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#deflate%3F-instance_method" title="#deflate? (instance method)">- (TrueClass, FalseClass) <strong>deflate?</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Truthiness of the deflate attribute.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#deflate_level-instance_method" title="#deflate_level (instance method)">- (Integer) <strong>deflate_level</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The deflate_level attribute.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#deflate_level%3F-instance_method" title="#deflate_level? (instance method)">- (TrueClass, FalseClass) <strong>deflate_level?</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Truthiness of the deflate_level attribute.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#feature_negotiation-instance_method" title="#feature_negotiation (instance method)">- ([TrueClass, FalseClass]) <strong>feature_negotiation</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The feature_negotiation attribute.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#feature_negotiation%3F-instance_method" title="#feature_negotiation? (instance method)">- (TrueClass, FalseClass) <strong>feature_negotiation?</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Truthiness of the feature_negotiation attribute.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#heartbeat_interval-instance_method" title="#heartbeat_interval (instance method)">- (Numeric) <strong>heartbeat_interval</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The heartbeat_interval attribute.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#heartbeat_interval%3F-instance_method" title="#heartbeat_interval? (instance method)">- (TrueClass, FalseClass) <strong>heartbeat_interval?</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Truthiness of the heartbeat_interval attribute.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#long_id-instance_method" title="#long_id (instance method)">- ([String, Numeric]) <strong>long_id</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The long_id attribute.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#long_id%3F-instance_method" title="#long_id? (instance method)">- (TrueClass, FalseClass) <strong>long_id?</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Truthiness of the long_id attribute.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#output_buffer_size-instance_method" title="#output_buffer_size (instance method)">- (Integer) <strong>output_buffer_size</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The output_buffer_size attribute.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#output_buffer_size%3F-instance_method" title="#output_buffer_size? (instance method)">- (TrueClass, FalseClass) <strong>output_buffer_size?</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Truthiness of the output_buffer_size attribute.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#output_buffer_timeout-instance_method" title="#output_buffer_timeout (instance method)">- (Integer) <strong>output_buffer_timeout</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The output_buffer_timeout attribute.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#output_buffer_timeout%3F-instance_method" title="#output_buffer_timeout? (instance method)">- (TrueClass, FalseClass) <strong>output_buffer_timeout?</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Truthiness of the output_buffer_timeout attribute.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#sample_rate-instance_method" title="#sample_rate (instance method)">- (Integer) <strong>sample_rate</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The sample_rate attribute.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#sample_rate%3F-instance_method" title="#sample_rate? (instance method)">- (TrueClass, FalseClass) <strong>sample_rate?</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Truthiness of the sample_rate attribute.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#short_id-instance_method" title="#short_id (instance method)">- ([String, Numeric]) <strong>short_id</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The short_id attribute.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#short_id%3F-instance_method" title="#short_id? (instance method)">- (TrueClass, FalseClass) <strong>short_id?</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Truthiness of the short_id attribute.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#snappy-instance_method" title="#snappy (instance method)">- ([TrueClass, FalseClass]) <strong>snappy</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The snappy attribute.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#snappy%3F-instance_method" title="#snappy? (instance method)">- (TrueClass, FalseClass) <strong>snappy?</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Truthiness of the snappy attribute.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#tls_v1-instance_method" title="#tls_v1 (instance method)">- ([TrueClass, FalseClass]) <strong>tls_v1</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The tls_v1 attribute.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#tls_v1%3F-instance_method" title="#tls_v1? (instance method)">- (TrueClass, FalseClass) <strong>tls_v1?</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Truthiness of the tls_v1 attribute.</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+    <h2>
+      Class Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#error-class_method" title="error (class method)">+ (Object) <strong>error</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#ok-class_method" title="ok (class method)">+ (Object) <strong>ok</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+    </ul>
+  
+    <h2>
+      Instance Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#to_line-instance_method" title="#to_line (instance method)">- (Object) <strong>to_line</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+  
+  
+  
+  
+  
+  
+  <div id="instance_attr_details" class="attr_details">
+    <h2>Instance Attribute Details</h2>
+    
+      
+      <span id="response=-instance_method"></span>
+      <div class="method_details first">
+  <h3 class="signature first" id="response-instance_method">
+  
+    - (<tt><span class='object_link'><a href="../FrameType.html" title="Krakow::FrameType (class)">Krakow::FrameType</a></span></tt>) <strong>response</strong> 
+  
+
+  
+
+  
+    <span class="not_defined_here">
+      Originally defined in class
+        <span class='object_link'><a href="../Command.html#response-instance_method" title="Krakow::Command#response (method)">Krakow::Command</a></span>
+    </span>
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns response to command</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="../FrameType.html" title="Krakow::FrameType (class)">Krakow::FrameType</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>response to command</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div>
+</div>
+    
+  </div>
+
+
+  <div id="class_method_details" class="method_details_list">
+    <h2>Class Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="error-class_method">
+  
+    + (<tt>Object</tt>) <strong>error</strong> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+47
+48
+49</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/command/identify.rb', line 47</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_error'>error</span>
+  <span class='qwords_beg'>%w(</span><span class='tstring_content'>E_INVALID</span><span class='words_sep'> </span><span class='tstring_content'>E_BAD_BODY</span><span class='words_sep'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="ok-class_method">
+  
+    + (<tt>Object</tt>) <strong>ok</strong> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+43
+44
+45</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/command/identify.rb', line 43</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_ok'>ok</span>
+  <span class='qwords_beg'>%w(</span><span class='tstring_content'>OK</span><span class='words_sep'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="deflate-instance_method">
+  
+    - (<tt>[TrueClass, FalseClass]</tt>) <strong>deflate</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the deflate attribute</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>[TrueClass, FalseClass]</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the deflate attribute</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+24</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/command/identify.rb', line 24</span>
+
+<span class='id identifier rubyid_attribute'>attribute</span> <span class='symbol'>:deflate</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='const'>TrueClass</span><span class='comma'>,</span> <span class='const'>FalseClass</span><span class='rbracket'>]</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="deflate?-instance_method">
+  
+    - (<tt>TrueClass</tt>, <tt>FalseClass</tt>) <strong>deflate?</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns truthiness of the deflate attribute</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>TrueClass</tt>, <tt>FalseClass</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>truthiness of the deflate attribute</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+24</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/command/identify.rb', line 24</span>
+
+<span class='id identifier rubyid_attribute'>attribute</span> <span class='symbol'>:deflate</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='const'>TrueClass</span><span class='comma'>,</span> <span class='const'>FalseClass</span><span class='rbracket'>]</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="deflate_level-instance_method">
+  
+    - (<tt>Integer</tt>) <strong>deflate_level</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the deflate_level attribute</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Integer</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the deflate_level attribute</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+25</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/command/identify.rb', line 25</span>
+
+<span class='id identifier rubyid_attribute'>attribute</span> <span class='symbol'>:deflate_level</span><span class='comma'>,</span> <span class='const'>Integer</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="deflate_level?-instance_method">
+  
+    - (<tt>TrueClass</tt>, <tt>FalseClass</tt>) <strong>deflate_level?</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns truthiness of the deflate_level attribute</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>TrueClass</tt>, <tt>FalseClass</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>truthiness of the deflate_level attribute</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+25</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/command/identify.rb', line 25</span>
+
+<span class='id identifier rubyid_attribute'>attribute</span> <span class='symbol'>:deflate_level</span><span class='comma'>,</span> <span class='const'>Integer</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="feature_negotiation-instance_method">
+  
+    - (<tt>[TrueClass, FalseClass]</tt>) <strong>feature_negotiation</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the feature_negotiation attribute</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>[TrueClass, FalseClass]</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the feature_negotiation attribute</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+18</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/command/identify.rb', line 18</span>
+
+<span class='id identifier rubyid_attribute'>attribute</span> <span class='symbol'>:feature_negotiation</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='const'>TrueClass</span><span class='comma'>,</span> <span class='const'>FalseClass</span><span class='rbracket'>]</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="feature_negotiation?-instance_method">
+  
+    - (<tt>TrueClass</tt>, <tt>FalseClass</tt>) <strong>feature_negotiation?</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns truthiness of the feature_negotiation attribute</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>TrueClass</tt>, <tt>FalseClass</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>truthiness of the feature_negotiation attribute</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+18</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/command/identify.rb', line 18</span>
+
+<span class='id identifier rubyid_attribute'>attribute</span> <span class='symbol'>:feature_negotiation</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='const'>TrueClass</span><span class='comma'>,</span> <span class='const'>FalseClass</span><span class='rbracket'>]</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="heartbeat_interval-instance_method">
+  
+    - (<tt>Numeric</tt>) <strong>heartbeat_interval</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the heartbeat_interval attribute</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Numeric</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the heartbeat_interval attribute</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+19</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/command/identify.rb', line 19</span>
+
+<span class='id identifier rubyid_attribute'>attribute</span> <span class='symbol'>:heartbeat_interval</span><span class='comma'>,</span> <span class='const'>Numeric</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="heartbeat_interval?-instance_method">
+  
+    - (<tt>TrueClass</tt>, <tt>FalseClass</tt>) <strong>heartbeat_interval?</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns truthiness of the heartbeat_interval attribute</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>TrueClass</tt>, <tt>FalseClass</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>truthiness of the heartbeat_interval attribute</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+19</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/command/identify.rb', line 19</span>
+
+<span class='id identifier rubyid_attribute'>attribute</span> <span class='symbol'>:heartbeat_interval</span><span class='comma'>,</span> <span class='const'>Numeric</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="long_id-instance_method">
+  
+    - (<tt>[String, Numeric]</tt>) <strong>long_id</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the long_id attribute</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>[String, Numeric]</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the long_id attribute</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+17</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/command/identify.rb', line 17</span>
+
+<span class='id identifier rubyid_attribute'>attribute</span> <span class='symbol'>:long_id</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='const'>String</span><span class='comma'>,</span> <span class='const'>Numeric</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='symbol'>:required</span> <span class='op'>=&gt;</span> <span class='kw'>true</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="long_id?-instance_method">
+  
+    - (<tt>TrueClass</tt>, <tt>FalseClass</tt>) <strong>long_id?</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns truthiness of the long_id attribute</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>TrueClass</tt>, <tt>FalseClass</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>truthiness of the long_id attribute</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+17</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/command/identify.rb', line 17</span>
+
+<span class='id identifier rubyid_attribute'>attribute</span> <span class='symbol'>:long_id</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='const'>String</span><span class='comma'>,</span> <span class='const'>Numeric</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='symbol'>:required</span> <span class='op'>=&gt;</span> <span class='kw'>true</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="output_buffer_size-instance_method">
+  
+    - (<tt>Integer</tt>) <strong>output_buffer_size</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the output_buffer_size attribute</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Integer</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the output_buffer_size attribute</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+20</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/command/identify.rb', line 20</span>
+
+<span class='id identifier rubyid_attribute'>attribute</span> <span class='symbol'>:output_buffer_size</span><span class='comma'>,</span> <span class='const'>Integer</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="output_buffer_size?-instance_method">
+  
+    - (<tt>TrueClass</tt>, <tt>FalseClass</tt>) <strong>output_buffer_size?</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns truthiness of the output_buffer_size attribute</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>TrueClass</tt>, <tt>FalseClass</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>truthiness of the output_buffer_size attribute</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+20</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/command/identify.rb', line 20</span>
+
+<span class='id identifier rubyid_attribute'>attribute</span> <span class='symbol'>:output_buffer_size</span><span class='comma'>,</span> <span class='const'>Integer</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="output_buffer_timeout-instance_method">
+  
+    - (<tt>Integer</tt>) <strong>output_buffer_timeout</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the output_buffer_timeout attribute</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Integer</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the output_buffer_timeout attribute</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+21</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/command/identify.rb', line 21</span>
+
+<span class='id identifier rubyid_attribute'>attribute</span> <span class='symbol'>:output_buffer_timeout</span><span class='comma'>,</span> <span class='const'>Integer</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="output_buffer_timeout?-instance_method">
+  
+    - (<tt>TrueClass</tt>, <tt>FalseClass</tt>) <strong>output_buffer_timeout?</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns truthiness of the output_buffer_timeout attribute</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>TrueClass</tt>, <tt>FalseClass</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>truthiness of the output_buffer_timeout attribute</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+21</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/command/identify.rb', line 21</span>
+
+<span class='id identifier rubyid_attribute'>attribute</span> <span class='symbol'>:output_buffer_timeout</span><span class='comma'>,</span> <span class='const'>Integer</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="sample_rate-instance_method">
+  
+    - (<tt>Integer</tt>) <strong>sample_rate</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the sample_rate attribute</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Integer</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the sample_rate attribute</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+26</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/command/identify.rb', line 26</span>
+
+<span class='id identifier rubyid_attribute'>attribute</span> <span class='symbol'>:sample_rate</span><span class='comma'>,</span> <span class='const'>Integer</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="sample_rate?-instance_method">
+  
+    - (<tt>TrueClass</tt>, <tt>FalseClass</tt>) <strong>sample_rate?</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns truthiness of the sample_rate attribute</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>TrueClass</tt>, <tt>FalseClass</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>truthiness of the sample_rate attribute</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+26</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/command/identify.rb', line 26</span>
+
+<span class='id identifier rubyid_attribute'>attribute</span> <span class='symbol'>:sample_rate</span><span class='comma'>,</span> <span class='const'>Integer</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="short_id-instance_method">
+  
+    - (<tt>[String, Numeric]</tt>) <strong>short_id</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the short_id attribute</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>[String, Numeric]</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the short_id attribute</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+16</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/command/identify.rb', line 16</span>
+
+<span class='id identifier rubyid_attribute'>attribute</span> <span class='symbol'>:short_id</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='const'>String</span><span class='comma'>,</span> <span class='const'>Numeric</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='symbol'>:required</span> <span class='op'>=&gt;</span> <span class='kw'>true</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="short_id?-instance_method">
+  
+    - (<tt>TrueClass</tt>, <tt>FalseClass</tt>) <strong>short_id?</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns truthiness of the short_id attribute</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>TrueClass</tt>, <tt>FalseClass</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>truthiness of the short_id attribute</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+16</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/command/identify.rb', line 16</span>
+
+<span class='id identifier rubyid_attribute'>attribute</span> <span class='symbol'>:short_id</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='const'>String</span><span class='comma'>,</span> <span class='const'>Numeric</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='symbol'>:required</span> <span class='op'>=&gt;</span> <span class='kw'>true</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="snappy-instance_method">
+  
+    - (<tt>[TrueClass, FalseClass]</tt>) <strong>snappy</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the snappy attribute</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>[TrueClass, FalseClass]</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the snappy attribute</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+23</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/command/identify.rb', line 23</span>
+
+<span class='id identifier rubyid_attribute'>attribute</span> <span class='symbol'>:snappy</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='const'>TrueClass</span><span class='comma'>,</span> <span class='const'>FalseClass</span><span class='rbracket'>]</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="snappy?-instance_method">
+  
+    - (<tt>TrueClass</tt>, <tt>FalseClass</tt>) <strong>snappy?</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns truthiness of the snappy attribute</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>TrueClass</tt>, <tt>FalseClass</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>truthiness of the snappy attribute</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+23</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/command/identify.rb', line 23</span>
+
+<span class='id identifier rubyid_attribute'>attribute</span> <span class='symbol'>:snappy</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='const'>TrueClass</span><span class='comma'>,</span> <span class='const'>FalseClass</span><span class='rbracket'>]</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="tls_v1-instance_method">
+  
+    - (<tt>[TrueClass, FalseClass]</tt>) <strong>tls_v1</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the tls_v1 attribute</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>[TrueClass, FalseClass]</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the tls_v1 attribute</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+22</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/command/identify.rb', line 22</span>
+
+<span class='id identifier rubyid_attribute'>attribute</span> <span class='symbol'>:tls_v1</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='const'>TrueClass</span><span class='comma'>,</span> <span class='const'>FalseClass</span><span class='rbracket'>]</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="tls_v1?-instance_method">
+  
+    - (<tt>TrueClass</tt>, <tt>FalseClass</tt>) <strong>tls_v1?</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns truthiness of the tls_v1 attribute</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>TrueClass</tt>, <tt>FalseClass</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>truthiness of the tls_v1 attribute</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+22</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/command/identify.rb', line 22</span>
+
+<span class='id identifier rubyid_attribute'>attribute</span> <span class='symbol'>:tls_v1</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='const'>TrueClass</span><span class='comma'>,</span> <span class='const'>FalseClass</span><span class='rbracket'>]</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="to_line-instance_method">
+  
+    - (<tt>Object</tt>) <strong>to_line</strong> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/krakow/command/identify.rb', line 30</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_to_line'>to_line</span>
+  <span class='id identifier rubyid_filtered'>filtered</span> <span class='op'>=</span> <span class='const'>Hash</span><span class='lbracket'>[</span><span class='op'>*</span>
+    <span class='id identifier rubyid_arguments'>arguments</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='op'>|</span>
+      <span class='kw'>unless</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span><span class='rparen'>)</span>
+        <span class='lbracket'>[</span><span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='rbracket'>]</span>
+      <span class='kw'>end</span>
+    <span class='kw'>end</span><span class='period'>.</span><span class='id identifier rubyid_compact'>compact</span><span class='period'>.</span><span class='id identifier rubyid_flatten'>flatten</span>
+  <span class='rbracket'>]</span>
+  <span class='id identifier rubyid_payload'>payload</span> <span class='op'>=</span> <span class='const'>MultiJson</span><span class='period'>.</span><span class='id identifier rubyid_dump'>dump</span><span class='lparen'>(</span><span class='id identifier rubyid_filtered'>filtered</span><span class='rparen'>)</span>
+  <span class='lbracket'>[</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\n</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_payload'>payload</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span><span class='comma'>,</span> <span class='id identifier rubyid_payload'>payload</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_pack'>pack</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>'</span><span class='tstring_content'>a*a*l&gt;a*</span><span class='tstring_end'>'</span></span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+
+    <div id="footer">
+  Generated on Sat May 10 12:40:49 2014 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.8.7.4 (ruby-1.9.3).
+</div>
+
+  </body>
+</html>
