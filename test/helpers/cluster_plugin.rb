@@ -32,7 +32,7 @@ module ClusterPlugin
 
   def new_consumer(opts = {})
     Krakow::Consumer.new({
-      :nslookupd => @cluster.nsqlookupd_http_endpoints,
+      :nsqlookupd => @cluster.nsqlookupd_http_endpoints,
       :topic => 'some-topic',
       :channel => 'some-channel',
       :discovery_interval => 0.5,
