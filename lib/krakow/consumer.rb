@@ -169,7 +169,7 @@ module Krakow
       connection = nil
       found.each do |node|
         debug "Processing discovery result: #{node.inspect}"
-        key = Connection.identifier(node[:broadcast_addres], node[:tcp_port], topic, channel)
+        key = Connection.identifier(node[:broadcast_address], node[:tcp_port], topic, channel)
         unless(connections[key])
           connection = build_connection(node[:broadcast_address], node[:tcp_port], queue)
           info "Registered new connection #{connection}" if register(connection)
