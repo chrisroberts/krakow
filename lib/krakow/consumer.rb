@@ -96,7 +96,7 @@ module Krakow
     #
     # @param host [String] remote host
     # @param port [String, Integer] remote port
-    # @param queue [String] queue name
+    # @param queue [Queue] queue for messages
     # @return [Krakow::Connection, nil] new connection or nil
     def build_connection(host, port, queue)
       begin
@@ -104,6 +104,8 @@ module Krakow
           :host => host,
           :port => port,
           :queue => queue,
+          :topic => topic,
+          :channel => channel,
           :notifier => notifier,
           :features => connection_options[:features],
           :features_args => connection_options[:config],
@@ -167,7 +169,7 @@ module Krakow
       connection = nil
       found.each do |node|
         debug "Processing discovery result: #{node.inspect}"
-        key = "#{node[:broadcast_address]}_#{node[:tcp_port]}"
+        key = Connection.identifier(node[:broadcast_addres], node[:tcp_port], topic, channel)
         unless(connections[key])
           connection = build_connection(node[:broadcast_address], node[:tcp_port], queue)
           info "Registered new connection #{connection}" if register(connection)

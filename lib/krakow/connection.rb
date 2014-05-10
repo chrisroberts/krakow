@@ -6,6 +6,17 @@ module Krakow
   # Provides TCP connection to NSQD
   class Connection
 
+    # Generate identifier for connection
+    #
+    # @param host [String]
+    # @param port [String, Integer]
+    # @param topic [String]
+    # @param channel [String]
+    # @return [String]
+    def self.identifier(host, port, topic, channel)
+      [host, port, topic, channel].compact.join('__')
+    end
+
     include Utils::Lazy
     # @!parse include Krakow::Utils::Lazy::InstanceMethods
     # @!parse extend Krakow::Utils::Lazy::ClassMethods
@@ -49,6 +60,8 @@ module Krakow
     #     @return [TrueClass, FalseClass] truthiness of the $1 $0
     attribute :host, String, :required => true
     attribute :port, [String,Integer], :required => true
+    attribute :topic, String
+    attribute :channel, String
     attribute :version, String, :default => 'v2'
     attribute :queue, Queue, :default => ->{ Queue.new }
     attribute :callbacks, Hash, :default => ->{ Hash.new }
@@ -94,7 +107,7 @@ module Krakow
 
     # @return [String] identifier for this connection
     def identifier
-      [host, port, queue].join('__')
+      self.class.identifier(host, port, topic, channel)
     end
 
     # @return [String] stringify object
