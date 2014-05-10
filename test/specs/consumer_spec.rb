@@ -138,6 +138,7 @@ describe Krakow::Consumer do
       expected_messages.each_with_index do |m, idx|
         @producers[idx % @producers.length].write(m)
       end
+
       wait_for { consumer.connections.length == 3 }
 
       messages = []
@@ -200,15 +201,17 @@ describe Krakow::Consumer do
         @producers[idx % @producers.length].write(m)
       end
 
-      wait_for { consumer.connections.length == 5 }
+      wait_for(20) { consumer.connections.length == 5 }
     end
 
     it 'should be able to properly get all messages from all nsqds' do
       messages = []
-      @expected_messages.length.times do
-        msg = consumer.queue.pop
-        messages << msg.message
-        msg.confirm
+      Timeout::timeout(5) do
+        @expected_messages.length.times do
+          msg = consumer.queue.pop
+          messages << msg.message
+          msg.confirm
+        end
       end
       messages.sort.must_equal @expected_messages
       consumer.queue.must_be :empty?
@@ -226,29 +229,24 @@ describe Krakow::Consumer do
       threads = []
       receive_queue = Queue.new
 
-      # fire up 5 consumers
-      5.times do
-        threads << Thread.new do
-          consumer = new_consumer
-
-          # work off the queue until we have all the expected messages
-          while receive_queue.length < expected_messages.length do
-            begin
-              Timeout::timeout(1) do
-                msg = consumer.queue.pop
-                receive_queue.push(msg.message)
-                msg.confirm
-              end
-            rescue Timeout::Error
-              # try again!
+      begin
+        # fire up 5 consumers
+        5.times do
+          threads << Thread.new do
+            consumer = new_consumer
+            loop do
+              msg = consumer.queue.pop
+              receive_queue.push(msg.message)
+              msg.confirm
             end
           end
-
-          consumer.terminate
         end
-      end
 
-      threads.each(&:join)
+        wait_for(10){ receive_queue.length == expected_messages.length }
+      ensure
+        threads.each(&:terminate)
+        threads.each(&:join)
+      end
 
       # turn the queue into an array so we can compare it
       received_messages = []
