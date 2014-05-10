@@ -17,7 +17,7 @@ module Krakow
     #     @return [$2] the $1 $0
     #   @!method $1?
     #     @return [TrueClass, FalseClass] truthiness of the $1 $0
-    attribute :nsqlookupd, String, :required => true
+    attribute :nsqlookupd, [Array, String], :required => true
 
     # @!endgroup
 
