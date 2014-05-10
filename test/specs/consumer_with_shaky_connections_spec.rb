@@ -45,7 +45,7 @@ describe Krakow::Consumer do
       end
     end
 
-    wait_for{ received.size >= 30 }
+    wait_for(20){ received.size >= 30 }
 
     received.size.must_be :>=, 30
 
@@ -66,7 +66,7 @@ describe Krakow::Consumer do
         producer.terminate
       end
 
-      wait_for do
+      wait_for(20) do
         string = nil
         until(string == 'needle')
           msg = @consumer.queue.pop
@@ -98,7 +98,7 @@ describe Krakow::Consumer do
         end
       end
 
-      Timeout::timeout(10) do
+      Timeout::timeout(20) do
         received_messages = []
 
         while (expected_messages & received_messages).length < expected_messages.length do

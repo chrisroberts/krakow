@@ -206,7 +206,7 @@ describe Krakow::Consumer do
 
     it 'should be able to properly get all messages from all nsqds' do
       messages = []
-      Timeout::timeout(5) do
+      Timeout::timeout(10) do
         @expected_messages.length.times do
           msg = consumer.queue.pop
           messages << msg.message
