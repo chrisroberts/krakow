@@ -24,8 +24,8 @@ module Krakow
     #     @return [TrueClass, FalseClass] truthiness of the $1 $0
     attribute :topic, String, :required => true
     attribute :channel, String, :required => true
-    attribute :host, String, :default => 'localhost'
-    attribute :port, [String, Integer], :default => 4150
+    attribute :host, String
+    attribute :port, [String, Integer]
     attribute :nsqlookupd, [Array, String]
     attribute :max_in_flight, Integer, :default => 1
     attribute :backoff_interval, Numeric
