@@ -61,7 +61,26 @@
 
     <iframe id="search_frame"></iframe>
 
-    <div id="content"><div id='filecontents'><h2>v0.2.2</h2>
+    <div id="content"><div id='filecontents'><h2>v0.3.0</h2>
+
+<ul>
+<li>Include jitter to discovery interval lookups</li>
+<li>Typecast to String on PUB and MPUB</li>
+<li>Update exception types used for not implemented methods</li>
+<li>Add #confirm, #requeue, and #touch helpers to FrameType::Message instances</li>
+<li>Update Utils::Lazy implementation to be faster and clearer</li>
+<li>Add #safe_socket method on Connection to add stability</li>
+<li>Rebuild connections on error to prevent consumer teardown</li>
+<li>Reference connections without requirement of connection instance being alive</li>
+<li>Use #read over #recv on underlying socket to ensure proper number of bytes (thanks @thomas-holmes)</li>
+<li>Expand spec testing</li>
+</ul>
+
+<p>A big thanks to @bschwartz for a large contribution in this changeset
+including expanded spec coverage, message proxy helper methods, and
+isolation of instability around Connection interactions.</p>
+
+<h2>v0.2.2</h2>
 
 <ul>
 <li>Fix <code>nsqlookupd</code> attribute in <code>Consumer</code> and <code>Discovery</code></li>
@@ -111,7 +130,7 @@
 </div></div>
 
     <div id="footer">
-  Generated on Sat May 10 12:40:46 2014 by
+  Generated on Sun May 11 07:14:13 2014 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.7.4 (ruby-1.9.3).
 </div>

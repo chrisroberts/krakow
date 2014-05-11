@@ -144,7 +144,8 @@ garbage collected).</p>
 
 <h3>Why is it forcing something called an &quot;unready state&quot;?</h3>
 
-<p>Because forcing starvation is mean.</p>
+<p>Because forcing starvation is mean. We don&#39;t want to be mean, so we&#39;ll ensure we
+are consuming from all registered connections.</p>
 
 <h3>I just want to connect to a producer, not a lookup service</h3>
 
@@ -255,32 +256,43 @@ for sub-second intervals):</p>
 
 <p>Run them all!</p>
 
-<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_ruby'>ruby</span> <span class='id identifier rubyid_test'>test</span><span class='op'>/</span><span class='id identifier rubyid_run'>run</span><span class='period'>.</span><span class='id identifier rubyid_rb'>rb</span>
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_bundle'>bundle</span> <span class='id identifier rubyid_exec'>exec</span> <span class='id identifier rubyid_ruby'>ruby</span> <span class='id identifier rubyid_test'>test</span><span class='op'>/</span><span class='id identifier rubyid_run'>run</span><span class='period'>.</span><span class='id identifier rubyid_rb'>rb</span>
 </code></pre>
 
 <p>Or, run part of them:</p>
 
-<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_ruby'>ruby</span> <span class='id identifier rubyid_test'>test</span><span class='op'>/</span><span class='id identifier rubyid_specs'>specs</span><span class='op'>/</span><span class='id identifier rubyid_consumer_spec'>consumer_spec</span><span class='period'>.</span><span class='id identifier rubyid_rb'>rb</span>
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_bundle'>bundle</span> <span class='id identifier rubyid_exec'>exec</span> <span class='id identifier rubyid_ruby'>ruby</span> <span class='id identifier rubyid_test'>test</span><span class='op'>/</span><span class='id identifier rubyid_specs'>specs</span><span class='op'>/</span><span class='id identifier rubyid_consumer_spec'>consumer_spec</span><span class='period'>.</span><span class='id identifier rubyid_rb'>rb</span>
 </code></pre>
 
 <h3>It doesn&#39;t work</h3>
 
-<p>Create an issue on the github repository.</p>
+<p>Create an issue on the github repository
+* <a href="https://github.com/chrisroberts/krakow/issues">https://github.com/chrisroberts/krakow/issues</a></p>
 
 <h3>It doesn&#39;t do <code>x</code></h3>
 
-<p>Create an issue, or even better, send a PR. Just base it off the <code>develop</code> branch.</p>
+<p>Create an issue, or even better, send a PR.
+* <a href="https://github.com/chrisroberts/krakow/pulls">https://github.com/chrisroberts/krakow/pulls</a></p>
 
 <h1>Info</h1>
 
 <ul>
 <li>Repo: <a href="https://github.com/chrisroberts/krakow">https://github.com/chrisroberts/krakow</a></li>
+<li>Docs: <a href="http://code.chrisroberts.org/krakow">http://code.chrisroberts.org/krakow</a></li>
 <li>IRC: Freenode @ spox</li>
+</ul>
+
+<h1>Contributors</h1>
+
+<ul>
+<li>Brendan Schwartz (@bschwartz)</li>
+<li>Thomas Holmes (@thomas-holmes)</li>
+<li>Jeremy Hinegardner (@copiousfreetime)</li>
 </ul>
 </div></div>
 
     <div id="footer">
-  Generated on Sat May 10 12:40:46 2014 by
+  Generated on Sun May 11 07:14:13 2014 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.7.4 (ruby-1.9.3).
 </div>
