@@ -1,3 +1,19 @@
+## v0.3.0
+* Include jitter to discovery interval lookups
+* Typecast to String on PUB and MPUB
+* Update exception types used for not implemented methods
+* Add #confirm, #requeue, and #touch helpers to FrameType::Message instances
+* Update Utils::Lazy implementation to be faster and clearer
+* Add #safe_socket method on Connection to add stability
+* Rebuild connections on error to prevent consumer teardown
+* Reference connections without requirement of connection instance being alive
+* Use #read over #recv on underlying socket to ensure proper number of bytes (thanks @thomas-holmes)
+* Expand spec testing
+
+A big thanks to @bschwartz for a large contribution in this changeset
+including expanded spec coverage, message proxy helper methods, and
+isolation of instability around Connection interactions.
+
 ## v0.2.2
 * Fix `nsqlookupd` attribute in `Consumer` and `Discovery`
 

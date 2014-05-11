@@ -86,7 +86,8 @@ Krakow::Utils::Logging.level = :warn # :debug / :info / :warn / :error / :fatal
 
 ### Why is it forcing something called an "unready state"?
 
-Because forcing starvation is mean.
+Because forcing starvation is mean. We don't want to be mean, so we'll ensure we
+are consuming from all registered connections.
 
 ### I just want to connect to a producer, not a lookup service
 
@@ -203,27 +204,35 @@ consumer = Krakow::Consumer.new(
 Run them all!
 
 ```
-ruby test/run.rb
+bundle exec ruby test/run.rb
 ```
 
 Or, run part of them:
 
 ```
-ruby test/specs/consumer_spec.rb
+bundle exec ruby test/specs/consumer_spec.rb
 ```
-
 
 ### It doesn't work
 
-Create an issue on the github repository.
+Create an issue on the github repository
+* https://github.com/chrisroberts/krakow/issues
 
 ### It doesn't do `x`
 
-Create an issue, or even better, send a PR. Just base it off the `develop` branch.
+Create an issue, or even better, send a PR.
+* https://github.com/chrisroberts/krakow/pulls
 
 # Info
 * Repo: https://github.com/chrisroberts/krakow
+* Docs: http://code.chrisroberts.org/krakow
 * IRC: Freenode @ spox
 
 [1]: http://bitly.github.io/nsq/ "NSQ: a realtime distributed messaging platform"
 [2]: http://celluloid.io "Celluloid: Actor-based concurrent object framework for Ruby"
+
+# Contributors
+
+* Brendan Schwartz (@bschwartz)
+* Thomas Holmes (@thomas-holmes)
+* Jeremy Hinegardner (@copiousfreetime)
