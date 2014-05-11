@@ -216,11 +216,13 @@ bundle exec ruby test/specs/consumer_spec.rb
 ### It doesn't work
 
 Create an issue on the github repository
+
 * https://github.com/chrisroberts/krakow/issues
 
 ### It doesn't do `x`
 
 Create an issue, or even better, send a PR.
+
 * https://github.com/chrisroberts/krakow/pulls
 
 # Info
