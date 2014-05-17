@@ -293,6 +293,8 @@ module Krakow
         response_wait
       when :error_only
         error_wait
+      else
+        0
       end
     end
 
