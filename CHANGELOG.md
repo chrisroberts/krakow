@@ -1,3 +1,6 @@
+## v0.3.2
+* Fix return value from Connection#wait_time_for (#9) (thanks @AlphaB and @davidpelaez)
+
 ## v0.3.0
 * Include jitter to discovery interval lookups
 * Typecast to String on PUB and MPUB
