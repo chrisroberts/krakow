@@ -1,3 +1,4 @@
+require 'krakow/version'
 require 'celluloid/autostart'
 require 'multi_json'
 
@@ -14,6 +15,5 @@ module Krakow
   autoload :FrameType, 'krakow/frame_type'
   autoload :Producer, 'krakow/producer'
   autoload :Utils, 'krakow/utils'
-  autoload :Version, 'krakow/version'
 
 end
