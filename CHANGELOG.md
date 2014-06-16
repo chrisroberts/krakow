@@ -1,3 +1,6 @@
+## v0.3.4
+* Explicitly require version file (#11 and #12)
+
 ## v0.3.2
 * Fix return value from Connection#wait_time_for (#9) (thanks @AlphaB and @davidpelaez)
 
