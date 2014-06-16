@@ -3,5 +3,5 @@ module Krakow
   class Version < Gem::Version
   end
   # Current version
-  VERSION = Version.new('0.3.4')
+  VERSION = Version.new('0.3.5')
 end
