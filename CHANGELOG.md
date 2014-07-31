@@ -1,3 +1,6 @@
+## v0.3.6
+* Allow `:options` key within `Producer` to set low level connection settings
+
 ## v0.3.4
 * Explicitly require version file (#11 and #12)
 

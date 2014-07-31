@@ -36,7 +36,7 @@ module Krakow
 
     def initialize(args={})
       super
-      arguments[:connection_options] = {:features => {}, :config => {}}.merge(
+      arguments[:connection_options] = {:features => {}, :config => {}, :options => {}}.merge(
         arguments.fetch(:connection_options, {})
       )
       connect
@@ -48,12 +48,17 @@ module Krakow
     def connect
       info "Establishing connection to: #{host}:#{port}"
       begin
-        @connection = Connection.new(
-          :host => host,
-          :port => port,
-          :features => connection_options[:features],
-          :features_args => connection_options[:config]
-        )
+        con_args = connection_options[:options].dup.tap do |args|
+          args[:host] = host
+          args[:port] = port
+          if(connection_options[:features])
+            args[:features] = connection_options[:features]
+          end
+          if(connection_options[:config])
+            args[:features_args] = connection_options[:config]
+          end
+        end
+        @connection = Connection.new(con_args)
         connection.init!
         self.link connection
         info "Connection established: #{connection}"
