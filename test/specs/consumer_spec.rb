@@ -213,7 +213,7 @@ describe Krakow::Consumer do
           msg.confirm
         end
       end
-      messages.sort.must_equal @expected_messages
+      messages.sort.must_equal @expected_messages.sort
       consumer.queue.must_be :empty?
     end
   end

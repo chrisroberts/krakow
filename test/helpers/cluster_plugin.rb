@@ -15,13 +15,13 @@ module ClusterPlugin
 
   def before_setup
     @cluster = NsqCluster.new(cluster_options)
-    sleep(0.1)
+    sleep(0.5)
   end
 
 
   def after_teardown
     @cluster.destroy
-    sleep(0.1)
+    sleep(0.5)
   end
 
 
