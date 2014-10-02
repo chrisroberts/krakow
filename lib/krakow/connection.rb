@@ -33,14 +33,15 @@ module Krakow
       :deflate_level,
       :max_deflate_level,
       :snappy,
-      :sample_rate
+      :sample_rate,
+      :auth_required
     ]
 
     # List of features that may not be enabled together
     EXCLUSIVE_FEATURES = [[:snappy, :deflate]]
 
     # List of features that may be enabled by the client
-    ENABLEABLE_FEATURES = [:tls_v1, :snappy, :deflate]
+    ENABLEABLE_FEATURES = [:tls_v1, :snappy, :deflate, :auth_required]
 
     finalizer :goodbye_my_love!
 
@@ -341,6 +342,22 @@ module Krakow
         @endpoint_settings = {}
       end
       true
+    end
+
+    # Send authentication request for connection
+    #
+    # @return [TrueClass]
+    def auth_required
+      info 'Authentication required for this connection'
+      if(feature_args[:auth])
+        transmit(Command::Auth.new(:secret => feature_args[:auth]))
+        response = receive
+        # @todo map result to restrict requests
+        true
+      else
+        error 'No authentication information provided for connection!'
+        abort 'Authentication failure. No authentication secret provided'
+      end
     end
 
     # Enable snappy feature on underlying socket
