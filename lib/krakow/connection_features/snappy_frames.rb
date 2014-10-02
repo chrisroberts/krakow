@@ -1,4 +1,9 @@
-require 'snappy'
+begin
+  require 'snappy'
+rescue LoadError
+  $stderr.puts 'ERROR: Failed to locate `snappy` gem. Install `snappy` gem into system or bundle.'
+  raise
+end
 require 'digest/crc'
 require 'krakow'
 
