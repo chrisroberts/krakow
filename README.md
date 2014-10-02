@@ -159,6 +159,11 @@ consumer = Krakow::Consumer.new(
 )
 ```
 
+*NOTE*: snappy support requires the snappy
+gem and is not provided by default, so you
+will need to ensure it is installed either
+on the system, or within the bundle.
+
 ### I need Deflate compression!
 
 OK!

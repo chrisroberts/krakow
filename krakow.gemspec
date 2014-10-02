@@ -13,7 +13,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'celluloid-io'
   s.add_dependency 'http'
   s.add_dependency 'multi_json'
-  s.add_dependency 'snappy'
   s.add_dependency 'digest-crc'
   s.files = Dir['lib/**/*'] + %w(krakow.gemspec README.md CHANGELOG.md CONTRIBUTING.md LICENSE)
   s.extra_rdoc_files = %w(CHANGELOG.md CONTRIBUTING.md LICENSE)
