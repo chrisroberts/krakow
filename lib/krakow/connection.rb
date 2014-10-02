@@ -352,7 +352,6 @@ module Krakow
       if(feature_args[:auth])
         transmit(Command::Auth.new(:secret => feature_args[:auth]))
         response = receive
-        # @todo map result to restrict requests
         true
       else
         error 'No authentication information provided for connection!'
