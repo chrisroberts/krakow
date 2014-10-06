@@ -25,8 +25,8 @@ describe Krakow::Consumer do
       consumer.queue.size.must_equal 0
       consumer.connections.size.must_equal 0
     end
-  end
 
+  end
 
   describe 'with one active producer' do
     before do
@@ -50,7 +50,7 @@ describe Krakow::Consumer do
         original_msg = consumer.queue.pop
         original_msg.attempts.must_equal 1
         original_msg.requeue
-        Timeout::timeout(1) do
+        Timeout::timeout(5) do
           req_msg = consumer.queue.pop
           req_msg.message_id.must_equal original_msg.message_id
           req_msg.attempts.must_equal 2
@@ -61,7 +61,7 @@ describe Krakow::Consumer do
         original_msg = consumer.queue.pop
         original_msg.attempts.must_equal 1
         consumer.requeue(original_msg.message_id)
-        Timeout::timeout(1) do
+        Timeout::timeout(5) do
           req_msg = consumer.queue.pop
           req_msg.message_id.must_equal original_msg.message_id
           req_msg.attempts.must_equal 2
@@ -127,7 +127,6 @@ describe Krakow::Consumer do
 
   end
 
-
   describe 'when max_in_flight < num_connections' do
     let(:max_in_flight) { 1 }
     with_cluster(:nsqlookupd_count => 1, :nsqd_count => 3)
@@ -135,11 +134,16 @@ describe Krakow::Consumer do
 
     it 'should be able to properly get all messages from all nsqds' do
       expected_messages = %w(a b c d e f g h i j)
+
       expected_messages.each_with_index do |m, idx|
         @producers[idx % @producers.length].write(m)
       end
 
       wait_for { consumer.connections.length == 3 }
+
+      wait_for(3){
+        consumer.queue.size >= expected_messages.size
+      }
 
       messages = []
 
@@ -151,6 +155,7 @@ describe Krakow::Consumer do
           true
         end
       end
+
       messages.sort.must_equal expected_messages
       consumer.queue.must_be :empty?
     end
@@ -176,7 +181,7 @@ describe Krakow::Consumer do
 
         @producers.last.write('a new hope')
 
-        wait_for do
+        wait_for(5) do
           msg = consumer.queue.pop
           msg.confirm
           msg.content == 'a new hope'
@@ -190,7 +195,6 @@ describe Krakow::Consumer do
 
   end
 
-
   describe 'when max_in_flight >= num_connections' do
     let(:max_in_flight) { 10 }
     with_cluster(:nsqlookupd_count => 1, :nsqd_count => 5)
@@ -201,23 +205,24 @@ describe Krakow::Consumer do
         @producers[idx % @producers.length].write(m)
       end
 
-      wait_for(20) { consumer.connections.length == 5 }
+      wait_for(5) { consumer.connections.length == 5 }
+      wait_for(5) { consumer.queue.size >= @expected_messages.size }
     end
 
     it 'should be able to properly get all messages from all nsqds' do
       messages = []
-      Timeout::timeout(10) do
+      wait_for(10) do
         @expected_messages.length.times do
           msg = consumer.queue.pop
           messages << msg.message
           msg.confirm
         end
+        true
       end
       messages.sort.must_equal @expected_messages.sort
       consumer.queue.must_be :empty?
     end
   end
-
 
   describe 'two consumers on one queue' do
     with_cluster(:nsqlookupd_count => 1, :nsqd_count => 1)

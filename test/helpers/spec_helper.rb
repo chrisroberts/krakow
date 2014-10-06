@@ -18,9 +18,14 @@ class MiniTest::Test
   #
   def wait_for(timeout = 5, &block)
     Timeout::timeout(timeout) do
-      loop do
-        break if yield
-        sleep(0.1)
+      value = false
+      until(value)
+        thread = Thread.new do
+          yield
+        end
+        thread.join
+        value = thread.value
+        sleep(0.2) unless value
       end
     end
   end
