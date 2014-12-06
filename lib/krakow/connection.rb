@@ -67,7 +67,7 @@ module Krakow
     attribute :queue, Queue, :default => ->{ Queue.new }
     attribute :callbacks, Hash, :default => ->{ Hash.new }
     attribute :responses, Queue, :default => ->{ Queue.new }
-    attribute :notifier, Celluloid::Actor
+    attribute :notifier, [Celluloid::Signals, Celluloid::Condition, Celluloid::Actor]
     attribute :features, Hash, :default => ->{ Hash.new }
     attribute :response_wait, Numeric, :default => 1.0
     attribute :response_interval, Numeric, :default => 0.03

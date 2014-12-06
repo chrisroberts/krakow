@@ -31,7 +31,7 @@ module Krakow
     attribute :backoff_interval, Numeric
     attribute :discovery_interval, Numeric, :default => 30
     attribute :discovery_jitter, Numeric, :default => 10.0
-    attribute :notifier, Celluloid::Actor
+    attribute :notifier, [Celluloid::Signals, Celluloid::Condition, Celluloid::Actor]
     attribute :connection_options, Hash, :default => ->{ Hash.new }
 
     # @!endgroup
