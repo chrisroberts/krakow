@@ -1,5 +1,8 @@
 ## v0.3.6
 * Allow `:options` key within `Producer` to set low level connection settings
+* Make snappy an optional dependency
+* Add initial support for authentication
+* Update allowed types for optional notifier
 
 ## v0.3.4
 * Explicitly require version file (#11 and #12)
