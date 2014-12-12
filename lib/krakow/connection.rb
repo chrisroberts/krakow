@@ -51,7 +51,7 @@ module Krakow
     attr_reader :socket
 
     # set exclusive methods
-    exclusive :init!, :reconnect!, :transmit
+    exclusive :init!
 
     attr_reader :reconnect_notifier, :running
 
@@ -229,7 +229,7 @@ module Krakow
           if(message)
             debug "Adding message to queue #{message}"
             queue << message
-            notifier.signal(message) if notifier
+            notifier.broadcast(message) if notifier
           end
         rescue Error::ConnectionUnavailable => e
           warn "Failed to receive message: #{e.class} - #{e}"
