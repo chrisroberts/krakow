@@ -50,7 +50,10 @@ module Krakow
     # @return [Socket-ish] underlying socket like instance
     attr_reader :socket
 
-    attr_reader :connector, :reconnector, :reconnect_notifier, :responder, :running
+    # set exclusive methods
+    exclusive :init!, :reconnect!, :transmit
+
+    attr_reader :reconnect_notifier, :running
 
     # @!group Attributes
 
@@ -95,9 +98,6 @@ module Krakow
     # @option args [Hash] :feature_args options for connection features
     def initialize(args={})
       super
-      @connector = Mutex.new
-      @reconnector = Mutex.new
-      @responder = Mutex.new
       @reconnect_notifier = Celluloid::Signals.new
       @socket_retries = 0
       @socket_max_retries = 10
@@ -120,9 +120,7 @@ module Krakow
     #
     # @return [nil]
     def init!
-      connector.synchronize do
-        connect!
-      end
+      connect!
       nil
     end
 
@@ -147,27 +145,25 @@ module Krakow
     # @param message [Krakow::Message] message to send
     # @return [Krakow::FrameType] response
     def transmit_with_response(message, wait_time)
-      responder.synchronize do
-        safe_socket{|socket| socket.write(message.to_line) }
-        responses.clear
-        response = nil
-        (wait_time / response_interval).to_i.times do |i|
-          response = responses.pop unless responses.empty?
-          break if response
-          sleep(response_interval)
+      safe_socket{|socket| socket.write(message.to_line) }
+      responses.clear
+      response = nil
+      (wait_time / response_interval).to_i.times do |i|
+        response = responses.pop unless responses.empty?
+        break if response
+        sleep(response_interval)
+      end
+      if(response)
+        message.response = response
+        if(message.error?(response))
+          res = Error::BadResponse.new "Message transmission failed #{message}"
+          res.result = response
+          abort res
         end
-        if(response)
-          message.response = response
-          if(message.error?(response))
-            res = Error::BadResponse.new "Message transmission failed #{message}"
-            res.result = response
-            abort res
-          end
-          response
-        else
-          unless(Command.response_for(message) == :error_only)
-            abort Error::BadResponse::NoResponse.new "No response provided for message #{message}"
-          end
+        response
+      else
+        unless(Command.response_for(message) == :error_only)
+          abort Error::BadResponse::NoResponse.new "No response provided for message #{message}"
         end
       end
     end
@@ -440,30 +436,24 @@ module Krakow
     #
     # @return [nil]
     def reconnect!
-      if(reconnector.try_lock)
-        begin
-          if(@socket_max_retries <= @socket_retries)
-            abort ConnectionFailure.new "Failed to re-establish connection after #{@socket_retries} tries."
-          end
-          pause_interval = @reconnect_pause * @socket_retries
-          @socket_retries += 1
-          warn "Pausing for #{pause_interval} seconds before reconnect"
-          sleep(pause_interval)
-          init!
-          @socket_retries = 0
-        rescue Celluloid::Error => e
-          warn "Internal error encountered. Allowing exception to bubble. #{e.class}: #{e}"
-          abort e
-        rescue SystemCallError, IOError => e
-          error "Reconnect error encountered: #{e.class} - #{e}"
-          retry
+      begin
+        if(@socket_max_retries <= @socket_retries)
+          abort ConnectionFailure.new "Failed to re-establish connection after #{@socket_retries} tries."
         end
-        callback_for(:reconnect)
-        reconnect_notifier.broadcast(:connected)
-        reconnector.unlock
-      else
-        reconnect_notifier.wait(:connected)
+        pause_interval = @reconnect_pause * @socket_retries
+        @socket_retries += 1
+        warn "Pausing for #{pause_interval} seconds before reconnect"
+        sleep(pause_interval)
+        init!
+        @socket_retries = 0
+      rescue Celluloid::Error => e
+        warn "Internal error encountered. Allowing exception to bubble. #{e.class}: #{e}"
+        abort e
+      rescue SystemCallError, IOError => e
+        error "Reconnect error encountered: #{e.class} - #{e}"
+        retry
       end
+      callback_for(:reconnect)
       nil
     end
 
