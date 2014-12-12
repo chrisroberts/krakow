@@ -1,3 +1,7 @@
+## v0.3.8
+* Remove locks and move logic to connection access
+* Check for result within response prior to access (prevent slaying actor)
+
 ## v0.3.6
 * Allow `:options` key within `Producer` to set low level connection settings
 * Make snappy an optional dependency
