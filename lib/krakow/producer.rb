@@ -16,6 +16,9 @@ module Krakow
     trap_exit  :connection_failure
     finalizer :goodbye_my_love!
 
+    # set exclusive methods
+    exclusive :write
+
     attr_reader :connection
 
     # @!group Attributes
