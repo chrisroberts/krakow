@@ -50,9 +50,6 @@ module Krakow
     # @return [Socket-ish] underlying socket like instance
     attr_reader :socket
 
-    # set exclusive methods
-    exclusive :init!
-
     attr_reader :reconnect_notifier, :running
 
     # @!group Attributes
