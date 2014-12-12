@@ -202,7 +202,7 @@ module Krakow
         distribution.add_connection(connection)
         true
       rescue Error::BadResponse => e
-        debug "Failed to establish connection: #{e.result.error}"
+        debug "Failed to establish connection: #{e.result ? e.result.error : '<No Response!>'}"
         connection.terminate
         false
       end
