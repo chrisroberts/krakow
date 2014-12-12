@@ -1,3 +1,6 @@
+## v0.3.10
+* Remove exclusive from Connection#init!
+
 ## v0.3.8
 * Remove locks and move logic to connection access
 * Check for result within response prior to access (prevent slaying actor)
