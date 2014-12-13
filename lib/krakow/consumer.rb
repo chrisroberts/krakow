@@ -232,7 +232,7 @@ module Krakow
     # Confirm message has been processed
     #
     # @param message_id [String, Krakow::FrameType::Message]
-    # @return [TrueClass]
+    # @return [TrueClass, FalseClass]
     # @raise [KeyError] connection not found
     def confirm(message_id)
       message_id = message_id.message_id if message_id.respond_to?(:message_id)
@@ -247,6 +247,9 @@ module Krakow
       rescue KeyError => e
         error "Message confirmation failed: #{e}"
         abort e
+      rescue Error::LookupFailed => e
+        error "Lookup of message for confirmation failed! <Message ID: #{message_id} - Error: #{e}>"
+        false
       rescue Error::ConnectionUnavailable => e
         retry
       end
