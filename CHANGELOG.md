@@ -1,3 +1,6 @@
+## v0.3.12
+* Update Consumer#confirm and Consumer#touch to rescue out lookups and abort
+
 ## v0.3.10
 * Remove exclusive from Connection#init!
 
