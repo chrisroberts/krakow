@@ -280,15 +280,20 @@ module Krakow
     # Touch message (to extend timeout)
     #
     # @param message_id [String, Krakow::FrameType::Message]
-    # @return [TrueClass]
+    # @return [TrueClass, FalseClass]
     def touch(message_id)
       message_id = message_id.message_id if message_id.respond_to?(:message_id)
-      distribution.in_flight_lookup(message_id) do |connection|
-        connection.transmit(
-          Command::Touch.new(:message_id => message_id)
-        )
+      begin
+        distribution.in_flight_lookup(message_id) do |connection|
+          connection.transmit(
+            Command::Touch.new(:message_id => message_id)
+          )
+        end
+        true
+      rescue Error::LookupFailed => e
+        error "Lookup of message for touch failed! <Message ID: #{message_id} - Error: #{e}>"
+        false
       end
-      true
     end
 
   end
