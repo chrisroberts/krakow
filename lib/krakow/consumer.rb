@@ -232,7 +232,7 @@ module Krakow
     # Confirm message has been processed
     #
     # @param message_id [String, Krakow::FrameType::Message]
-    # @return [TrueClass, FalseClass]
+    # @return [TrueClass]
     # @raise [KeyError] connection not found
     def confirm(message_id)
       message_id = message_id.message_id if message_id.respond_to?(:message_id)
@@ -249,7 +249,7 @@ module Krakow
         abort e
       rescue Error::LookupFailed => e
         error "Lookup of message for confirmation failed! <Message ID: #{message_id} - Error: #{e}>"
-        false
+        abort e
       rescue Error::ConnectionUnavailable => e
         retry
       end
@@ -280,7 +280,7 @@ module Krakow
     # Touch message (to extend timeout)
     #
     # @param message_id [String, Krakow::FrameType::Message]
-    # @return [TrueClass, FalseClass]
+    # @return [TrueClass]
     def touch(message_id)
       message_id = message_id.message_id if message_id.respond_to?(:message_id)
       begin
@@ -292,7 +292,7 @@ module Krakow
         true
       rescue Error::LookupFailed => e
         error "Lookup of message for touch failed! <Message ID: #{message_id} - Error: #{e}>"
-        false
+        abort e
       end
     end
 
