@@ -142,8 +142,8 @@ module Krakow
     # @param message [Krakow::Message] message to send
     # @return [Krakow::FrameType] response
     def transmit_with_response(message, wait_time)
-      safe_socket{|socket| socket.write(message.to_line) }
       responses.clear
+      safe_socket{|socket| socket.write(message.to_line) }
       response = nil
       (wait_time / response_interval).to_i.times do |i|
         response = responses.pop unless responses.empty?
