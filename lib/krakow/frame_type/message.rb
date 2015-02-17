@@ -7,6 +7,10 @@ module Krakow
 
       # @return [Krakow::Consumer]
       attr_accessor :origin
+      # @return [Krakow::Connection]
+      attr_accessor :connection
+      # @return [Float] time of message instance creation
+      attr_reader :instance_stamp
 
       # @!group Attributes
 
@@ -21,6 +25,11 @@ module Krakow
       attribute :message, String, :required => true
 
       # @!endgroup
+
+      def initialize(*args)
+        super
+        @instance_stamp = Time.now.to_f
+      end
 
       # Message content
       #
