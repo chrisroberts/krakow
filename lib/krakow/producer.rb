@@ -14,12 +14,13 @@ module Krakow
     include Celluloid
 
     trap_exit  :connection_failure
-    finalizer :goodbye_my_love!
+    finalizer :producer_cleanup
 
     # set exclusive methods
     exclusive :write
 
     attr_reader :connection
+    attr_reader :notifier
 
     # @!group Attributes
 
@@ -49,6 +50,7 @@ module Krakow
     #
     # @return nil
     def connect
+      @connecting = true
       info "Establishing connection to: #{host}:#{port}"
       begin
         con_args = connection_options[:options].dup.tap do |args|
@@ -62,13 +64,14 @@ module Krakow
           end
         end
         @connection = Connection.new(con_args)
-        connection.init!
-        self.link connection
-        info "Connection established: #{connection}"
+        @connection.init!
+        self.link @connection
+        info "Connection established: #{@connection}"
         nil
       rescue => e
         abort e
       end
+      @connecting = false
     end
 
     # @return [String] stringify object
@@ -78,28 +81,34 @@ module Krakow
 
     # @return [TrueClass, FalseClass] currently connected to server
     def connected?
-      !!(connection && connection.alive? && connection.connected?)
+      !@connecting &&
+        connection &&
+        connection.alive? &&
+        connection.connected?
     end
 
     # Process connection failure and attempt reconnection
     #
     # @return [TrueClass]
-    def connection_failure(*args)
-      @connection = nil
-      begin
-        warn "Connection failure detected for #{host}:#{port}"
-        connect
-      rescue => e
-        warn "Failed to establish connection to #{host}:#{port}. Pausing #{reconnect_interval} before retry"
-        sleep reconnect_interval
-        connect
+    def connection_failure(obj, reason)
+      if(obj == connection && !reason.nil?)
+        begin
+          @connection = nil
+          warn "Connection failure detected for #{host}:#{port} - #{reason}"
+          obj.terminate if obj.alive?
+          connect
+        rescue => reason
+          warn "Failed to establish connection to #{host}:#{port}. Pausing #{reconnect_interval} before retry"
+          sleep reconnect_interval
+          retry
+        end
       end
       true
     end
 
     # Instance destructor
     # @return nil
-    def goodbye_my_love!
+    def producer_cleanup
       debug 'Tearing down producer'
       if(connection && connection.alive?)
         connection.terminate
@@ -118,7 +127,7 @@ module Krakow
       if(message.empty?)
         abort ArgumentError.new 'Expecting one or more messages to send. None provided.'
       end
-      if(connection && connection.alive?)
+      begin
         if(message.size > 1)
           debug 'Multiple message publish'
           connection.transmit(
@@ -136,8 +145,8 @@ module Krakow
             )
           )
         end
-      else
-        abort Error::ConnectionUnavailable.new 'Remote connection is unavailable!'
+      rescue => e
+        abort e
       end
     end
 
