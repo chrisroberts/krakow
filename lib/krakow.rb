@@ -1,4 +1,10 @@
 require 'krakow/version'
+require 'celluloid'
+
+if(ENV['DEBUG'])
+  Celluloid.task_class = Celluloid::TaskThread
+end
+
 require 'celluloid/autostart'
 require 'multi_json'
 
@@ -13,6 +19,7 @@ module Krakow
   autoload :Distribution, 'krakow/distribution'
   autoload :Error, 'krakow/exceptions'
   autoload :FrameType, 'krakow/frame_type'
+  autoload :Ksocket, 'krakow/ksocket'
   autoload :Producer, 'krakow/producer'
   autoload :Utils, 'krakow/utils'
 
