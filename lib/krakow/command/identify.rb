@@ -36,7 +36,7 @@ module Krakow
           end.compact.flatten
         ]
         payload = MultiJson.dump(filtered)
-        [name, "\n", payload.length, payload].pack('a*a*l>a*')
+        [name, "\n", payload.bytesize, payload].pack('a*a*l>a*')
       end
 
       class << self

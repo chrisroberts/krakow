@@ -18,7 +18,7 @@ module Krakow
 
       def to_line
         scrt = secret.to_s
-        [name, "\n", scrt.length, scrt].pack('a*a*a*a*l>a*')
+        [name, "\n", scrt.bytesize, scrt].pack('a*a*a*a*l>a*')
       end
 
       class << self

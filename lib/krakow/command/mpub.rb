@@ -19,9 +19,9 @@ module Krakow
       def to_line
         formatted_messages = messages.map do |message|
           message = message.to_s
-          [message.length, message].pack('l>a*')
+          [message.bytesize, message].pack('l>a*')
         end.join
-        [name, ' ', topic_name, "\n", formatted_messages.length, messages.size, formatted_messages].pack('a*a*a*a*l>l>a*')
+        [name, ' ', topic_name, "\n", formatted_messages.bytesize, messages.size, formatted_messages].pack('a*a*a*a*l>l>a*')
       end
 
       class << self

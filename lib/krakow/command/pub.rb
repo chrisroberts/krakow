@@ -19,7 +19,7 @@ module Krakow
 
       def to_line
         msg = message.to_s
-        [name, ' ', topic_name, "\n", msg.length, msg].pack('a*a*a*a*l>a*')
+        [name, ' ', topic_name, "\n", msg.bytesize, msg].pack('a*a*a*a*l>a*')
       end
 
       class << self
