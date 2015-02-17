@@ -4,6 +4,8 @@ module Krakow
   # Consume messages from a server
   class Consumer
 
+    autoload :Queue, 'krakow/consumer/queue'
+
     include Utils::Lazy
     # @!parse include Krakow::Utils::Lazy::InstanceMethods
     # @!parse extend Krakow::Utils::Lazy::ClassMethods
@@ -11,7 +13,7 @@ module Krakow
     include Celluloid
 
     trap_exit :connection_failure
-    finalizer :goodbye_my_love!
+    finalizer :consumer_cleanup
 
     attr_reader :connections, :discovery, :distribution, :queue
 
@@ -42,27 +44,34 @@ module Krakow
         arguments[:connection_options] || {}
       )
       @connections = {}
+      @queue = Queue.new(
+        current_actor,
+        :removal_callback => :remove_message
+      )
       @distribution = Distribution::Default.new(
         :max_in_flight => max_in_flight,
         :backoff_interval => backoff_interval,
         :consumer => current_actor
       )
-      @queue = Queue.new
       if(nsqlookupd)
         debug "Connections will be established via lookup #{nsqlookupd.inspect}"
         @discovery = Discovery.new(:nsqlookupd => nsqlookupd)
         discover
       elsif(host && port)
-        debug "Connection will be established via direct connection #{host}:#{port}"
-        connection = build_connection(host, port, queue)
-        if(register(connection))
-          info "Registered new connection #{connection}"
-          distribution.redistribute!
-        else
-          abort Error::ConnectionFailure.new("Failed to establish subscription at provided end point (#{host}:#{port}")
-        end
+        direct_connect
       else
         abort Error::ConfigurationError.new('No connection information provided!')
+      end
+    end
+
+    def direct_connect
+      debug "Connection will be established via direct connection #{host}:#{port}"
+      connection = build_connection(host, port, queue)
+      if(register(connection))
+        info "Registered new connection #{connection}"
+        distribution.redistribute!
+      else
+        abort Error::ConnectionFailure.new("Failed to establish subscription at provided end point (#{host}:#{port}")
       end
     end
 
@@ -82,12 +91,17 @@ module Krakow
     # Instance destructor
     #
     # @return [nil]
-    def goodbye_my_love!
+    def consumer_cleanup
       debug 'Tearing down consumer'
+      if(distribution && distribution.alive?)
+        distribution.terminate
+      end
+      if(queue && queue.alive?)
+        queue.terminate
+      end
       connections.values.each do |con|
         con.terminate if con.alive?
       end
-      distribution.terminate if distribution && distribution.alive?
       info 'Consumer torn down'
       nil
     end
@@ -113,13 +127,11 @@ module Krakow
             :handle => {
               :actor => current_actor,
               :method => :process_message
-            },
-            :reconnect => {
-              :actor => current_actor,
-              :method => :connection_reconnect
             }
           }
         )
+        queue.register_connection(connection)
+        connection
       rescue => e
         error "Failed to build connection (host: #{host} port: #{port} queue: #{queue}) - #{e.class}: #{e}"
         debug "#{e.class}: #{e}\n#{e.backtrace.join("\n")}"
@@ -132,22 +144,30 @@ module Krakow
     # @param message [Krakow::FrameType]
     # @param connection [Krakow::Connection]
     # @return [Krakow::FrameType]
+    # @note If we receive a message that is already in flight, attempt
+    #   to scrub message from wait queue. If message is found, retry
+    #   distribution registration. If message is not found, assume it
+    #   is currently being processed and do not allow new message to
+    #   be queued
     def process_message(message, connection)
+      discard = false
       if(message.is_a?(FrameType::Message))
-        distribution.register_message(message, connection.identifier)
         message.origin = current_actor
+        message.connection = connection
+        retried = false
+        begin
+          distribution.register_message(message, connection.identifier)
+        rescue KeyError => e
+          if(!retried && queue.scrub_duplicate_message(message))
+            retried = true
+            retry
+          else
+            error "Received message is currently in flight and not in wait queue. Discarding! (#{message})"
+            discard = true
+          end
+        end
       end
-      message
-    end
-
-    # Action to take when a connection has reconnected
-    #
-    # @param connection [Krakow::Connection]
-    # @return [nil]
-    def connection_reconnect(connection)
-      connection.transmit(Command::Sub.new(:topic_name => topic, :channel_name => channel))
-      distribution.set_ready_for(connection)
-      nil
+      discard ? nil : message
     end
 
     # Send RDY for connection based on distribution rules
@@ -215,18 +235,27 @@ module Krakow
     # @return [nil]
     def connection_failure(actor, reason)
       connections.delete_if do |key, value|
-        if(value == actor && reason.nil?)
+        if(value == actor && reason)
           warn "Connection failure detected. Removing connection: #{key} - #{reason || 'no reason provided'}"
           begin
             distribution.remove_connection(key)
           rescue Error::ConnectionUnavailable, Error::ConnectionFailure
             warn 'Caught connection unavailability'
           end
+          queue.deregister_connection(key)
           distribution.redistribute!
           true
         end
+        direct_connect unless discovery
       end
       nil
+    end
+
+    def remove_message(messages)
+      [messages].flatten.compact.each do |msg|
+        distribution.unregister_message(msg.message_id)
+        update_ready!(msg.connection)
+      end
     end
 
     # Confirm message has been processed
@@ -237,11 +266,12 @@ module Krakow
     def confirm(message_id)
       message_id = message_id.message_id if message_id.respond_to?(:message_id)
       begin
-        distribution.in_flight_lookup(message_id) do |connection|
-          distribution.unregister_message(message_id)
+        begin
+          connection = distribution.in_flight_lookup(message_id)
           connection.transmit(Command::Fin.new(:message_id => message_id))
           distribution.success(connection.identifier)
-          update_ready!(connection)
+        rescue => e
+          abort e
         end
         true
       rescue KeyError => e
@@ -251,7 +281,10 @@ module Krakow
         error "Lookup of message for confirmation failed! <Message ID: #{message_id} - Error: #{e}>"
         abort e
       rescue Error::ConnectionUnavailable => e
-        retry
+        abort e
+      ensure
+        distribution.unregister_message(message_id)
+        update_ready!(connection)
       end
     end
     alias_method :finish, :confirm
