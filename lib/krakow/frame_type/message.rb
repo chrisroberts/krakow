@@ -5,10 +5,6 @@ module Krakow
     # Message received from server
     class Message < FrameType
 
-      # @return [Krakow::Consumer]
-      attr_accessor :origin
-      # @return [Krakow::Connection]
-      attr_accessor :connection
       # @return [Float] time of message instance creation
       attr_reader :instance_stamp
 
@@ -45,6 +41,15 @@ module Krakow
           abort Krakow::Error::OriginNotFound.new('No origin specified for this message')
         end
         @origin
+      end
+
+      # @return [Krakow::Connection]
+      def connection
+        unless(@connection)
+          error 'No origin connection has been specified for this message'
+          abort Krakow::Error::ConnectionNotFound.new('No connection specified for this message')
+        end
+        @connection
       end
 
       # Proxy to [Krakow::Consumer#confirm]

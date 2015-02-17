@@ -64,6 +64,9 @@ module Krakow
       end
     end
 
+    # Connect to nsqd instance directly
+    #
+    # @return [Connection]
     def direct_connect
       debug "Connection will be established via direct connection #{host}:#{port}"
       connection = build_connection(host, port, queue)
@@ -73,6 +76,7 @@ module Krakow
       else
         abort Error::ConnectionFailure.new("Failed to establish subscription at provided end point (#{host}:#{port}")
       end
+      connection
     end
 
     # Returns [Krakow::Connection] associated to key
@@ -251,11 +255,17 @@ module Krakow
       nil
     end
 
+    # Remove message
+    #
+    # @param messages [Array<FrameType::Message>]
+    # @return [NilClass]
+    # @note used mainly for queue callback
     def remove_message(messages)
       [messages].flatten.compact.each do |msg|
         distribution.unregister_message(msg.message_id)
         update_ready!(msg.connection)
       end
+      nil
     end
 
     # Confirm message has been processed

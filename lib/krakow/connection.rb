@@ -48,8 +48,8 @@ module Krakow
     attr_reader :endpoint_settings
     # @return [Ksocket] underlying socket like instance
     attr_reader :socket
-
-    attr_reader :reconnect_notifier, :running
+    # @return [TrueClass, FalseClass]
+    attr_reader :running
 
     # @!group Attributes
 

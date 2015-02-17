@@ -12,6 +12,7 @@ module Krakow
 
     finalizer :closedown_socket
 
+    # Teardown helper
     def closedown_socket
       @writing = @reading = false
       if(socket && !socket.closed?)
@@ -88,6 +89,7 @@ module Krakow
     end
     alias_method :write, :put
 
+    # @return [Socket]
     def socket
       if(block_given?)
         yield @socket
