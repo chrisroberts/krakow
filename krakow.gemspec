@@ -10,10 +10,11 @@ Gem::Specification.new do |s|
   s.description = 'NSQ ruby library'
   s.license = 'Apache 2.0'
   s.require_path = 'lib'
-  s.add_dependency 'celluloid-io'
-  s.add_dependency 'http'
-  s.add_dependency 'multi_json'
-  s.add_dependency 'digest-crc'
+  s.add_runtime_dependency 'celluloid'
+  s.add_runtime_dependency 'http'
+  s.add_runtime_dependency 'multi_json'
+  s.add_runtime_dependency 'digest-crc'
+  s.add_development_dependency 'childprocess'
   s.files = Dir['lib/**/*'] + %w(krakow.gemspec README.md CHANGELOG.md CONTRIBUTING.md LICENSE)
   s.extra_rdoc_files = %w(CHANGELOG.md CONTRIBUTING.md LICENSE)
 end
