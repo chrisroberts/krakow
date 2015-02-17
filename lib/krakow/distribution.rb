@@ -97,10 +97,14 @@ module Krakow
     # @param connection_identifier [String]
     # @return [Integer]
     def register_message(message, connection_identifier)
-      registry_info = registry_lookup(connection_identifier)
-      registry_info[:in_flight] += 1
-      flight_record[message.message_id] = connection_identifier
-      calculate_ready!(connection_identifier)
+      if(flight_record[message.message_id])
+        abort KeyError.new "Message is already registered in flight record! (#{message.message_id})"
+      else
+        registry_info = registry_lookup(connection_identifier)
+        registry_info[:in_flight] += 1
+        flight_record[message.message_id] = connection_identifier
+        calculate_ready!(connection_identifier)
+      end
     end
 
     # Add connection to make available for RDY distribution
@@ -128,8 +132,8 @@ module Krakow
       registry.delete(connection_identifier)
       # remove any in flight messages
       flight_record.delete_if do |k,v|
-        if(k == connection_identifier)
-          warn "Removing in flight reference due to failed connection: #{k}"
+        if(v == connection_identifier)
+          warn "Removing in flight reference due to failed connection: #{v}"
           true
         end
       end
@@ -156,7 +160,11 @@ module Krakow
         abort Krakow::Error::LookupFailed.new("Failed to locate in flight message (ID: #{msg_id})")
       end
       if(block_given?)
-        yield connection
+        begin
+          yield connection
+        rescue => e
+          abort e
+        end
       else
         connection
       end
