@@ -30,7 +30,7 @@ describe Krakow do
 
       it 'should produce all payloads' do
         100.times do
-          output = (0...100000).map{('a'..'z').to_a[rand(26)]}.join
+          output = 2000.times.map{TOPIC_NAME.shuffle.join}.join
           @producer.write(output).response.must_equal 'OK'
         end
       end
@@ -54,7 +54,7 @@ describe Krakow do
 
       it 'should produce all payloads' do
         10000.times do
-          output = (0...100000).map{('a'..'z').to_a[rand(26)]}.join
+          output = 2000.times.map{TOPIC_NAME.shuffle.join}.join
           @producer.write(output).must_equal true
         end
       end
