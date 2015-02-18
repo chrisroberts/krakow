@@ -54,12 +54,12 @@ module Krakow
 
       # Remove connection registration and remove all messages
       #
-      # @param connection [Connection]
+      # @param identifier [String] connection identifier
       # @return [Array<FrameType::Message>] messages queued for deregistered connection
-      def deregister_connection(connection)
+      def deregister_connection(identifier)
         messages do |collection|
-          removed = collection.delete(connection.identifier)
-          pop_order.delete(connection.identifier)
+          removed = collection.delete(identifier)
+          pop_order.delete(identifier)
           removed
         end
       end
@@ -73,8 +73,12 @@ module Krakow
           abort TypeError.new "Expecting `FrameType::Message` but received `#{message.class}`!"
         end
         messages do |collection|
-          collection[message.connection.identifier] << message
-          pop_order << message.connection.identifier
+          begin
+            collection[message.connection.identifier] << message
+            pop_order << message.connection.identifier
+          rescue Celluloid::DeadActorError
+            abort Error::ConnectionUnavailable.new
+          end
         end
         signal(:new_message)
         current_actor
