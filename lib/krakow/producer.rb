@@ -125,7 +125,9 @@ module Krakow
     # Write message to server
     #
     # @param message [String] message to write
-    # @return [Krakow::FrameType::Error,nil]
+    # @return [Krakow::FrameType, TrueClass]
+    # @note if connection response wait is set to 0, writes will
+    #   return a `true` value on completion
     # @raise [Krakow::Error::ConnectionUnavailable]
     def write(*message)
       if(message.empty?)
