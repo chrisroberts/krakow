@@ -40,7 +40,7 @@ describe Krakow do
       100.times do |i|
         begin
           result << @producer.write('test')
-          if(i % 20)
+          if(i % 20 == 0)
             @producer.connection.socket.socket.close
           end
         rescue
