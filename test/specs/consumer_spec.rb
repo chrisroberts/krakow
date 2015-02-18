@@ -33,6 +33,7 @@ describe Krakow do
       end
 
       after do
+        sleep(0.2) # cooldown
         @producer.terminate
         @consumer.terminate
       end
@@ -84,6 +85,7 @@ describe Krakow do
       end
 
       after do
+        sleep(0.2) # cooldown
         @producer.terminate
         @consumer.terminate
       end
