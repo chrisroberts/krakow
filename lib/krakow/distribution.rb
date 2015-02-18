@@ -52,15 +52,24 @@ module Krakow
     # Remove message metadata from registry
     #
     # @param message [Krakow::FrameType::Message, String] message or ID
-    # @return [Krakow::Connection]
+    # @return [Krakow::Connection, NilClass]
     def unregister_message(message)
       msg_id = message.respond_to?(:message_id) ? message.message_id : message.to_s
       connection = connection_lookup(flight_record[msg_id])
-      registry_info = registry_lookup(connection.identifier)
       flight_record.delete(msg_id)
-      registry_info[:in_flight] -= 1
-      calculate_ready!(connection.identifier)
-      connection
+      if(connection)
+        begin
+          ident = connection.identifier
+          registry_info = registry_lookup(ident)
+          registry_info[:in_flight] -= 1
+          calculate_ready!(ident)
+          connection
+        rescue Celluloid::DeadActorError
+          warn 'Connection is dead. No recalculation applied on ready.'
+        end
+      else
+        warn 'No connection associated to message via lookup. No recalculation applied on ready.'
+      end
     end
 
     # Return the currently configured RDY value for given connnection
