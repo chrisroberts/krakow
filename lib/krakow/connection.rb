@@ -122,6 +122,9 @@ module Krakow
     # @param message [Krakow::Message] message to send
     # @return [TrueClass, Krakow::FrameType] response if expected or true
     def transmit(message)
+      unless(message.respond_to?(:to_line))
+        abort TypeError.new("Expecting type `Krakow::FrameType` but received `#{message.class}`")
+      end
       output = message.to_line
       response_wait = wait_time_for(message)
       if(response_wait > 0)
@@ -380,7 +383,11 @@ module Krakow
 
     # @return [TrueClass, FalseClass] underlying socket is connected
     def connected?
-      socket && socket.alive?
+      begin
+        !!(socket && socket.alive?)
+      rescue Celluloid::DeadActorError
+        false
+      end
     end
 
     protected
