@@ -32,13 +32,15 @@ module Krakow
       @lookupds = args.fetch(:lookupds, 1).times.map do
         build_lookupd
       end
-      @nsqds = args.fetch(:nsqd, 1).times.map do
+      @nsqds = args.fetch(:nsqds, 1).times.map do
         build_nsqd
       end
-      begin
-        TCPSocket.new(*nsqd_tcp_addresses.first.split(':'))
-      rescue Errno::ECONNREFUSED
-        retry
+      nsqd_tcp_addresses.each do |addr|
+        begin
+          TCPSocket.new(*addr.split(':'))
+        rescue Errno::ECONNREFUSED
+          retry
+        end
       end
     end
 
