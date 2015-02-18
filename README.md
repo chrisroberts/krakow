@@ -218,6 +218,8 @@ Or, run part of them:
 bundle exec ruby test/specs/consumer_spec.rb
 ```
 
+*NOTE*: the specs expect that `nsqd` and `nsqlookupd` are available in `$PATH`
+
 ### It doesn't work
 
 Create an issue on the github repository
