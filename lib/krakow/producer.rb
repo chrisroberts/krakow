@@ -81,10 +81,14 @@ module Krakow
 
     # @return [TrueClass, FalseClass] currently connected to server
     def connected?
-      !@connecting &&
-        connection &&
-        connection.alive? &&
-        connection.connected?
+      begin
+        !!(!@connecting &&
+          connection &&
+          connection.alive? &&
+          connection.connected?)
+      rescue Celluloid::DeadActorError
+        false
+      end
     end
 
     # Process connection failure and attempt reconnection
@@ -145,6 +149,8 @@ module Krakow
             )
           )
         end
+      rescue Celluloid::Task::TerminatedError
+        abort Error::ConnectionUnavailable.new 'Connection is currently unavailable'
       rescue => e
         abort e
       end
