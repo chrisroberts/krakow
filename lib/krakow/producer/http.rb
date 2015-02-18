@@ -72,7 +72,12 @@ module Krakow
         begin
           response = MultiJson.load(response.body.to_s)
         rescue MultiJson::LoadError
-          response = {'status_code' => response.code, 'status_txt' => response.body.to_s, 'data' => nil}
+          response = {
+            'status_code' => response.code,
+            'status_txt' => response.body.to_s,
+            'response' => response.body.to_s,
+            'data' => nil,
+          }
         end
         Response.new(response)
       end
