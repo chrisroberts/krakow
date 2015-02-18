@@ -16,7 +16,8 @@ class MiniTest::Test
   # example:
   #   wait_for { @consumer.queue.length > 0 }
   #
-  def wait_for(timeout = 5, &block)
+  def wait_for(timeout = 5)
+    raise ArgumentError.new 'Block must be provided!' unless block_given?
     Timeout::timeout(timeout) do
       loop do
         break if yield
