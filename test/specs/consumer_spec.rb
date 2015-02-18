@@ -72,13 +72,15 @@ describe Krakow do
           :port => port,
           :topic => @topic
         )
+        wait_for{ @producer.connected? }
         @producer.write('seed')
+        sleep(1)
         @consumer = Krakow::Consumer.new(
           :nsqlookupd => @nsqd.lookupd_http_addresses.first,
           :topic => @topic,
           :channel => '_default'
         )
-        wait_for{ @producer.connected? && !@consumer.connections.empty? }
+        wait_for{ @consumer.connections.values.all?{|c| c.connected?} }
       end
 
       after do
@@ -89,7 +91,6 @@ describe Krakow do
       it 'should have an nsqd connection' do
         @consumer.connections.wont_be :empty?
         @consumer.connections.values.first.connected?.must_equal true
-        @consumer.queue.size.must_equal 1
       end
 
       it 'should receive messages' do
