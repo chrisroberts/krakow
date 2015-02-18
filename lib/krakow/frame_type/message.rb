@@ -7,6 +7,7 @@ module Krakow
 
       # @return [Float] time of message instance creation
       attr_reader :instance_stamp
+      attr_accessor :origin, :connection
 
       # @!group Attributes
 
