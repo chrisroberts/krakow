@@ -1,73 +1,100 @@
 require_relative '../helpers/spec_helper'
 
-describe Krakow::Producer do
-
-  with_cluster(:nsqd_count => 1)
+describe Krakow do
 
   before do
-    @producer = Krakow::Producer.new(
-      :host => @cluster.nsqd.first.host,
-      :port => @cluster.nsqd.first.tcp_port,
-      :topic => 'hella-good',
-      :reconnect_interval => 1
-    )
+    @nsqd = Krakow::Nsqd.new
+    @nsqd.run!
   end
 
   after do
-    @producer.terminate
+    @nsqd.halt!
   end
 
-  it 'should be connected' do
-    @producer.connected?.must_equal true
+  describe Krakow::Producer do
+
+    describe 'State' do
+      it 'should teardown all resources on terminate' do
+        topic = TOPIC_NAME.shuffle.join
+        host, port = @nsqd.nsqd_tcp_addresses.first.split(':')
+        producer = Krakow::Producer.new(
+          :host => host,
+          :port => port,
+          :topic => @topic
+        )
+        producer.connected?.must_equal true
+        connection = producer.connection
+        socket = connection.socket
+        producer.terminate
+        wait_for{ !producer.alive? }
+        producer.alive?.must_equal false
+        connection.alive?.must_equal false
+        socket.alive?.must_equal false
+      end
+    end
+
+    describe 'Usage' do
+      before do
+        @topic = TOPIC_NAME.shuffle.join
+        host, port = @nsqd.nsqd_tcp_addresses.first.split(':')
+        @producer = Krakow::Producer.new(
+          :host => host,
+          :port => port,
+          :topic => @topic
+        )
+      end
+
+      after do
+        @producer.terminate
+      end
+
+      it 'should have an active connection' do
+        @producer.connected?.must_equal true
+      end
+
+      it 'should write a single message' do
+        @producer.write('testing').response.must_equal 'OK'
+      end
+
+      it 'should write multiple messages' do
+        @producer.write('testing1', 'testing2', 'testing3').response.must_equal 'OK'
+      end
+
+      it 'should automatically reconnect a failed connection' do
+        @producer.connection.socket.socket.close
+        result = nil
+        begin
+          @producer.write('testing')
+        rescue => result
+        end
+        [IOError, Krakow::Error::ConnectionUnavailable].must_include result.class
+        wait_for{ @producer.connected? }
+        @producer.write('testing').response.must_equal 'OK'
+      end
+
+    end
+
   end
 
-  it 'should write single messages successfully' do
-    response = @producer.write('msg')
-    response.must_be_kind_of Krakow::FrameType::Response
-    Krakow::Command::Pub.ok.must_include response.content
-  end
+  describe Krakow::Producer::Http do
+    before do
+      @producer = Krakow::Producer::Http.new(
+        :endpoint => @nsqd.nsqd_http_addresses.first,
+        :topic => TOPIC_NAME.shuffle.join
+      )
+    end
 
-  it 'should write multiple messages successfully' do
-    response = @producer.write('msg1', 'msg2', 'msg3')
-    response.must_be_kind_of Krakow::FrameType::Response
-    Krakow::Command::Mpub.ok.must_include response.content
-  end
+    it 'should write a single message' do
+      result = @producer.write('testing')
+      result.status_txt.must_equal 'OK'
+      result.response.must_equal 'OK'
+    end
 
-  it 'should successfully write a single non-string message' do
-    response = @producer.write(1)
-    response.must_be_kind_of Krakow::FrameType::Response
-    Krakow::Command::Pub.ok.must_include response.content
-  end
-
-  it 'should successfully write multiple non-string messages' do
-    response = @producer.write(1,2,3)
-    response.must_be_kind_of Krakow::FrameType::Response
-    Krakow::Command::Mpub.ok.must_include response.content
-  end
-
-  it 'should raise connection errors when trying to write and the connection is not available' do
-    @cluster.nsqd.first.stop
-    wait_for(1){ !@producer.connected? }
-    proc {
-      @producer.write('hi')
-    }.must_raise Krakow::Error::ConnectionUnavailable
-
-    @producer.alive?.must_equal true
-    @cluster.nsqd.first.start
-  end
-
-  it 'should be able to reconnect automatically' do
-    @cluster.nsqd.first.stop
-    wait_for(1){ !@producer.connected? }
-    @producer.connected?.must_equal false
-    @cluster.nsqd.first.start
-    wait_for(2){ @producer.connected? }
-    @producer.write('ohai')
-    @producer.connected?.must_equal true
-
-    response = @producer.write('msg1', 'msg2', 'msg3')
-    response.must_be_kind_of Krakow::FrameType::Response
-    Krakow::Command::Mpub.ok.must_include response.content
+    it 'should write multiple messages' do
+      result = @producer.write('testing1', 'testing2', 'testing3')
+      result.status_txt.must_equal 'OK'
+      result.response.must_equal 'OK'
+    end
   end
 
 end

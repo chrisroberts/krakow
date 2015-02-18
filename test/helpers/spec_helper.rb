@@ -4,11 +4,11 @@ Bundler.setup
 require 'timeout'
 require 'krakow'
 require 'minitest/autorun'
-require 'minitest/pride'
-require_relative 'cluster_plugin'
+require_relative 'nsqd'
+
+TOPIC_NAME = ('a'..'z').to_a + ('A'..'Z').to_a
 
 class MiniTest::Test
-  include ClusterPlugin
 
   # Block execution until a condition is met
   # Times out after 5 seconds by default
