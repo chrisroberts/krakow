@@ -64,6 +64,18 @@ module Krakow
       end
     end
 
+    # @return [TrueClass, FalseClass] currently connected to at least
+    #   one nsqd
+    def connected?
+      !!connections.values.any? do |con|
+        begin
+          con.connected?
+        rescue Celluloid::DeadActorError
+          false
+        end
+      end
+    end
+
     # Connect to nsqd instance directly
     #
     # @return [Connection]
@@ -238,18 +250,16 @@ module Krakow
     # @param reason [Exception] reason for termination
     # @return [nil]
     def connection_failure(actor, reason)
-      connections.delete_if do |key, value|
-        if(value == actor && reason)
-          warn "Connection failure detected. Removing connection: #{key} - #{reason || 'no reason provided'}"
-          begin
-            distribution.remove_connection(key)
-          rescue Error::ConnectionUnavailable, Error::ConnectionFailure
-            warn 'Caught connection unavailability'
-          end
-          queue.deregister_connection(key)
-          distribution.redistribute!
-          true
+      if(reason && key = connections.key(actor))
+        warn "Connection failure detected. Removing connection: #{key} - #{reason}"
+        connections.delete(key)
+        begin
+          distribution.remove_connection(key)
+        rescue Error::ConnectionUnavailable, Error::ConnectionFailure
+          warn 'Caught connection unavailability'
         end
+        queue.deregister_connection(key)
+        distribution.redistribute!
         direct_connect unless discovery
       end
       nil
@@ -292,9 +302,11 @@ module Krakow
         abort e
       rescue Error::ConnectionUnavailable => e
         abort e
+      rescue Celluloid::DeadActorError
+        abort Error::ConnectionUnavailable.new
       ensure
-        distribution.unregister_message(message_id)
-        update_ready!(connection)
+        con = distribution.unregister_message(message_id)
+        update_ready!(con) if con
       end
     end
     alias_method :finish, :confirm
