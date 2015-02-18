@@ -17,13 +17,27 @@ describe Krakow do
       @topic = TOPIC_NAME.shuffle.join
       @producers = @nsqd.nsqd_tcp_addresses.map do |addr|
         host, port = addr.split(':')
-        Krakow::Producer.new(:host => host, :port => port, :topic => @topic)
+        Krakow::Producer.new(
+          :host => host,
+          :port => port,
+          :topic => @topic,
+          :connection_options => {
+            :options => {
+              :response_wait => 0
+            }
+          }
+        )
       end.map do |producer|
         producer.write('seed')
         producer
       end
       @consumers = 15.times.map do
-        Krakow::Consumer.new(:nsqlookupd => @nsqd.lookupd_http_addresses.first, :topic => @topic, :channel => 'default', :max_in_flight => 20)
+        Krakow::Consumer.new(
+          :nsqlookupd => @nsqd.lookupd_http_addresses.first,
+          :topic => @topic,
+          :channel => 'default',
+          :max_in_flight => 20
+        )
       end
       wait_for(10){ @consumers.all?{|consumer| !consumer.connections.empty?} }
       @consumers.each do |consumer|
