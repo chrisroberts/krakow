@@ -242,6 +242,8 @@ Create an issue, or even better, send a PR.
 
 # Contributors
 
+* Pete Hopkins (@phopkins)
+* Sam Phillips (@i2amsam)
 * Brendan Schwartz (@bschwartz)
 * Thomas Holmes (@thomas-holmes)
 * Jeremy Hinegardner (@copiousfreetime)

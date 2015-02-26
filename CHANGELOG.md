@@ -1,3 +1,14 @@
+## v0.4.0
+* Prevent duplicate connection consumption loops (#23) (thanks @phopkins)
+* Refactor connection implementation to prevent crashing blocks (#22) (thanks @phopkins)
+* Properly calculate message sizes using byte length, not string length (#24) (thanks @phopkins)
+* Clear responses prior to message transmission (#20) (thanks @i2amsam)
+* Rebuild testing specs (not fully covered, but a good start)
+* Consumer and Producer provide better connection failure recovery
+* Fix in-flight issues within distribution on connection failures
+
+_NOTE: Large portions of `Krakow::Connection` has been refactored_
+
 ## v0.3.12
 * Update Consumer#confirm and Consumer#touch to rescue out lookups and abort
 
