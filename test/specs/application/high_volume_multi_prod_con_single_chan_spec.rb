@@ -77,7 +77,7 @@ describe Krakow do
         end
       end
       sleep(3)
-      wait_for(120){@received.size == 0 && @generated.empty?}
+      wait_for(200){@received.size == 0 && @generated.empty?}
       @received.must_be :empty?
       @generated.must_be :empty?
     end
