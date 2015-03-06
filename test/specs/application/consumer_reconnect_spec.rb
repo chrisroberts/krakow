@@ -48,6 +48,7 @@ describe Krakow do
     end
 
     it 'should confirm all messages' do
+      retries = 0
       result = []
       100.times do |i|
         begin
@@ -57,6 +58,8 @@ describe Krakow do
           end
         rescue => e
           wait_for(30){ @consumer.connected? }
+          retries += 1
+          raise if retries > 5
           retry
         end
       end
