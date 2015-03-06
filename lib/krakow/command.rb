@@ -8,6 +8,18 @@ module Krakow
     # @!parse include Utils::Lazy::InstanceMethods
     # @!parse extend Utils::Lazy::ClassMethods
 
+    autoload :Auth, 'krakow/command/auth'
+    autoload :Cls, 'krakow/command/cls'
+    autoload :Fin, 'krakow/command/fin'
+    autoload :Identity, 'krakow/command/identity'
+    autoload :Mpub, 'krakow/command/mpub'
+    autoload :Nop, 'krakow/command/nop'
+    autoload :Pub, 'krakow/command/pub'
+    autoload :Rdy, 'krakow/command/rdy'
+    autoload :Req, 'krakow/command/req'
+    autoload :Sub, 'krakow/command/sub'
+    autoload :Touch, 'krakow/command/touch'
+
     class << self
 
       # Allowed OK return values
@@ -71,14 +83,6 @@ module Krakow
     def error?(response)
       response = response.content if response.is_a?(FrameType)
       self.class.error.include?(response)
-    end
-
-    # Make all the commands available
-    Dir.glob(File.join(File.dirname(__FILE__), 'command', '*')).each do |path|
-      autoload(
-        File.basename(path).sub(File.extname(path), '').capitalize.to_sym,
-        File.join('krakow/command', File.basename(path).sub(File.extname(path), ''))
-      )
     end
 
   end
