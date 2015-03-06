@@ -1,3 +1,6 @@
+## v0.4.2
+* Update command subclass loading to be explicit (remove glob loading)
+
 ## v0.4.0
 * Prevent duplicate connection consumption loops (#23) (thanks @phopkins)
 * Refactor connection implementation to prevent crashing blocks (#22) (thanks @phopkins)
