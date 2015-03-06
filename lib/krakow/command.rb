@@ -11,7 +11,7 @@ module Krakow
     autoload :Auth, 'krakow/command/auth'
     autoload :Cls, 'krakow/command/cls'
     autoload :Fin, 'krakow/command/fin'
-    autoload :Identity, 'krakow/command/identity'
+    autoload :Identify, 'krakow/command/identify'
     autoload :Mpub, 'krakow/command/mpub'
     autoload :Nop, 'krakow/command/nop'
     autoload :Pub, 'krakow/command/pub'

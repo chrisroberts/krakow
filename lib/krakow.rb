@@ -1,4 +1,3 @@
-require 'krakow/version'
 require 'celluloid'
 
 if(ENV['DEBUG'])
@@ -10,7 +9,6 @@ require 'multi_json'
 
 # NSQ client and producer library
 module Krakow
-
   autoload :Command, 'krakow/command'
   autoload :Connection, 'krakow/connection'
   autoload :ConnectionFeatures, 'krakow/connection_features'
@@ -22,5 +20,6 @@ module Krakow
   autoload :Ksocket, 'krakow/ksocket'
   autoload :Producer, 'krakow/producer'
   autoload :Utils, 'krakow/utils'
-
 end
+
+require 'krakow/version'
