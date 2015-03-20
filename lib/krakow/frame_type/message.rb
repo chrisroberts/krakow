@@ -55,18 +55,31 @@ module Krakow
 
       # Proxy to [Krakow::Consumer#confirm]
       def confirm(*args)
+        validate!
         origin.confirm(*[self, *args].compact)
       end
       alias_method :finish, :confirm
 
       # Proxy to [Krakow::Consumer#requeue]
       def requeue(*args)
+        validate!
         origin.requeue(*[self, *args].compact)
       end
 
       # Proxy to [Krakow::Consumer#touch]
       def touch(*args)
-        origin.touch(*[self, *args].compact)
+        validate!
+        result = origin.touch(*[self, *args].compact)
+        @instance_stamp = Time.now.to_f
+        result
+      end
+
+      # @return [NilClass]
+      # @raises [Error::MessageTimeout]
+      def validate!
+        if(((Time.now.to_f - instance_stamp) * 1000) > connection.endpoint_settings[:msg_timeout].to_f)
+          raise Krakow::Error::MessageTimeout.new "Message has exceeded allowed timeout (#{connection.endpoint_settings[:msg_timeout].to_f * 1000}s)"
+        end
       end
 
     end

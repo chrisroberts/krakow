@@ -16,6 +16,8 @@ module Krakow
     class ConnectionUnavailable < Error; end
     # Consumer was not set
     class OriginNotFound < Error; end
+    # Message has exceeded timeout
+    class MessageTimeout < Error; end
 
     # Invalid response
     class BadResponse < Error

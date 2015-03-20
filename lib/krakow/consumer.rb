@@ -171,14 +171,21 @@ module Krakow
         message.origin = current_actor
         message.connection = connection
         retried = false
+        unregister = false
         begin
           distribution.register_message(message, connection.identifier)
         rescue KeyError => e
           if(!retried && queue.scrub_duplicate_message(message))
+            warn "Received duplicate message. Attempting to scrub from currently queued messages. (#{message})"
             retried = true
             retry
+          elsif(!unregister)
+            warn "Received message is currently in flight and not in wait queue. Removing from in flight! (#{message})"
+            distribution.unregister_message(message)
+            unregister = true
+            retry
           else
-            error "Received message is currently in flight and not in wait queue. Discarding! (#{message})"
+            error "Received message cannot be added into distribution do to key conflict (#{message})"
             discard = true
           end
         end
