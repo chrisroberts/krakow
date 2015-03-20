@@ -142,6 +142,7 @@ module Krakow
     # @return [Krakow::FrameType] response
     def transmit_with_response(message, wait_time)
       responses.clear
+      debug ">>> #{message.to_line}"
       socket.put(message.to_line)
       response = nil
       (wait_time / response_interval).to_i.times do |i|
