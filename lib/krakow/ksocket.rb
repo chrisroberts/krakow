@@ -9,6 +9,8 @@ module Krakow
 
     # @return [String]
     attr_reader :buffer
+    # @return [TCPSocket]
+    attr_reader :raw_socket
 
     finalizer :closedown_socket
 
@@ -29,12 +31,12 @@ module Krakow
     # @return [self]
     def initialize(args={})
       if(args[:socket])
-        @socket = args[:socket]
+        @raw_socket = args[:socket]
       else
         unless([:host, :port].all?{|k| args.include?(k)})
           raise ArgumentError.new 'Missing required arguments. Expecting `:socket` or `:host` and `:port`.'
         end
-        @socket = TCPSocket.new(args[:host], args[:port])
+        @raw_socket = TCPSocket.new(args[:host], args[:port])
       end
       @buffer = ''
       async.read_loop
@@ -43,6 +45,15 @@ module Krakow
     # @return [TrueClass, FalseClass] read loop enabled
     def reading?
       !!@reading
+    end
+
+    # Replace socket instance with new socket
+    #
+    # @param sock [Socket]
+    # @return [Socket]
+    def socket=(sock)
+      socket{|s| @raw_socket = sock }
+      sock
     end
 
     # Read from socket and push into local Queue
@@ -92,9 +103,9 @@ module Krakow
     # @return [Socket]
     def socket
       if(block_given?)
-        yield @socket
+        yield @raw_socket
       else
-        @socket
+        @raw_socket
       end
     end
 
