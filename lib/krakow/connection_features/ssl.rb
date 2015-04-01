@@ -17,7 +17,7 @@ module Krakow
         # @option args [Hash] :ssl_context
         # @return [Io]
         def initialize(io, args={})
-          ssl_socket_arguments = [io]
+          ssl_socket_arguments = [io.raw_socket]
           if(args[:ssl_context])
             validate_ssl_args!(args[:ssl_context])
             context = OpenSSL::SSL::SSLContext.new
@@ -27,7 +27,9 @@ module Krakow
           end
           @_socket = OpenSSL::SSL::SSLSocket.new(*ssl_socket_arguments)
           _socket.sync = true
+          io.socket = _socket
           _socket.connect
+          _socket.verify_result
         end
 
         # Proxy to underlying socket

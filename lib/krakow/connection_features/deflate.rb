@@ -15,10 +15,11 @@ module Krakow
         # @param io [IO] IO to wrap
         # @return [Io]
         def initialize(io, args={})
-          @io = io
+          @io = io.raw_socket
           @buffer = ''
           @inflator = Zlib::Inflate.new(-Zlib::MAX_WBITS)
           @deflator = Zlib::Deflate.new(nil, -Zlib::MAX_WBITS)
+          io.socket = self
         end
 
         # Proxy to underlying socket

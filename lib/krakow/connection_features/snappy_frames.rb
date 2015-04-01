@@ -37,9 +37,10 @@ module Krakow
         # @param io [IO] IO to wrap
         # @return [Io]
         def initialize(io, args={})
-          @io = io
+          @io = io.raw_socket
           @snappy_write_ident = false
           @buffer = ''
+          io.socket = self
         end
 
         # Proxy to underlying socket
