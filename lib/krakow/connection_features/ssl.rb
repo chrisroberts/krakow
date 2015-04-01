@@ -25,7 +25,7 @@ module Krakow
             context.key = OpenSSL::PKey::RSA.new(File.open(args[:ssl_context][:key]))
             ssl_socket_arguments << context
           end
-          @_socket = Celluloid::IO::SSLSocket.new(*ssl_socket_arguments)
+          @_socket = OpenSSL::SSL::SSLSocket.new(*ssl_socket_arguments)
           _socket.sync = true
           _socket.connect
         end
