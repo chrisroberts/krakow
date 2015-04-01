@@ -354,7 +354,7 @@ module Krakow
     # @return [TrueClass]
     def snappy
       info 'Loading support for snappy compression and converting connection'
-      @socket = ConnectionFeatures::SnappyFrames::Io.new(socket, features_args)
+      ConnectionFeatures::SnappyFrames::Io.new(socket, features_args)
       response = receive
       info "Snappy connection conversion complete. Response: #{response.inspect}"
       true
@@ -365,7 +365,7 @@ module Krakow
     # @return [TrueClass]
     def deflate
       debug 'Loading support for deflate compression and converting connection'
-      @socket = ConnectionFeatures::Deflate::Io.new(socket, features_args)
+      ConnectionFeatures::Deflate::Io.new(socket, feature_args)
       response = receive
       info "Deflate connection conversion complete. Response: #{response.inspect}"
       true
@@ -376,7 +376,7 @@ module Krakow
     # @return [TrueClass]
     def tls_v1
       info 'Enabling TLS for connection'
-      @socket = ConnectionFeatures::Ssl::Io.new(socket, features_args)
+      ConnectionFeatures::Ssl::Io.new(socket, features_args)
       response = receive
       info "TLS enable complete. Response: #{response.inspect}"
       true
@@ -385,7 +385,7 @@ module Krakow
     # @return [TrueClass, FalseClass] underlying socket is connected
     def connected?
       begin
-        !!(socket && socket.alive?)
+        !!(socket && socket.alive? && !@connecting)
       rescue Celluloid::DeadActorError
         false
       end
