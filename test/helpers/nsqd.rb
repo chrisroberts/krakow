@@ -59,10 +59,10 @@ module Krakow
         'tcp-address' => "0.0.0.0:#{ports.first}",
         'http-address' => "0.0.0.0:#{ports.last}"
       }.merge(args.fetch(:nsqd_options, {}))
-      cmd = ['nsqd'] + options.map{|k,v| ["-#{k}", v]}
+      cmd = ['nsqd'] + options.map{|k,v| "-#{k}=#{v}" }
       unless(@lookupds.empty?)
         lookupd_tcp_addresses.each do |laddr|
-          cmd.push('-lookupd-tcp-address').push(laddr)
+          cmd.push "-lookupd-tcp-address=#{laddr}"
         end
       end
       [start_process(ChildProcess.build(*cmd.flatten)), options]
