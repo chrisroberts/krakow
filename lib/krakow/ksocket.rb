@@ -1,21 +1,21 @@
 require 'krakow'
 require 'socket'
+require 'fiber'
 
 module Krakow
   class Ksocket
 
     include Utils::Lazy
-    include Celluloid
+    include Zoidberg::Shell
 
     # @return [String]
     attr_reader :buffer
     # @return [TCPSocket]
     attr_reader :raw_socket
 
-    finalizer :closedown_socket
-
     # Teardown helper
-    def closedown_socket
+    def terminate(error=nil)
+      debug "Tearing down ksocket (Error: #{error.class} - #{error})"
       @writing = @reading = false
       if(socket && !socket.closed?)
         socket.close
@@ -36,10 +36,10 @@ module Krakow
         unless([:host, :port].all?{|k| args.include?(k)})
           raise ArgumentError.new 'Missing required arguments. Expecting `:socket` or `:host` and `:port`.'
         end
+        @make_socket = lambda{TCPSocket.new(args[:host], args[:port])}
         @raw_socket = TCPSocket.new(args[:host], args[:port])
       end
       @buffer = ''
-      async.read_loop
     end
 
     # @return [TrueClass, FalseClass] read loop enabled
@@ -61,10 +61,8 @@ module Krakow
       unless(reading?)
         @reading = true
         while(reading?)
-          res = defer do
-            Kernel.select([socket], nil, nil, nil)
-            socket{|s| s.readpartial(1024)}
-          end
+          Kernel.select([@raw_socket], nil, nil, nil)
+          res = @raw_socket.readpartial(1024)
           if(res)
             debug "Received content from socket: #{res.inspect}"
             buffer << res

@@ -47,5 +47,3 @@ class MiniTest::Test
     result.must_be :<, time
   end
 end
-
-Celluloid.logger.level = ENV['DEBUG'] ? 0 : 4

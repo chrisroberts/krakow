@@ -28,6 +28,7 @@ describe Krakow do
         producer.terminate
         wait_for{ !producer.alive? }
         producer.alive?.must_equal false
+        wait_for{ !connection.alive? }
         connection.alive?.must_equal false
         socket.alive?.must_equal false
       end
@@ -68,6 +69,7 @@ describe Krakow do
         rescue => result
         end
         [IOError, Krakow::Error::ConnectionUnavailable].must_include result.class
+        sleep(0.1)
         wait_for{ @producer.connected? }
         @producer.write('testing').response.must_equal 'OK'
       end
@@ -95,6 +97,7 @@ describe Krakow do
       result.status_txt.must_equal 'OK'
       result.response.must_equal 'OK'
     end
+
   end
 
 end

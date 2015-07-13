@@ -1,4 +1,5 @@
 require 'krakow'
+require 'logger'
 
 module Krakow
   module Utils
@@ -18,10 +19,10 @@ module Krakow
       # @return [Logger, nil]
       def log(*args)
         if(args.empty?)
-          Celluloid::Logger
+          $krakow_logger ||= Logger.new(STDOUT)
         else
           severity, string = args
-          Celluloid::Logger.send(severity.to_sym, "#{self}: #{string}")
+          ($krakow_logger ||= Logger.new(STDOUT)).send(severity.to_sym, "#{self}: #{string}")
           nil
         end
       end
@@ -32,9 +33,8 @@ module Krakow
         # @param level [Integer]
         # @return [Integer, nil]
         def level=(level)
-          if(Celluloid.logger.class == Logger)
-            Celluloid.logger.level = Logger.const_get(level.to_s.upcase.to_sym)
-          end
+          lgr = $krakow_logger ||= Logger.new(STDOUT)
+          lgr.level = lgr.class.const_get(level.to_s.upcase.to_sym)
         end
       end
 

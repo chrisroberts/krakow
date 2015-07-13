@@ -6,7 +6,7 @@ module Krakow
 
     class Queue
 
-      include Celluloid
+      include Zoidberg::Shell
       include Utils::Lazy
 
       # @return [Consumer]
@@ -73,15 +73,11 @@ module Krakow
           abort TypeError.new "Expecting `FrameType::Message` but received `#{message.class}`!"
         end
         messages do |collection|
-          begin
-            collection[message.connection.identifier] << message
-            pop_order << message.connection.identifier
-          rescue Celluloid::DeadActorError
-            abort Error::ConnectionUnavailable.new
-          end
+          collection[message.connection.identifier] << message
+          pop_order << message.connection.identifier
         end
         signal(:new_message)
-        current_actor
+        self
       end
       alias_method :<<, :push
       alias_method :enq, :push

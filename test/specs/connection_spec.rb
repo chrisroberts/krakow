@@ -24,7 +24,7 @@ describe Krakow do
     end
 
     after do
-      @connection.terminate
+#      @connection.terminate
     end
 
     it 'should be connected to nsqd' do

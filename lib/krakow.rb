@@ -1,10 +1,4 @@
-require 'celluloid'
-
-if(ENV['DEBUG'])
-  Celluloid.task_class = Celluloid::TaskThread
-end
-
-require 'celluloid/autostart'
+require 'zoidberg'
 require 'multi_json'
 
 # NSQ client and producer library

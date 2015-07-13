@@ -11,13 +11,9 @@ module Krakow
     # @!parse include Utils::Lazy::InstanceMethods
     # @!parse extend Utils::Lazy::ClassMethods
 
-    include Celluloid
+    include Zoidberg::Supervise
 
     trap_exit  :connection_failure
-    finalizer :producer_cleanup
-
-    # set exclusive methods
-    exclusive :write
 
     attr_reader :connection
     attr_reader :notifier
@@ -81,21 +77,17 @@ module Krakow
 
     # @return [TrueClass, FalseClass] currently connected to server
     def connected?
-      begin
-        !!(!@connecting &&
-          connection &&
-          connection.alive? &&
-          connection.connected?)
-      rescue Celluloid::DeadActorError
-        false
-      end
+      !!(!@connecting &&
+        connection &&
+        connection.alive? &&
+        connection.connected?)
     end
 
     # Process connection failure and attempt reconnection
     #
     # @return [TrueClass]
     def connection_failure(obj, reason)
-      if(obj == connection && !reason.nil?)
+#      if(obj == connection && !reason.nil?)
         begin
           @connection = nil
           warn "Connection failure detected for #{host}:#{port} - #{reason}"
@@ -106,14 +98,14 @@ module Krakow
           sleep reconnect_interval
           retry
         end
-      end
+#      end
       true
     end
 
     # Instance destructor
     # @return nil
-    def producer_cleanup
-      debug 'Tearing down producer'
+    def terminate(error=nil)
+      debug "Tearing down producer (Error: #{error.class} - #{error})"
       if(connection && connection.alive?)
         connection.terminate
       end
@@ -151,8 +143,6 @@ module Krakow
             )
           )
         end
-      rescue Celluloid::Task::TerminatedError
-        abort Error::ConnectionUnavailable.new 'Connection is currently unavailable'
       rescue => e
         abort e
       end

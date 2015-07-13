@@ -10,10 +10,9 @@ module Krakow
     # @!parse include Krakow::Utils::Lazy::InstanceMethods
     # @!parse extend Krakow::Utils::Lazy::ClassMethods
 
-    include Celluloid
+    include Zoidberg::Supervise
 
-    trap_exit :connection_failure
-    finalizer :consumer_cleanup
+#    trap_exit :connection_failure
 
     attr_reader :connections, :discovery, :distribution, :queue
 
@@ -33,7 +32,7 @@ module Krakow
     attribute :backoff_interval, Numeric
     attribute :discovery_interval, Numeric, :default => 30
     attribute :discovery_jitter, Numeric, :default => 10.0
-    attribute :notifier, [Celluloid::Signals, Celluloid::Condition, Celluloid::Actor]
+    attribute :notifier, [Zoidberg::Signal]
     attribute :connection_options, Hash, :default => ->{ Hash.new }
 
     # @!endgroup
@@ -45,13 +44,13 @@ module Krakow
       )
       @connections = {}
       @queue = Queue.new(
-        current_actor,
+        current_self,
         :removal_callback => :remove_message
       )
       @distribution = Distribution::Default.new(
         :max_in_flight => max_in_flight,
         :backoff_interval => backoff_interval,
-        :consumer => current_actor
+        :consumer => current_self
       )
       if(nsqlookupd)
         debug "Connections will be established via lookup #{nsqlookupd.inspect}"
@@ -68,11 +67,7 @@ module Krakow
     #   one nsqd
     def connected?
       !!connections.values.any? do |con|
-        begin
-          con.connected?
-        rescue Celluloid::DeadActorError
-          false
-        end
+        con.connected?
       end
     end
 
@@ -107,7 +102,7 @@ module Krakow
     # Instance destructor
     #
     # @return [nil]
-    def consumer_cleanup
+    def terminate(*_)
       debug 'Tearing down consumer'
       if(distribution && distribution.alive?)
         distribution.terminate
@@ -141,7 +136,7 @@ module Krakow
           :features_args => connection_options[:config],
           :callbacks => {
             :handle => {
-              :actor => current_actor,
+              :actor => current_self,
               :method => :process_message
             }
           }
@@ -168,7 +163,7 @@ module Krakow
     def process_message(message, connection)
       discard = false
       if(message.is_a?(FrameType::Message))
-        message.origin = current_actor
+        message.origin = current_self
         message.connection = connection
         retried = false
         unregister = false
@@ -309,8 +304,6 @@ module Krakow
         abort e
       rescue Error::ConnectionUnavailable => e
         abort e
-      rescue Celluloid::DeadActorError
-        abort Error::ConnectionUnavailable.new
       ensure
         con = distribution.unregister_message(message_id)
         update_ready!(con) if con

@@ -20,7 +20,9 @@ module Krakow
     # @!parse include Krakow::Utils::Lazy::InstanceMethods
     # @!parse extend Krakow::Utils::Lazy::ClassMethods
 
-    include Celluloid
+    include Zoidberg::Supervise
+
+    trap_exit :run_reconnect
 
     # Available connection features
     FEATURES = [
@@ -41,8 +43,6 @@ module Krakow
 
     # List of features that may be enabled by the client
     ENABLEABLE_FEATURES = [:tls_v1, :snappy, :deflate, :auth_required]
-
-    finalizer :connection_cleanup
 
     # @return [Hash] current configuration for endpoint
     attr_reader :endpoint_settings
@@ -66,7 +66,7 @@ module Krakow
     attribute :queue, [Queue, Consumer::Queue], :default => ->{ Queue.new }
     attribute :callbacks, Hash, :default => ->{ Hash.new }
     attribute :responses, Queue, :default => ->{ Queue.new }
-    attribute :notifier, [Celluloid::Signals, Celluloid::Condition, Celluloid::Actor]
+    attribute :notifier, [Zoidberg::Signal]
     attribute :features, Hash, :default => ->{ Hash.new }
     attribute :response_wait, Numeric, :default => 1.0
     attribute :response_interval, Numeric, :default => 0.03
@@ -85,7 +85,7 @@ module Krakow
     # @option args [Queue] :queue received message queue
     # @option args [Hash] :callbacks
     # @option args [Queue] :responses received responses queue
-    # @option args [Celluloid::Actor] :notifier actor to notify on new message
+    # @option args [Zoidberg::Signal] :notifier actor to notify on new message
     # @option args [Hash] :features features to enable
     # @option args [Numeric] :response_wait time to wait for response
     # @option args [Numeric] :response_interval sleep interval for wait loop
@@ -127,12 +127,16 @@ module Krakow
       end
       output = message.to_line
       response_wait = wait_time_for(message)
-      if(response_wait > 0)
-        transmit_with_response(message, response_wait)
-      else
-        debug ">>> #{output}"
-        socket.put(output)
-        true
+      begin
+        if(response_wait > 0)
+          transmit_with_response(message, response_wait)
+        else
+          debug ">>> #{output}"
+          socket.put(output)
+          true
+        end
+      rescue IOError => e
+        abort e
       end
     end
 
@@ -168,8 +172,8 @@ module Krakow
     # Destructor method for cleanup
     #
     # @return [nil]
-    def connection_cleanup
-      debug 'Tearing down connection'
+    def terminate(error=nil)
+      debug "Tearing down connection (Error: #{error.class} - #{error})"
       @running = false
       if(connected?)
         socket.terminate
@@ -214,16 +218,27 @@ module Krakow
       unless(@running)
         @running = true
         while(@running)
-          message = handle(receive)
-          if(message)
-            debug "Adding message to queue #{message}"
-            queue << message
-            if(notifier)
-              warn "Sending new message notification: #{notifier} - #{message}"
-              notifier.broadcast(message)
+          begin
+            message = handle(receive)
+            if(message)
+              debug "Adding message to queue #{message}"
+              queue << message
+              if(notifier)
+                warn "Sending new message notification: #{notifier} - #{message}"
+                notifier.broadcast(message)
+              end
+            else
+              debug 'Received `nil` message. Ignoring.'
             end
-          else
-            debug 'Received `nil` message. Ignoring.'
+          rescue Zoidberg::DeadException => e
+            if(current_actor.alive?)
+              warn 'Dead instance error encountered. Pausing to let system repair itself.'
+              sleep(1)
+              warn "Attempting to process on socket: #{socket}"
+            else
+              error 'This connection is dead. Bubbling exception and dying.'
+              raise e
+            end
           end
         end
       end
@@ -264,7 +279,7 @@ module Krakow
       if(callback)
         debug "Processing connection callback for #{type.inspect} (#{callback.inspect})"
         if(callback[:actor].alive?)
-          callback[:actor].send(callback[:method], *(args + [current_actor]))
+          callback[:actor].send(callback[:method], *(args + [current_self]))
         else
           error "Expected actor for callback processing is not alive! (type: `#{type.inspect}`)"
         end
@@ -384,11 +399,7 @@ module Krakow
 
     # @return [TrueClass, FalseClass] underlying socket is connected
     def connected?
-      begin
-        !!(socket && socket.alive? && !@connecting)
-      rescue Celluloid::DeadActorError
-        false
-      end
+      !!(socket && socket.alive? && !@connecting)
     end
 
     protected
@@ -406,12 +417,20 @@ module Krakow
         end
         @socket = Ksocket.new(:host => host, :port => port)
         self.link socket
+        socket.async.read_loop
         socket.put version.rjust(4).upcase
         identify_and_negotiate
         info 'Connection initialized'
         @connecting = false
       end
       nil
+    end
+
+    def run_reconnect(inst, err)
+      warn "Socket is in failed state. Attempting reconnect! (Instance: #{inst} / Error: #{err.class} - #{err})"
+      inst.terminate if inst.alive?
+      responses.clear
+      connect!
     end
 
   end

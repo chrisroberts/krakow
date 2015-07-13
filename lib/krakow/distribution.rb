@@ -9,7 +9,7 @@ module Krakow
 #    autoload :ProducerWeighted, 'krakow/distribution/producer_weighted'
 #    autoload :ConsumerWeighted, 'krakow/distribution/consumer_weighted'
 
-    include Celluloid
+    include Zoidberg::Supervise
     include Utils::Lazy
     # @!parse include Krakow::Utils::Lazy::InstanceMethods
     # @!parse extend Krakow::Utils::Lazy::ClassMethods
@@ -58,15 +58,11 @@ module Krakow
       connection = connection_lookup(flight_record[msg_id])
       flight_record.delete(msg_id)
       if(connection)
-        begin
-          ident = connection.identifier
-          registry_info = registry_lookup(ident)
-          registry_info[:in_flight] -= 1
-          calculate_ready!(ident)
-          connection
-        rescue Celluloid::DeadActorError
-          warn 'Connection is dead. No recalculation applied on ready.'
-        end
+        ident = connection.identifier
+        registry_info = registry_lookup(ident)
+        registry_info[:in_flight] -= 1
+        calculate_ready!(ident)
+        connection
       else
         warn 'No connection associated to message via lookup. No recalculation applied on ready.'
       end
