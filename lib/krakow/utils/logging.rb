@@ -19,10 +19,10 @@ module Krakow
       # @return [Logger, nil]
       def log(*args)
         if(args.empty?)
-          $krakow_logger ||= Logger.new(STDOUT)
+          Krakow::Utils::Logging.logger
         else
           severity, string = args
-          ($krakow_logger ||= Logger.new(STDOUT)).send(severity.to_sym, "#{self}: #{string}")
+          Krakow::Utils::Logging.logger.send(severity.to_sym, "#{self}: #{string}")
           nil
         end
       end
@@ -33,11 +33,17 @@ module Krakow
         # @param level [Integer]
         # @return [Integer, nil]
         def level=(level)
-          lgr = $krakow_logger ||= Logger.new(STDOUT)
-          lgr.level = lgr.class.const_get(level.to_s.upcase.to_sym)
+          logger.level = logger.class.const_get(level.to_s.upcase.to_sym)
         end
+
+        def logger
+          $krakow_logger ||= Logger.new(STDOUT)
+        end
+
       end
 
     end
   end
 end
+
+Krakow::Utils::Logging.level = :error

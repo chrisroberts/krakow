@@ -20,6 +20,7 @@ module Krakow
     # @!parse include Krakow::Utils::Lazy::InstanceMethods
     # @!parse extend Krakow::Utils::Lazy::ClassMethods
 
+    include Zoidberg::SoftShell
     include Zoidberg::Supervise
 
     trap_exit :run_reconnect
@@ -127,16 +128,12 @@ module Krakow
       end
       output = message.to_line
       response_wait = wait_time_for(message)
-      begin
-        if(response_wait > 0)
-          transmit_with_response(message, response_wait)
-        else
-          debug ">>> #{output}"
-          socket.put(output)
-          true
-        end
-      rescue IOError => e
-        abort e
+      if(response_wait > 0)
+        transmit_with_response(message, response_wait)
+      else
+        debug ">>> #{output}"
+        socket.put(output)
+        true
       end
     end
 
@@ -178,7 +175,6 @@ module Krakow
       if(connected?)
         socket.terminate
       end
-      @socket = nil
       info 'Connection torn down'
       nil
     end
@@ -219,7 +215,7 @@ module Krakow
         @running = true
         while(@running)
           begin
-            message = handle(receive)
+            message = current_self.handle(receive)
             if(message)
               debug "Adding message to queue #{message}"
               queue << message
@@ -416,8 +412,6 @@ module Krakow
           @socket = nil
         end
         @socket = Ksocket.new(:host => host, :port => port)
-        self.link socket
-        socket.async.read_loop
         socket.put version.rjust(4).upcase
         identify_and_negotiate
         info 'Connection initialized'

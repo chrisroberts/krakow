@@ -33,6 +33,7 @@ describe Krakow do
           :topic => @topic,
           :channel => '_default'
         )
+        @consumer.start!
         wait_for{ @producer.connected? && !@consumer.connections.empty? }
       end
 
@@ -83,6 +84,7 @@ describe Krakow do
           :topic => @topic,
           :channel => '_default'
         )
+        @consumer.start!
         wait_for{ @producer.connected? && !@consumer.connections.empty? }
       end
 
@@ -135,6 +137,7 @@ describe Krakow do
           :topic => @topic,
           :channel => '_default'
         )
+        @consumer.start!
         wait_for{ @consumer.connections.values.all?{|c| c.connected?} }
       end
 

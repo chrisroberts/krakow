@@ -12,8 +12,6 @@ module Krakow
 
     include Zoidberg::Supervise
 
-#    trap_exit :connection_failure
-
     attr_reader :connections, :discovery, :distribution, :queue
 
     # @!group Attributes
@@ -42,6 +40,14 @@ module Krakow
       arguments[:connection_options] = {:features => {}, :config => {}}.merge(
         arguments[:connection_options] || {}
       )
+    end
+
+    def restarted!
+      start!
+      current_self
+    end
+
+    def start!
       @connections = {}
       @queue = Queue.new(
         current_self,
@@ -81,7 +87,7 @@ module Krakow
         info "Registered new connection #{connection}"
         distribution.redistribute!
       else
-        abort Error::ConnectionFailure.new("Failed to establish subscription at provided end point (#{host}:#{port}")
+        raise Error::ConnectionFailure.new("Failed to establish subscription at provided end point (#{host}:#{port})")
       end
       connection
     end
@@ -141,7 +147,7 @@ module Krakow
             }
           }
         )
-        queue.register_connection(connection)
+        defer{ queue.register_connection(connection) }
         connection
       rescue => e
         error "Failed to build connection (host: #{host} port: #{port} queue: #{queue}) - #{e.class}: #{e}"
@@ -234,13 +240,12 @@ module Krakow
     def register(connection)
       begin
         connection.init!
-        connection.transmit(Command::Sub.new(:topic_name => topic, :channel_name => channel))
-        self.link connection
+        defer{ connection.transmit(Command::Sub.new(:topic_name => topic, :channel_name => channel)) }
         connections[connection.identifier] = connection
         distribution.add_connection(connection)
         true
       rescue Error::BadResponse => e
-        debug "Failed to establish connection: #{e.result ? e.result.error : '<No Response!>'}"
+        warn "Failed to establish connection: #{e.result ? e.result.error : '<No Response!>'}"
         connection.terminate
         false
       end
@@ -290,7 +295,7 @@ module Krakow
       begin
         begin
           connection = distribution.in_flight_lookup(message_id)
-          connection.transmit(Command::Fin.new(:message_id => message_id))
+          defer{ connection.transmit(Command::Fin.new(:message_id => message_id)) }
           distribution.success(connection.identifier)
         rescue => e
           abort e
@@ -320,12 +325,14 @@ module Krakow
       message_id = message_id.message_id if message_id.respond_to?(:message_id)
       distribution.in_flight_lookup(message_id) do |connection|
         distribution.unregister_message(message_id)
-        connection.transmit(
-          Command::Req.new(
-            :message_id => message_id,
-            :timeout => timeout
+        defer do
+          connection.transmit(
+            Command::Req.new(
+              :message_id => message_id,
+              :timeout => timeout
+            )
           )
-        )
+        end
         distribution.failure(connection.identifier)
         update_ready!(connection)
       end
@@ -340,9 +347,11 @@ module Krakow
       message_id = message_id.message_id if message_id.respond_to?(:message_id)
       begin
         distribution.in_flight_lookup(message_id) do |connection|
-          connection.transmit(
-            Command::Touch.new(:message_id => message_id)
-          )
+          defer do
+            connection.transmit(
+              Command::Touch.new(:message_id => message_id)
+            )
+          end
         end
         true
       rescue Error::LookupFailed => e

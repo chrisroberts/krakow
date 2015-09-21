@@ -11,9 +11,8 @@ module Krakow
     # @!parse include Utils::Lazy::InstanceMethods
     # @!parse extend Utils::Lazy::ClassMethods
 
+    include Zoidberg::SoftShell
     include Zoidberg::Supervise
-
-    trap_exit  :connection_failure
 
     attr_reader :connection
     attr_reader :notifier
@@ -61,7 +60,6 @@ module Krakow
         end
         @connection = Connection.new(con_args)
         @connection.init!
-        self.link @connection
         info "Connection established: #{@connection}"
         nil
       rescue => e
@@ -81,25 +79,6 @@ module Krakow
         connection &&
         connection.alive? &&
         connection.connected?)
-    end
-
-    # Process connection failure and attempt reconnection
-    #
-    # @return [TrueClass]
-    def connection_failure(obj, reason)
-#      if(obj == connection && !reason.nil?)
-        begin
-          @connection = nil
-          warn "Connection failure detected for #{host}:#{port} - #{reason}"
-          obj.terminate if obj.alive?
-          connect
-        rescue => reason
-          warn "Failed to establish connection to #{host}:#{port}. Pausing #{reconnect_interval} before retry"
-          sleep reconnect_interval
-          retry
-        end
-#      end
-      true
     end
 
     # Instance destructor
@@ -125,26 +104,22 @@ module Krakow
       if(message.empty?)
         abort ArgumentError.new 'Expecting one or more messages to send. None provided.'
       end
-      begin
-        if(message.size > 1)
-          debug 'Multiple message publish'
-          connection.transmit(
-            Command::Mpub.new(
-              :topic_name => topic,
-              :messages => message
-            )
+      if(message.size > 1)
+        debug 'Multiple message publish'
+        connection.transmit(
+          Command::Mpub.new(
+            :topic_name => topic,
+            :messages => message
           )
-        else
-          debug 'Single message publish'
-          connection.transmit(
-            Command::Pub.new(
-              :message => message.first,
-              :topic_name => topic
-            )
+        )
+      else
+        debug 'Single message publish'
+        connection.transmit(
+          Command::Pub.new(
+            :message => message.first,
+            :topic_name => topic
           )
-        end
-      rescue => e
-        abort e
+        )
       end
     end
 
