@@ -57,8 +57,8 @@ module Krakow
       msg_id = message.respond_to?(:message_id) ? message.message_id : message.to_s
       connection = connection_lookup(flight_record[msg_id])
       flight_record.delete(msg_id)
-      if(connection)
-        ident = connection.identifier
+      if(connection && connection.alive?)
+        ident = connection.inspect
         registry_info = registry_lookup(ident)
         registry_info[:in_flight] -= 1
         calculate_ready!(ident)
@@ -82,11 +82,8 @@ module Krakow
     # @param connection [Krakow::Connection]
     # @return [Krakow::FrameType::Error,nil]
     def set_ready_for(connection, *_)
-      connection.transmit(
-        Command::Rdy.new(
-          :count => ready_for(connection.identifier)
-        )
-      )
+      ready_count = ready_for(connection.inspect)
+      defer{ connection.transmit(Command::Rdy.new(:count => ready_count)) }
     end
 
     # Initial ready value used for new connections
@@ -117,8 +114,8 @@ module Krakow
     # @param connection [Krakow::Connection]
     # @return [TrueClass]
     def add_connection(connection)
-      unless(registry[connection.identifier])
-        registry[connection.identifier] = {
+      unless(registry[connection.inspect])
+        registry[connection.inspect] = {
           :ready => initial_ready,
           :in_flight => 0,
           :failures => 0,
@@ -150,7 +147,7 @@ module Krakow
     # @param identifier [String] connection identifier
     # @return [Krakow::Connection, nil]
     def connection_lookup(identifier)
-      consumer.connection(identifier)
+      defer{ consumer.connection(identifier) }
     end
 
     # Return source connection for given message ID

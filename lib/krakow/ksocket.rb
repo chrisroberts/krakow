@@ -1,6 +1,5 @@
 require 'krakow'
 require 'socket'
-require 'fiber'
 
 module Krakow
   class Ksocket
@@ -61,15 +60,17 @@ module Krakow
 
     def put(string)
       idx = 0
-      until(idx == string.length)
-        result = raw_socket.write_nonblock(
-          string[0, string.length - idx],
-          :exception => false
-        )
-        if(result == :wait_writable)
-          defer{ IO.select(nil, [raw_socket]) }
-        else
-          idx += result
+      defer do
+        until(idx == string.length)
+          result = raw_socket.write_nonblock(
+            string[0, string.length - idx],
+            :exception => false
+          )
+          if(result == :wait_writable)
+            IO.select(nil, [raw_socket])
+          else
+            idx += result
+          end
         end
       end
       idx
@@ -77,11 +78,13 @@ module Krakow
     alias_method :write, :put
 
     def get(length)
-      begin
-        raw_socket.read_nonblock(length)
-      rescue IO::WaitReadable
-        defer{ IO.select([raw_socket], nil) }
-        retry
+      defer do
+        begin
+          raw_socket.read_nonblock(length)
+        rescue IO::WaitReadable
+          IO.select([raw_socket], nil)
+          retry
+        end
       end
     end
     alias_method :recv, :get

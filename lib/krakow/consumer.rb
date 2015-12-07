@@ -14,6 +14,8 @@ module Krakow
 
     attr_reader :connections, :discovery, :distribution, :queue
 
+    trap_exit :connection_failure
+
     # @!group Attributes
 
     # @!macro [attach] attribute
@@ -40,6 +42,7 @@ module Krakow
       arguments[:connection_options] = {:features => {}, :config => {}}.merge(
         arguments[:connection_options] || {}
       )
+      @connections = {}
     end
 
     def restarted!

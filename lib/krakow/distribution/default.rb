@@ -32,9 +32,9 @@ module Krakow
             @watch_dog = nil
           end
           connections.each do |connection|
-            current_ready = ready_for(connection.identifier)
-            calculate_ready!(connection.identifier)
-            unless(current_ready == ready_for(connection.identifier))
+            current_ready = ready_for(connection.inspect)
+            calculate_ready!(connection.inspect)
+            unless(current_ready == ready_for(connection.inspect))
               debug "Redistribution ready setting update for connection #{connection}"
               set_ready_for(connection)
             end
@@ -68,7 +68,7 @@ module Krakow
           end
         end
         if(connection)
-          registry_lookup(connection.identifier)[:ready] = 1
+          registry_lookup(connection.inspect)[:ready] = 1
           connection
         end
       end
@@ -146,7 +146,7 @@ module Krakow
         connection = rdy_connections.shuffle.first
         if(connection)
           debug "Stripping RDY state from connection: #{connection}"
-          calculate_ready!(connection.identifier)
+          calculate_ready!(connection.inspect)
           set_ready_for(connection)
         else
           warn "Failed to locate available connection for RDY aquisition!"

@@ -23,6 +23,8 @@ module Krakow
     include Zoidberg::SoftShell
     include Zoidberg::Supervise
 
+    option :cache_signals
+
     trap_exit :run_reconnect
 
     # Available connection features
@@ -132,7 +134,7 @@ module Krakow
         transmit_with_response(message, response_wait)
       else
         debug ">>> #{output}"
-        socket.put(output)
+        defer{ socket.put(output) }
         true
       end
     end
@@ -144,13 +146,19 @@ module Krakow
     def transmit_with_response(message, wait_time)
       responses.clear
       debug ">>> #{message.to_line}"
-      socket.put(message.to_line)
+      defer{ socket.put(message.to_line) }
       response = nil
-      (wait_time / response_interval).to_i.times do |i|
-        response = responses.pop unless responses.empty?
-        break if response
-        sleep(response_interval)
+      # TODO: Need timeout for max wait
+      if(wait_time)
+        wait_for(:response)
+        response = responses.pop
       end
+      # (wait_time / response_interval).to_i.times do |i|
+      #   response = responses.pop unless responses.empty?
+      #   break if response
+      #   sleep(response_interval)
+      # end
+      response = responses.pop unless responses.empty?
       if(response)
         message.response = response
         if(message.error?(response))
@@ -256,6 +264,7 @@ module Krakow
         if(!message.is_a?(FrameType::Message))
           debug "Captured non-message type response: #{message}"
           responses << message
+          signal(:response)
           nil
         else
           message
@@ -275,7 +284,7 @@ module Krakow
       if(callback)
         debug "Processing connection callback for #{type.inspect} (#{callback.inspect})"
         if(callback[:actor].alive?)
-          callback[:actor].send(callback[:method], *(args + [current_self]))
+          defer{ callback[:actor].send(callback[:method], *(args + [current_self])) }
         else
           error "Expected actor for callback processing is not alive! (type: `#{type.inspect}`)"
         end

@@ -104,22 +104,26 @@ module Krakow
       if(message.empty?)
         abort ArgumentError.new 'Expecting one or more messages to send. None provided.'
       end
-      if(message.size > 1)
-        debug 'Multiple message publish'
-        connection.transmit(
-          Command::Mpub.new(
-            :topic_name => topic,
-            :messages => message
+      begin
+        if(message.size > 1)
+          debug 'Multiple message publish'
+          connection.transmit(
+            Command::Mpub.new(
+              :topic_name => topic,
+              :messages => message
+            )
           )
-        )
-      else
-        debug 'Single message publish'
-        connection.transmit(
-          Command::Pub.new(
-            :message => message.first,
-            :topic_name => topic
+        else
+          debug 'Single message publish'
+          connection.transmit(
+            Command::Pub.new(
+              :message => message.first,
+              :topic_name => topic
+            )
           )
-        )
+        end
+      rescue Zoidberg::DeadException
+        raise Error::ConnectionUnavailable.new
       end
     end
 

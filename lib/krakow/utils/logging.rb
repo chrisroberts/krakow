@@ -37,7 +37,7 @@ module Krakow
         end
 
         def logger
-          $krakow_logger ||= Logger.new(STDOUT)
+          $krakow_logger ||= Zoidberg.logger
         end
 
       end

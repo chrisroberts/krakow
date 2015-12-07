@@ -38,6 +38,7 @@ describe Krakow do
         :max_in_flight => 20,
         :discovery_interval => 5
       )
+      @consumer.start!
       wait_for{ @consumer.connected? }
       sleep(1)
     end
